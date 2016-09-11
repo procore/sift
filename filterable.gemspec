@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
                 'Rakefile',
                 'README.md']
 
-  s.add_dependency 'rails', '~> 5.0.0', '>= 5.0.0.1'
+  s.add_dependency 'rails', '~> 4.2.0'
 
   s.add_development_dependency 'sqlite3'
 end
