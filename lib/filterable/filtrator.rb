@@ -1,4 +1,13 @@
-  class Filtrator < Struct.new(:collection, :params, :filters)
+module Filterable
+  class Filtrator
+    attr_reader :collection, :params, :filters
+
+    def initialize(collection, params, filters)
+      self.collection = collection
+      self.params = params
+      self.filters = filters
+    end
+
     def apply_all
       active_filters.each do |filter|
         apply(filter)
@@ -10,6 +19,8 @@
     end
 
     private
+
+    attr_writer :collection, :params, :filters
 
     def literal(collection, filter)
       return collection unless params[filter.param]
@@ -36,3 +47,4 @@
       }
     end
   end
+end

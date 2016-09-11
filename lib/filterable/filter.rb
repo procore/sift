@@ -1,7 +1,9 @@
 module Filterable
   # Filter describes the way a parameter maps to a database column
   # and the type information helpful for validating input.
-  class Filter < Struct.new(:param, :type, :column_name)
+  class Filter
+    attr_reader :param, :type, :column_name
+
     WHITELIST_TYPES = [:int,
                        :decimal,
                        :boolean,
@@ -13,7 +15,9 @@ module Filterable
 
     def initialize(param, type, column_name)
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
-      super(param, type, column_name)
+      self.param = param
+      self.type = type
+      self.column_name = column_name
     end
 
     def validation
@@ -31,5 +35,9 @@ module Filterable
       when :datetime
       end
     end
+
+    private
+
+    attr_writer :param, :type, :column_name
   end
 end
