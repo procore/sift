@@ -20,6 +20,6 @@ class PostsController < ApplicationController
   private
 
   def render_filter_errors
-    render json: { errors: filter_errors }
+    render json: { errors: filter_errors } and return
   end
 end

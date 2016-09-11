@@ -17,11 +17,11 @@ module Filterable
   end
 
   def filters_valid?
-    FilterValidator.new(self.class.filters, params).valid?
+    FilterValidator.new(self.class.filters, filter_params).valid?
   end
 
   def filter_errors
-    x = FilterValidator.new(self.class.filters, params)
+    x = FilterValidator.new(self.class.filters, filter_params)
     x.valid?
     x.errors.messages
   end

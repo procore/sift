@@ -2,7 +2,7 @@ module Filterable
   class Filtrator
     attr_reader :collection, :params, :filters
 
-    def initialize(collection, params, filters)
+    def initialize(collection, params, filters = [])
       self.collection = collection
       self.params = params
       self.filters = filters
@@ -34,8 +34,8 @@ module Filterable
     end
 
     def parameter(filter)
-      if params[filter.param].include?('...')
-        Range.new(*params[filter.param].split('...'))
+      if params[filter.param].to_s.include?('...')
+        Range.new(*params[filter.param].to_s.split('...'))
       else
         params[filter.param]
       end

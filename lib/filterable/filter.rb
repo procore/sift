@@ -13,7 +13,7 @@ module Filterable
                        :time,
                        :datetime].freeze
 
-    def initialize(param, type, column_name)
+    def initialize(param, type, column_name = param)
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
       self.param = param
       self.type = type
@@ -23,16 +23,19 @@ module Filterable
     def validation
       case type
       when :int
-        { numericality: { only_integer: true }, allow_nil: true }
+        { format: { with: /\A\d+(...\d+)?\z/ , message: "must be int or range" } }
       when :decimal
         { numericality: true, allow_nil: true }
       when :boolean
-        { inclusion: { in: [true, false] }, allow_nil: true }
+        { inclusion: { in: ['1', '0'] }, allow_nil: true }
       when :string
       when :text
       when :date
+        { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }
       when :time
+        { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }
       when :datetime
+        { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }
       end
     end
 

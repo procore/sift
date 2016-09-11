@@ -9,21 +9,19 @@ module Filterable
 
     def initialize(filters, params)
       filters.each do |filter|
-        if filter.param
-          instance_variable_set("@#{filter.param}", params[filter.param])
-        end
+        instance_variable_set("@#{filter.param}", params[filter.param.to_sym])
       end
 
-      add_validations(filters)
+      add_validations(filters, params)
     end
 
     private
 
-    def add_validations(filters)
+    def add_validations(filters, params)
       class_eval do
         attr_accessor(*filters.map(&:param))
         filters.each do |filter|
-          if filter.param && filter.validation
+          if params[filter.param.to_sym] && filter.validation
             validates filter.param.to_sym, filter.validation
           end
         end

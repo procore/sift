@@ -2,11 +2,13 @@ require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
   test 'it works' do
-    Post.create!
+    post = Post.create!
 
     get('/posts')
 
-    assert_equal 1, JSON.parse(@response.body).size
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+    assert_equal(post.id, json.first['id'])
   end
 
   test 'it filters on id by value' do
@@ -15,7 +17,9 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     get('/posts', params: { filters: { id: post.id } })
 
-    assert_equal 1, JSON.parse(@response.body).size
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+    assert_equal post.id, json.first["id"]
   end
 
   test 'it filters on decimals' do
@@ -24,7 +28,9 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     get('/posts', params: { filters: { rating: post.rating } })
 
-    assert_equal 1, JSON.parse(@response.body).size
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+    assert_equal post.id, json.first["id"]
   end
 
   test 'it filters on booleans' do
@@ -33,7 +39,9 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     get('/posts', params: { filters: { visible: '1' } })
 
-    assert_equal 1, JSON.parse(@response.body).size
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+    assert_equal post.id, json.first["id"]
   end
 
   test 'it filters on booleans false' do
@@ -42,7 +50,22 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     get('/posts', params: { filters: { visible: '0' } })
 
-    assert_equal 1, JSON.parse(@response.body).size
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+    assert_equal post.id, json.first["id"]
+  end
+
+  test 'it invalidates id' do
+    post = Post.create!(visible: false)
+    Post.create!
+    expected_json = { 'errors' => { 'id' => ['must be int or range'] } }
+
+
+    get('/posts', params: { filters: { id: 'poopie' } })
+
+    json = JSON.parse(@response.body)
+
+    assert_equal expected_json, json
   end
 
   test 'it filters on id with a range' do
@@ -52,7 +75,8 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     get('/posts', params: { filters: { id: "#{post.id}...#{post2.id}" } })
 
-    assert_equal 2, JSON.parse(@response.body).size
+    json = JSON.parse(@response.body)
+    assert_equal 2, json.size
   end
 
   test 'it filters on id with an array' do
