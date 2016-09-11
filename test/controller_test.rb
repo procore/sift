@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
-
   test 'it works' do
     Post.create!
 
@@ -14,7 +13,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     post = Post.create!
     Post.create!
 
-    get('/posts', params: {filters: { id: post.id }})
+    get('/posts', params: { filters: { id: post.id } })
 
     assert_equal 1, JSON.parse(@response.body).size
   end

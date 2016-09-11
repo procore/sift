@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-$: << File.expand_path(File.expand_path('../../test', __FILE__))
+$LOAD_PATH << File.expand_path(File.expand_path('../../test', __FILE__))
 
 require 'bundler/setup'
 require 'rails/test_unit/minitest_plugin'
