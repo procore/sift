@@ -1,17 +1,25 @@
 class PostsController < ApplicationController
   include Filterable
 
-  filter_on :priority
-  filter_on :rating
-  filter_on :visible
-  filter_on :title
-  filter_on :body
-  filter_on :expiration
-  filter_on :hidden_after
-  filter_on :published_at
+  filter_on :id, type: :int
+  filter_on :priority, type: :int
+  filter_on :rating, type: :decimal
+  filter_on :visible, type: :boolean
+  filter_on :title, type: :string
+  filter_on :body, type: :text
+  filter_on :expiration, type: :date
+  filter_on :hidden_after, type: :time
+  filter_on :published_at, type: :datetime
+
+  before_action :render_filter_errors, unless: :filters_valid?
 
   def index
-    puts params.inspect
     render json: filtrate(Post.all)
+  end
+
+  private
+
+  def render_filter_errors
+    render json: { errors: filter_errors }
   end
 end

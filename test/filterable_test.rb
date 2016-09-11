@@ -3,19 +3,21 @@ require 'test_helper'
 class Filterable::Test < ActiveSupport::TestCase
   class MyClass
     include Filterable
-  end
 
-  test "filterable exists" do
-    assert_kind_of Module, Filterable
+    def params
+      ActionController::Parameters.new({})
+    end
   end
 
   test "does nothing if no filters are registered" do
+    MyClass.reset_filters
     assert_equal [], MyClass.new.filtrate([])
   end
 
   test "it registers filters with filter_on" do
-    MyClass.filter_on(:id)
+    MyClass.reset_filters
+    MyClass.filter_on(:id, type: :int)
 
-    assert_equal [:id], MyClass.filters
+    assert_equal [:id], MyClass.filters.map(&:param)
   end
 end

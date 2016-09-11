@@ -10,8 +10,9 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, JSON.parse(@response.body).size
   end
 
-  test 'it filters on id' do
+  test 'it filters on id by value' do
     post = Post.create!
+    Post.create!
 
     get('/posts', params: {filters: { id: post.id }})
 
