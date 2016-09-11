@@ -1,36 +1,10 @@
 require 'filterable/filter'
 require 'filterable/filter_validator'
+require 'filterable/filtrator'
 
 module Filterable
   extend ActiveSupport::Concern
 
-  class Filtrator < Struct.new(:collection, :params, :filters)
-    def apply_all
-      active_filters.each do |filter|
-        apply(filter)
-      end
-    end
-
-    def apply(filter)
-      self.collection = literal(collection, filter)
-    end
-
-    private
-
-    def literal(collection, filter)
-      if params[filter.param]
-        collection.where(filter.column_name => params[filter.param])
-      else
-        collection
-      end
-    end
-
-    def active_filters
-      filters.select { |filter|
-        params[filter.param].present?
-      }
-    end
-  end
 
   def filtrate(collection)
     filter_collection = Filtrator.new(collection, filter_params, self.class.filters)

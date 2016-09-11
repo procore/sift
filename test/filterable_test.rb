@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Filterable::Test < ActiveSupport::TestCase
+class FilterableTest < ActiveSupport::TestCase
   class MyClass
     include Filterable
 
