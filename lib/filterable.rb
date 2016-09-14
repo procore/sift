@@ -7,9 +7,7 @@ module Filterable
 
 
   def filtrate(collection)
-    filter_collection = Filtrator.new(collection, filter_params, self.class.filters)
-    filter_collection.apply_all
-    filter_collection.collection
+    Filtrator.filter(collection, filter_params, filters)
   end
 
   def filter_params
@@ -17,13 +15,21 @@ module Filterable
   end
 
   def filters_valid?
-    FilterValidator.new(self.class.filters, filter_params).valid?
+    filter_validator.valid?
   end
 
   def filter_errors
-    x = FilterValidator.new(self.class.filters, filter_params)
-    x.valid?
-    x.errors.messages
+    filter_validator.errors.messages
+  end
+
+  private
+
+  def filter_validator
+    @_filter_validator ||= FilterValidator.new(filters, filter_params)
+  end
+
+  def filters
+    self.class.filters
   end
 
   class_methods do
@@ -33,10 +39,6 @@ module Filterable
 
     def filters
       @_filters ||= []
-    end
-
-    def allowed_parameters
-      filters.map(&:param)
     end
 
     # TODO: this is only used in tests, can I kill it?

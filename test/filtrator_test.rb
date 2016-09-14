@@ -5,10 +5,12 @@ class FiltratorTest < ActiveSupport::TestCase
     Filterable::Filtrator.new(Post.all, { id: 1 }, [])
   end
 
-  test 'it can apply any filter with apply' do
+  test 'it filters by all the filters you pass it' do
     post = Post.create!
-    filtrator = Filterable::Filtrator.new(Post.all, { id: post.id })
     filter = Filterable::Filter.new(:id, :int)
-    filtrator.apply(filter)
+
+    collection = Filterable::Filtrator.filter(Post.all, { id: post.id }, [filter])
+
+    assert_equal Post.where(id: post.id), collection
   end
 end

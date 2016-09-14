@@ -2,6 +2,11 @@ module Filterable
   # Filter describes the way a parameter maps to a database column
   # and the type information helpful for validating input.
   class Filter
+    RANGE_PATTERN = { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }.freeze
+    DIGIT_RANGE_PATTERN = { format: { with: /\A\d+(...\d+)?\z/ , message: "must be int or range" } }.freeze
+    DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
+    # TODO: make this as permissive as active record to boolean.
+    BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
     attr_reader :param, :type, :column_name
 
     WHITELIST_TYPES = [:int,
@@ -22,25 +27,22 @@ module Filterable
 
     def validation
       case type
+      when :datetime, :date, :time
+        RANGE_PATTERN
       when :int
-        { format: { with: /\A\d+(...\d+)?\z/ , message: "must be int or range" } }
+        DIGIT_RANGE_PATTERN
       when :decimal
-        { numericality: true, allow_nil: true }
+        DECIMAL_PATTERN
       when :boolean
-        { inclusion: { in: ['1', '0'] }, allow_nil: true }
+        BOOLEAN_PATTERN
       when :string
       when :text
-      when :date
-        { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }
-      when :time
-        { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }
-      when :datetime
-        { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }
       end
     end
 
     private
 
     attr_writer :param, :type, :column_name
+
   end
 end

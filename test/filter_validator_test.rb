@@ -40,7 +40,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   test 'it validates booleans are 0 or 1' do
     filter = Filterable::Filter.new(:hi, :boolean, :hi)
 
-    validator = Filterable::FilterValidator.new([filter], { hi: '0' })
+    validator = Filterable::FilterValidator.new([filter], { hi: false })
     assert validator.valid?
     assert_equal Hash.new, validator.errors.messages
   end
@@ -49,7 +49,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
     bool_filter = Filterable::Filter.new(:hi, :boolean, :hi)
     dec_filter = Filterable::Filter.new(:bye, :decimal, :bye)
 
-    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: '0',  bye: 1.24})
+    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: true,  bye: 1.24})
     assert validator.valid?
     assert_equal Hash.new, validator.errors.messages
   end
@@ -57,20 +57,19 @@ class FilterValidatorTest < ActiveSupport::TestCase
   test 'it invalidates when one of two filters is invalid' do
     bool_filter = Filterable::Filter.new(:hi, :boolean, :hi)
     dec_filter = Filterable::Filter.new(:bye, :decimal, :bye)
-    expected_messages = { hi: ["is not included in the list"] }
+    expected_messages = { bye: ["is not a number"] }
 
-    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: 'blah',  bye: 1.24})
+    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: 'hi',  bye: 'whatup' })
     assert !validator.valid?
     assert_equal expected_messages, validator.errors.messages
   end
 
   test 'it invalidates when both fields are invalid' do
-    bool_filter = Filterable::Filter.new(:hi, :boolean, :hi)
+    bool_filter = Filterable::Filter.new(:hi, :date, :hi)
     dec_filter = Filterable::Filter.new(:bye, :decimal, :bye)
-    expected_messages = { hi: ["is not included in the list"], bye: ["is not a number"]}
+    expected_messages = { hi: ["must be a range"], bye: ["is not a number"] }
 
-
-    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: 'blah',  bye: 'blue'})
+    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: 1,  bye: 'blue'})
     assert !validator.valid?
     assert_equal expected_messages, validator.errors.messages
   end
@@ -79,7 +78,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
     bool_filter = Filterable::Filter.new(:hi, :boolean, :hi)
     dec_filter = Filterable::Filter.new(:bye, :decimal, :bye)
 
-    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: '1' })
+    validator = Filterable::FilterValidator.new([bool_filter, dec_filter], { hi: true })
     assert validator.valid?
     assert_equal Hash.new, validator.errors.messages
   end
