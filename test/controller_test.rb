@@ -82,4 +82,13 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test 'it filters on id with an array' do
 
   end
+
+  test 'it filters on named scope' do
+    post = Post.create!(expiration: 3.days.ago)
+    post2 = Post.create!(expiration: 1.days.ago)
+    get('/posts', params: { filters: { expired_before: 2.days.ago } })
+
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+  end
 end

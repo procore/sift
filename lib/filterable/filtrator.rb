@@ -27,7 +27,11 @@ module Filterable
     attr_writer :collection, :params, :filters
 
     def apply(collection, filter)
-      collection.where(filter.column_name => parameter(filter))
+      if filter.type == :scope
+        collection.public_send(filter.column_name, parameter(filter))
+      else
+        collection.where(filter.column_name => parameter(filter))
+      end
     end
 
     def parameter(filter)

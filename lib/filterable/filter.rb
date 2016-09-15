@@ -16,7 +16,8 @@ module Filterable
                        :text,
                        :date,
                        :time,
-                       :datetime].freeze
+                       :datetime,
+                       :scope].freeze
 
     def initialize(param, type, column_name = param)
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)

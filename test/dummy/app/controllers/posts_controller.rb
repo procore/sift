@@ -10,6 +10,7 @@ class PostsController < ApplicationController
   filter_on :expiration, type: :date
   filter_on :hidden_after, type: :time
   filter_on :published_at, type: :datetime
+  filter_on :expired_before, type: :scope
 
   before_action :render_filter_errors, unless: :filters_valid?
 
