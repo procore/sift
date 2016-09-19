@@ -99,7 +99,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
     assert_equal Hash.new, validator.errors.messages
   end
 
-  test "datetimes are invalid when not a range" do
+  test 'datetimes are invalid when not a range' do
     filter = Filterable::Filter.new(:hi, :datetime, :hi)
     expected_messages = { hi: ["must be a range"] }
 

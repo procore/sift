@@ -5,8 +5,8 @@ module Filterable
     RANGE_PATTERN = { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }.freeze
     DIGIT_RANGE_PATTERN = { format: { with: /\A\d+(...\d+)?\z/ , message: "must be int or range" } }.freeze
     DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
-    # TODO: make this as permissive as active record to boolean.
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
+
     attr_reader :param, :type, :column_name
 
     WHITELIST_TYPES = [:int,
@@ -24,6 +24,10 @@ module Filterable
       self.param = param
       self.type = type
       self.column_name = column_name
+    end
+
+    def supports_ranges?
+      ![:string, :text, :scope].include?(type)
     end
 
     def validation
