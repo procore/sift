@@ -32,8 +32,8 @@ module Filterable
   end
 
   class_methods do
-    def filter_on(parameter, type:, column_name: parameter)
-      filters << Filter.new(parameter, type, column_name)
+    def filter_on(parameter, type:, internal_name: parameter)
+      filters << Filter.new(parameter, type, internal_name)
     end
 
     def filters

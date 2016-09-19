@@ -56,7 +56,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'it invalidates id' do
-    post = Post.create!(visible: false)
+    Post.create!(visible: false)
     Post.create!
     expected_json = { 'errors' => { 'id' => ['must be int or range'] } }
 
@@ -84,9 +84,18 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'it filters on named scope' do
-    post = Post.create!(expiration: 3.days.ago)
-    post2 = Post.create!(expiration: 1.days.ago)
+    Post.create!(expiration: 3.days.ago)
+    Post.create!(expiration: 1.days.ago)
     get('/posts', params: { filters: { expired_before: 2.days.ago } })
+
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+  end
+
+  test 'the param can have a different name from the internal name' do
+    post = Post.create!(title: 'hi')
+    Post.create!(title: 'friend')
+    get('/posts', params: { filters: { french_bread: post.title } })
 
     json = JSON.parse(@response.body)
     assert_equal 1, json.size
