@@ -1,41 +1,48 @@
 module Filterable
+  # Filtrator takes a collection, params and a set of filters
+  # and applies them to create a new active record collection
+  # with those filters applied.
   class Filtrator
     attr_reader :collection, :params, :filters
 
+    def self.filter(collection, filter_params, filters)
+      new(collection, filter_params, filters).filter
+    end
+
     def initialize(collection, params, filters = [])
+      # TODO: rename collection, or alteast don't use it twice
       self.collection = collection
       self.params = params
       self.filters = filters
     end
 
-    def apply_all
-      active_filters.each do |filter|
-        apply(filter)
+    def filter
+      active_filters.reduce(collection) do |col, filter|
+        apply(col, filter)
       end
-    end
-
-    def apply(filter)
-      self.collection = literal(collection, filter)
     end
 
     private
 
     attr_writer :collection, :params, :filters
 
-    def literal(collection, filter)
-      return collection unless params[filter.param]
-
-      case filter.type
-      when :boolean
-        collection.where(filter.column_name => parameter(filter) == '1')
+    def apply(collection, filter)
+      if filter.type == :scope
+        collection.public_send(filter.column_name, parameter(filter))
       else
         collection.where(filter.column_name => parameter(filter))
       end
     end
 
     def parameter(filter)
-      if params[filter.param].to_s.include?('...')
+      if filter.supports_ranges? && params[filter.param].to_s.include?('...')
         Range.new(*params[filter.param].to_s.split('...'))
+      elsif filter.type == :boolean
+        if Rails.version.starts_with?('5')
+          ActiveRecord::Type::Boolean.new.cast(params[filter.param])
+        else
+          ActiveRecord::Type::Boolean.new.type_cast_from_user(params[filter.param])
+        end
       else
         params[filter.param]
       end
