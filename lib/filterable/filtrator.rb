@@ -35,7 +35,7 @@ module Filterable
     end
 
     def parameter(filter)
-      if params[filter.param].to_s.include?('...')
+      if filter.supports_ranges? && params[filter.param].to_s.include?('...')
         Range.new(*params[filter.param].to_s.split('...'))
       elsif filter.type == :boolean
         if Rails.version.starts_with?('5')

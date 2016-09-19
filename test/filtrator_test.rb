@@ -13,4 +13,13 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.where(id: post.id), collection
   end
+
+  test 'it will not try to make a range out of a string field that includes ...' do
+    post = Post.create!(title: 'wow...man')
+    filter = Filterable::Filter.new(:title, :string)
+
+    collection = Filterable::Filtrator.filter(Post.all, { title: post.title }, [filter])
+
+    assert_equal Post.where(id: post.id).to_a, collection.to_a
+  end
 end

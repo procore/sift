@@ -5,7 +5,6 @@ require 'filterable/filtrator'
 module Filterable
   extend ActiveSupport::Concern
 
-
   def filtrate(collection)
     Filtrator.filter(collection, filter_params, filters)
   end
