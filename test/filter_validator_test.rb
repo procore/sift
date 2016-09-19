@@ -20,7 +20,6 @@ class FilterValidatorTest < ActiveSupport::TestCase
 
   test 'it validates decimals are numerical' do
     filter = Filterable::Filter.new(:hi, :decimal, :hi)
-    expected_messages = { hi: ["is not included in the list"] }
 
     validator = Filterable::FilterValidator.new([filter], { hi: 2.13 })
     assert validator.valid?
