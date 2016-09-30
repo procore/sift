@@ -30,6 +30,7 @@ module Filterable
       if filter.type == :scope
         collection.public_send(filter.column_name, parameter(filter))
       else
+        binding.pry
         collection.where(filter.column_name => parameter(filter))
       end
     end
