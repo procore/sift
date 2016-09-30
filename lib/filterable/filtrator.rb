@@ -35,7 +35,6 @@ module Filterable
     end
 
     def parameter(filter)
-      puts "entering parameter method #{filter}"
       if filter.supports_ranges? && params[filter.param].to_s.include?('...')
         Range.new(*params[filter.param].to_s.split('...'))
       elsif filter.type == :boolean
@@ -45,8 +44,6 @@ module Filterable
           ActiveRecord::Type::Boolean.new.type_cast_from_user(params[filter.param])
         end
       elsif filter.type == :array && !params[filter.param].is_a?(Array)
-        puts "this is what params looks like #{params[filter.param]}"
-        puts "json of params #{JSON.parse(params[filter.param])}"
         JSON.parse(params[filter.param])
       else
         params[filter.param]
