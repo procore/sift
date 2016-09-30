@@ -17,6 +17,7 @@ module Filterable
                        :date,
                        :time,
                        :datetime,
+                       :array,
                        :scope].freeze
 
     def initialize(param, type, column_name = param)
@@ -27,7 +28,7 @@ module Filterable
     end
 
     def supports_ranges?
-      ![:string, :text, :scope].include?(type)
+      ![:string, :text, :scope, :array].include?(type)
     end
 
     def validation
@@ -42,6 +43,7 @@ module Filterable
         BOOLEAN_PATTERN
       when :string
       when :text
+      when :array
       end
     end
 
