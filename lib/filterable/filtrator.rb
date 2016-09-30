@@ -30,7 +30,6 @@ module Filterable
       if filter.type == :scope
         collection.public_send(filter.column_name, parameter(filter))
       else
-        binding.pry
         collection.where(filter.column_name => parameter(filter))
       end
     end
@@ -44,6 +43,8 @@ module Filterable
         else
           ActiveRecord::Type::Boolean.new.type_cast_from_user(params[filter.param])
         end
+      elsif filter.type == :array && !params[filter.param].is_a?(Array)
+        JSON.parse(params[filter.param])
       else
         params[filter.param]
       end
