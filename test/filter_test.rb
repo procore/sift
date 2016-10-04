@@ -6,7 +6,7 @@ class FilterTest < ActiveSupport::TestCase
 
     assert_equal 'hi', filter.param
     assert_equal :int, filter.type
-    assert_equal 'hi', filter.column_name
+    assert_equal 'hi', filter.internal_name
   end
 
   test 'it raises if the type is unknown' do

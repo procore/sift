@@ -16,6 +16,9 @@ class PostsController < ApplicationController
 
   before_action :render_filter_errors, unless: :filters_valid?
 
+
+  sort_on :title, type: :string
+
   def index
     render json: filtrate(Post.all)
   end

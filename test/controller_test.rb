@@ -100,4 +100,24 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(@response.body)
     assert_equal 1, json.size
   end
+
+  test 'it sorts' do
+    Post.create!(title: 'z')
+    Post.create!(title: 'a')
+
+    get('/posts', params: { sort: 'title' })
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['a', 'z'], json.map(&:title)
+  end
+
+  test 'it sorts descending' do
+    Post.create!(title: 'z')
+    Post.create!(title: 'a')
+
+    get('/posts', params: { sort: '-title' })
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['z', 'a'], json.map(&:title)
+  end
 end
