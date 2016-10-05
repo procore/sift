@@ -33,7 +33,7 @@ module Filterable
       sort_field = raw_field.gsub(/\W/,'')
       sortable_params = sorts.map(&:param)
       if sortable_params.include?(sort_field)
-        order_hash[sort_field] = raw_field.match('-') ? :desc : :asc
+        order_hash[sort_field] = raw_field.starts_with?('-') ? :desc : :asc
       end
       order_hash
     }
