@@ -28,7 +28,11 @@ module Filterable
 
     def apply(collection, filter)
       if filter.type == :scope
-        collection.public_send(filter.column_name, parameter(filter))
+        if params[filter.param].present?
+          collection.public_send(filter.column_name, parameter(filter))
+        else
+          filter.block.call(collection)
+        end
       else
         collection.where(filter.column_name => parameter(filter))
       end
@@ -50,7 +54,7 @@ module Filterable
 
     def active_filters
       filters.select { |filter|
-        params[filter.param].present?
+        params[filter.param].present? || filter.block
       }
     end
   end
