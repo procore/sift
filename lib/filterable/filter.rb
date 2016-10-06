@@ -7,7 +7,7 @@ module Filterable
     DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
 
-    attr_reader :param, :type, :column_name, :block
+    attr_reader :param, :type, :column_name, :default
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -24,7 +24,7 @@ module Filterable
       self.param = param
       self.type = type
       self.column_name = column_name
-      self.block = default
+      self.default = default
     end
 
     def supports_ranges?
@@ -48,7 +48,7 @@ module Filterable
 
     private
 
-    attr_writer :param, :type, :column_name, :block
+    attr_writer :param, :type, :column_name, :default
 
   end
 end

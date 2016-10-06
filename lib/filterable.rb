@@ -33,11 +33,7 @@ module Filterable
 
   class_methods do
     def filter_on(parameter, type:, internal_name: parameter, default: nil)
-      if default.nil?
-        filters << Filter.new(parameter, type, internal_name)
-      else
-        filters << Filter.new(parameter, type, internal_name, default)
-      end
+      filters << Filter.new(parameter, type, internal_name, default)
     end
 
     def filters

@@ -31,7 +31,7 @@ module Filterable
         if params[filter.param].present?
           collection.public_send(filter.column_name, parameter(filter))
         else
-          filter.block.call(collection)
+          filter.default.call(collection)
         end
       else
         collection.where(filter.column_name => parameter(filter))
@@ -54,7 +54,7 @@ module Filterable
 
     def active_filters
       filters.select { |filter|
-        params[filter.param].present? || filter.block
+        params[filter.param].present? || filter.default
       }
     end
   end
