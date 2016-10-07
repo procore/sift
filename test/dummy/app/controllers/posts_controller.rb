@@ -18,6 +18,7 @@ class PostsController < ApplicationController
 
 
   sort_on :title, type: :string
+  sort_on :priority, type: :string
 
   def index
     render json: filtrate(Post.all)

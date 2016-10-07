@@ -22,9 +22,9 @@ class FilterableTest < ActiveSupport::TestCase
   end
 
   test "it registers sorts with sort_on" do
-    MyClass.reset_sorts
+    MyClass.reset_filters
     MyClass.sort_on(:id, type: :int)
 
-    assert_equal ['id'], MyClass.sorts.map(&:param)
+    assert_equal [:id], MyClass.filters.map(&:param)
   end
 end

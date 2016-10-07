@@ -7,11 +7,15 @@ module Filterable
   extend ActiveSupport::Concern
 
   def filtrate(collection)
-    Filtrator.filter(collection, filter_params, filters).order(order_hash)
+    Filtrator.filter(collection, filter_params, filters, sort_params)
   end
 
   def filter_params
     params.fetch(:filters, {})
+  end
+
+  def sort_params
+    params.fetch(:sort, '').split(',')
   end
 
   def filters_valid?
@@ -25,22 +29,7 @@ module Filterable
   private
 
   def filter_validator
-    @_filter_validator ||= FilterValidator.new(filters, filter_params)
-  end
-
-  def order_hash
-    params.fetch(:sort, '').split(',').reduce({}) { |order_hash, raw_field|
-      sort_field = raw_field.gsub(/\W/,'')
-      sortable_params = sorts.map(&:param)
-      if sortable_params.include?(sort_field)
-        order_hash[sort_field] = raw_field.starts_with?('-') ? :desc : :asc
-      end
-      order_hash
-    }
-  end
-
-  def sorts
-    self.class.sorts
+    @_filter_validator ||= FilterValidator.new(filters, params, self.class.sort_fields)
   end
 
   def filters
@@ -61,16 +50,14 @@ module Filterable
       @_filters = []
     end
 
+    def sort_fields
+      @_sort_fields ||= []
+    end
+
     def sort_on(parameter, type:, internal_name: parameter)
-      sorts << Sort.new(parameter, type, internal_name)
-    end
-
-    def sorts
-      @_sorts ||= []
-    end
-
-    def reset_sorts
-      @_sorts = []
+      filters << Sort.new(parameter, type, internal_name)
+      sort_fields << parameter.to_s
+      sort_fields << "-#{parameter.to_s}"
     end
   end
 end

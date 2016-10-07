@@ -7,11 +7,11 @@ module Filterable
   class FilterValidator
     include ActiveModel::Validations
 
-    def initialize(filters, params)
+    def initialize(filters, params, sort_fields)
       filters.each do |filter|
-        instance_variable_set("@#{filter.param}", to_type(filter, params))
+        instance_variable_set("@#{filter.validation_field}", to_type(filter, params))
       end
-      add_validations(filters, params)
+      add_validations(filters, params, sort_fields)
     end
 
     private
@@ -19,21 +19,23 @@ module Filterable
     def to_type(filter, params)
       if filter.type == :boolean
         if Rails.version.starts_with?('5')
-          ActiveRecord::Type::Boolean.new.cast(params[filter.param])
+          ActiveRecord::Type::Boolean.new.cast(params.fetch(:filters, {})[filter.param])
         else
-          ActiveRecord::Type::Boolean.new.type_cast_from_user(params[filter.param])
+          ActiveRecord::Type::Boolean.new.type_cast_from_user(params.fetch(:filters, {})[filter.param])
         end
+      elsif filter.validation_field == :sort
+        params.fetch(:sort, '').split(',')
       else
-        params[filter.param]
+        params.fetch(:filters, {})[filter.param]
       end
     end
 
-    def add_validations(filters, params)
+    def add_validations(filters, params, sort_fields)
       class_eval do
-        attr_accessor(*filters.map(&:param))
-        filters.each do |filter|
-          if params[filter.param.to_sym] && filter.validation
-            validates filter.param.to_sym, filter.validation
+        attr_accessor(*filters.map(&:validation_field).uniq)
+        filters.uniq { |filter| filter.validation_field }.each do |filter|
+          if (params.fetch(:filters, {})[filter.validation_field] && filter.validation(sort_fields)) || filter.validation_field == :sort
+            validates filter.validation_field.to_sym, filter.validation(sort_fields)
           end
         end
       end

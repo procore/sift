@@ -30,7 +30,7 @@ module Filterable
       ![:string, :text, :scope].include?(type)
     end
 
-    def validation
+    def validation(_=nil)
       case type
       when :datetime, :date, :time
         RANGE_PATTERN
@@ -45,9 +45,34 @@ module Filterable
       end
     end
 
+    def apply!(collection, value, _)
+      collection.where(internal_name => parameter(value))
+    end
+
+    def always_active?
+      false
+    end
+
+    def validation_field
+      param
+    end
+
     private
 
     attr_writer :param, :type, :internal_name
 
+    def parameter(value)
+      if supports_ranges? && value.include?('...')
+        Range.new(*value.split('...'))
+      elsif type == :boolean
+        if Rails.version.starts_with?('5')
+          ActiveRecord::Type::Boolean.new.cast(value)
+        else
+          ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
+        end
+      else
+        value
+      end
+    end
   end
 end
