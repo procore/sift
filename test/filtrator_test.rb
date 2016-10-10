@@ -33,4 +33,15 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.where(body: "foo"), collection
   end
+
+  test 'it does not return default if param passed' do
+    post1 = Post.create!(expired_before: "foo")
+    post2 = Post.create!(expired_before: "bar")
+
+    filter = Filterable::Filter.new(:expired_before, :scope, :expired_before, nil)
+
+    collection = Filterable::Filtrator.filter(Post.all, { expired_before: post1.expired_before }, [filter])
+
+    assert_equal Post.where(expired_before: "foo"), collection
+  end
 end
