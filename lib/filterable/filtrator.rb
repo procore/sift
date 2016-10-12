@@ -54,7 +54,7 @@ module Filterable
 
     def active_filters
       filters.select { |filter|
-        params[filter.param].present? || params[filter.default].present?
+        params[filter.param].present? || filter.default
       }
     end
   end

@@ -13,7 +13,7 @@ class PostsController < ApplicationController
   filter_on :expired_before, type: :scope
 
   filter_on :french_bread, type: :string, internal_name: :title
-  filter_on :sourdough, type: :scope, internal_name: :body, default: ->(c) { c.where(body: "foo")}
+  filter_on :status, type: :scope, internal_name: :body, default: ->(c) { c.where(body: "foo")}
 
   before_action :render_filter_errors, unless: :filters_valid?
 

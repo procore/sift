@@ -23,25 +23,21 @@ class FiltratorTest < ActiveSupport::TestCase
     assert_equal Post.where(id: post.id).to_a, collection.to_a
   end
 
-  test 'it returns default scope when filter scope not passed' do
+  test 'it returns default when filter param not passed' do
     post1 = Post.create!(body: "foo")
     post2 = Post.create!(body: "bar")
-
-    filter = Filterable::Filter.new(:body, :scope, :body, ->(c) { c.where(body: 'foo') })
-
+    filter = Filterable::Filter.new(:status, :scope, :body, ->(c) { c.where(body: 'foo') })
     collection = Filterable::Filtrator.filter(Post.all, {}, [filter])
 
-    assert_equal Post.where(body: "foo"), collection
+    assert_equal Post.where(id: post1.id).to_a, collection.to_a
   end
 
   test 'it does not return default if param passed' do
-    post1 = Post.create!(expired_before: "foo")
-    post2 = Post.create!(expired_before: "bar")
+    post1 = Post.create!(body: "foo")
+    post2 = Post.create!(body: "bar")
+    filter = Filterable::Filter.new(:status, :scope, :body, nil)
+    collection = Filterable::Filtrator.filter(Post.all, { status: "bar" }, [filter])
 
-    filter = Filterable::Filter.new(:expired_before, :scope, :expired_before, nil)
-
-    collection = Filterable::Filtrator.filter(Post.all, { expired_before: post1.expired_before }, [filter])
-
-    assert_equal Post.where(expired_before: "foo"), collection
+    assert_equal Post.where(id: post2.id).to_a, collection.to_a
   end
 end
