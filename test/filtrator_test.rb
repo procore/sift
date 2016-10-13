@@ -26,10 +26,10 @@ class FiltratorTest < ActiveSupport::TestCase
   test 'it returns default when filter param not passed' do
     post1 = Post.create!(body: "foo")
     post2 = Post.create!(body: "bar")
-    filter = Filterable::Filter.new(:body2, :scope, :body2, ->(c) { c.where(body: 'foo') })
+    filter = Filterable::Filter.new(:body2, :scope, :body2, ->(c) { c.order(:body) })
     collection = Filterable::Filtrator.filter(Post.all, {}, [filter])
 
-    assert_equal Post.where(id: post1.id).to_a, collection.to_a
+    assert_equal [Post.second, Post.first], collection.to_a
   end
 
   test 'it will not return default if param passed' do
