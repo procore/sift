@@ -28,13 +28,19 @@ module Filterable
 
     def apply(collection, filter)
       if filter.type == :scope
-        if params[filter.param].present?
-          collection.public_send(filter.column_name, parameter(filter))
-        else
-          filter.default.call(collection)
-        end
+        apply_scope_filters(collection, filter)
       else
         collection.where(filter.column_name => parameter(filter))
+      end
+    end
+
+    def apply_scope_filters(collection, filter)
+      if params[filter.param].present?
+        collection.public_send(filter.column_name, parameter(filter))
+      elsif filter.default.present?
+        filter.default.call(collection)
+      else
+        collection
       end
     end
 

@@ -3,7 +3,7 @@ class Post < ApplicationRecord
     where('expiration < ?', date)
   }
 
-  scope :status, -> (status) {
-    where(body: status)
+  scope :body2, -> (text) {
+    where(body: text)
   }
 end
