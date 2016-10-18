@@ -13,6 +13,7 @@ class PostsController < ApplicationController
   filter_on :expired_before, type: :scope
 
   filter_on :french_bread, type: :string, internal_name: :title
+  filter_on :body2, type: :scope, internal_name: :body2, default: ->(c) { c.order(:body) }
 
   before_action :render_filter_errors, unless: :filters_valid?
 
