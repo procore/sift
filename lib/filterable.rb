@@ -2,6 +2,7 @@ require 'filterable/filter'
 require 'filterable/filter_validator'
 require 'filterable/filtrator'
 require 'filterable/sort'
+require 'filterable/subset_comparator'
 
 module Filterable
   extend ActiveSupport::Concern

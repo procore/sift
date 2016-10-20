@@ -1,17 +1,8 @@
 module Filterable
-  class FunkyArray
-    def initialize(array)
-      @array = array
-    end
-
-    def include?(other)
-      @array.to_set >= other.to_set
-    end
-  end
-
-  # TODO docs comment
+  # Sort provides the same interface as a filter,
+  # but instead of applying a `where` to the collection
+  # it applies an `order`.
   class Sort
-
     attr_reader :param, :type, :internal_name
 
     WHITELIST_TYPES = [:int,
@@ -48,7 +39,7 @@ module Filterable
 
     def validation(sort)
       {
-        inclusion: { in: FunkyArray.new(sort) },
+        inclusion: { in: SubsetComparator.new(sort) },
         allow_nil: true
       }
     end
