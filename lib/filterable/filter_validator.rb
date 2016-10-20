@@ -7,7 +7,12 @@ module Filterable
   class FilterValidator
     include ActiveModel::Validations
 
-    def initialize(filters, params, sort_fields)
+    attr_reader :filter_params, :sort_params
+
+    def initialize(filters, params, sort_fields, filter_params:, sort_params:)
+      @filter_params = filter_params
+      @sort_params = sort_params
+
       filters.each do |filter|
         instance_variable_set("@#{filter.validation_field}", to_type(filter, params))
       end
@@ -19,14 +24,14 @@ module Filterable
     def to_type(filter, params)
       if filter.type == :boolean
         if Rails.version.starts_with?('5')
-          ActiveRecord::Type::Boolean.new.cast(params.fetch(:filters, {})[filter.param])
+          ActiveRecord::Type::Boolean.new.cast(filter_params[filter.param])
         else
-          ActiveRecord::Type::Boolean.new.type_cast_from_user(params.fetch(:filters, {})[filter.param])
+          ActiveRecord::Type::Boolean.new.type_cast_from_user(filter_params[filter.param])
         end
       elsif filter.validation_field == :sort
         params.fetch(:sort, '').split(',')
       else
-        params.fetch(:filters, {})[filter.param]
+        filter_params[filter.param]
       end
     end
 
