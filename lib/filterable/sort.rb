@@ -47,10 +47,11 @@ module Filterable
     end
 
     def validation(sort)
-      {inclusion: { in: FunkyArray.new(sort) }, allow_nil: true }
+      {
+        inclusion: { in: FunkyArray.new(sort) },
+        allow_nil: true
+      }
     end
-
-
 
     private
 

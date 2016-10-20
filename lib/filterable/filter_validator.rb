@@ -36,9 +36,11 @@ module Filterable
     end
 
     def add_validations(filters, params, sort_fields)
+      unique_validations = filters.uniq { |filter| filter.validation_field }
       class_eval do
-        attr_accessor(*filters.map(&:validation_field).uniq)
-        filters.uniq { |filter| filter.validation_field }.each do |filter|
+        attr_accessor(*unique_validations.map(&:validation_field))
+
+        unique_validations.each do |filter|
           if (params.fetch(:filters, {})[filter.validation_field] && filter.validation(sort_fields)) || filter.validation_field == :sort
             validates filter.validation_field.to_sym, filter.validation(sort_fields)
           end
