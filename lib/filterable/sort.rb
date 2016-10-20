@@ -29,6 +29,11 @@ module Filterable
       self.internal_name = internal_name
     end
 
+    def default
+      # TODO: we can support defaults here later
+      false
+    end
+
     def apply!(collection, _, sorts)
       collection.order(order_hash(sorts))
     end

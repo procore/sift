@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    filterable (0.2.0)
+    filterable (0.2.1)
       rails (> 4.2.0)
 
 GEM
@@ -62,10 +62,8 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.9.1)
     nio4r (1.2.1)
-    nokogiri (1.6.8)
+    nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
-    pkg-config (1.1.7)
     rack (2.0.1)
     rack-test (0.6.3)
       rack (>= 1.0)

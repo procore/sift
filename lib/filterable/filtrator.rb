@@ -28,9 +28,19 @@ module Filterable
 
     def apply(collection, filter)
       if filter.type == :scope
-        collection.public_send(filter.internal_name, parameter(filter))
+        apply_scope_filters(collection, filter)
       else
         filter.apply!(collection, params[filter.param].to_s, sort)
+      end
+    end
+
+    def apply_scope_filters(collection, filter)
+      if params[filter.param].present?
+        collection.public_send(filter.internal_name, parameter(filter))
+      elsif filter.default.present?
+        filter.default.call(collection)
+      else
+        collection
       end
     end
 
@@ -50,7 +60,7 @@ module Filterable
 
     def active_filters
       filters.select { |filter|
-        params[filter.param].present? || filter.always_active?
+        params[filter.param].present? || filter.default || filter.always_active?
       }
     end
   end

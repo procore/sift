@@ -7,7 +7,8 @@ module Filterable
     DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
 
-    attr_reader :param, :type, :internal_name
+
+    attr_reader :param, :type, :internal_name, :default
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -19,11 +20,12 @@ module Filterable
                        :datetime,
                        :scope].freeze
 
-    def initialize(param, type, internal_name = param)
+    def initialize(param, type, internal_name = param, default)
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
       self.param = param
       self.type = type
       self.internal_name = internal_name
+      self.default = default
     end
 
     def supports_ranges?
@@ -59,7 +61,7 @@ module Filterable
 
     private
 
-    attr_writer :param, :type, :internal_name
+    attr_writer :param, :type, :internal_name, :default
 
     def parameter(value)
       if supports_ranges? && value.include?('...')
