@@ -27,10 +27,4 @@ class FilterableTest < ActiveSupport::TestCase
 
     assert_equal [:id], MyClass.filters.map(&:param)
   end
-
-  test "filtrate applies the filters" do
-    MyClass.filter_on(:id, type: :int)
-
-    assert_equal [], MyClass.new.filtrate(Post.all)
-  end
 end
