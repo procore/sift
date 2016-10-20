@@ -25,7 +25,7 @@ module Filterable
       false
     end
 
-    def apply!(collection, _, sorts)
+    def apply!(collection, sorts:, value:)
       collection.order(order_hash(sorts))
     end
 

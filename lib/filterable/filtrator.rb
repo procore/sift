@@ -28,7 +28,7 @@ module Filterable
       if filter.type == :scope
         apply_scope_filters(collection, filter)
       else
-        filter.apply!(collection, params[filter.param].to_s, sort)
+        filter.apply!(collection, value: params[filter.param].to_s, sorts: sort)
       end
     end
 

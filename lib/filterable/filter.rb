@@ -47,7 +47,7 @@ module Filterable
       end
     end
 
-    def apply!(collection, value, _)
+    def apply!(collection, value:, sorts:)
       collection.where(internal_name => parameter(value))
     end
 
