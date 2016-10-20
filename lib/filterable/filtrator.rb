@@ -10,10 +10,10 @@ module Filterable
     end
 
     def initialize(collection, params, sort, filters = [])
-      self.collection = collection
-      self.params = params
-      self.filters = filters
-      self.sort = sort
+      @collection = collection
+      @params = params
+      @filters = filters
+      @sort = sort
     end
 
     def filter
@@ -23,8 +23,6 @@ module Filterable
     end
 
     private
-
-    attr_writer :collection, :params, :filters, :sort
 
     def apply(collection, filter)
       if filter.type == :scope

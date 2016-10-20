@@ -19,28 +19,28 @@ class FilterTest < ActiveSupport::TestCase
     filter = Filterable::Filter.new('hi', :datetime, 'hi', nil)
     expected_validation = { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }
 
-    assert_equal expected_validation, filter.validation
+    assert_equal expected_validation, filter.validation(nil)
   end
 
   test 'it knows what validation it needs when an int' do
     filter = Filterable::Filter.new('hi', :int, 'hi', nil)
     expected_validation = { format: { with: /\A\d+(...\d+)?\z/ , message: "must be int or range" } }
 
-    assert_equal expected_validation, filter.validation
+    assert_equal expected_validation, filter.validation(nil)
   end
 
   test 'it knows what validation it needs when a decimal' do
     filter = Filterable::Filter.new('hi', :decimal, 'hi', nil)
     expected_validation = { numericality: true, allow_nil: true }
 
-    assert_equal expected_validation, filter.validation
+    assert_equal expected_validation, filter.validation(nil)
   end
 
   test 'it knows what validation it needs when a boolean' do
     filter = Filterable::Filter.new('hi', :boolean, 'hi', nil)
     expected_validation = { inclusion: { in: [true, false] }, allow_nil: true }
 
-    assert_equal expected_validation, filter.validation
+    assert_equal expected_validation, filter.validation(nil)
   end
 
   test 'stringy types do not support ranges' do

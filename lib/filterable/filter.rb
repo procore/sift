@@ -22,17 +22,17 @@ module Filterable
 
     def initialize(param, type, internal_name = param, default)
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
-      self.param = param
-      self.type = type
-      self.internal_name = internal_name
-      self.default = default
+      @param = param
+      @type = type
+      @internal_name = internal_name
+      @default = default
     end
 
     def supports_ranges?
       ![:string, :text, :scope].include?(type)
     end
 
-    def validation(_=nil)
+    def validation(_)
       case type
       when :datetime, :date, :time
         RANGE_PATTERN
@@ -60,8 +60,6 @@ module Filterable
     end
 
     private
-
-    attr_writer :param, :type, :internal_name, :default
 
     def parameter(value)
       if supports_ranges? && value.include?('...')

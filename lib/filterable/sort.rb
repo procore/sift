@@ -15,9 +15,9 @@ module Filterable
 
     def initialize(param, type, internal_name = param)
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
-      self.param = param
-      self.type = type
-      self.internal_name = internal_name
+      @param = param
+      @type = type
+      @internal_name = internal_name
     end
 
     def default
@@ -45,8 +45,6 @@ module Filterable
     end
 
     private
-
-    attr_writer :param, :type, :internal_name
 
     def order_hash(sorts)
       sorts.reduce({}) { |order_hash, raw_field|
