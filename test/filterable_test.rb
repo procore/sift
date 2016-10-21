@@ -11,12 +11,19 @@ class FilterableTest < ActiveSupport::TestCase
 
   test "does nothing if no filters are registered" do
     MyClass.reset_filters
-    assert_equal [], MyClass.new.filtrate([])
+    assert_equal [], MyClass.new.filtrate(Post.all)
   end
 
   test "it registers filters with filter_on" do
     MyClass.reset_filters
     MyClass.filter_on(:id, type: :int)
+
+    assert_equal [:id], MyClass.filters.map(&:param)
+  end
+
+  test "it registers sorts with sort_on" do
+    MyClass.reset_filters
+    MyClass.sort_on(:id, type: :int)
 
     assert_equal [:id], MyClass.filters.map(&:param)
   end

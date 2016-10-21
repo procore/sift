@@ -100,4 +100,46 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(@response.body)
     assert_equal 1, json.size
   end
+
+  test 'it sorts' do
+    Post.create!(title: 'z')
+    Post.create!(title: 'a')
+
+    get('/posts', params: { sort: 'title' })
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['a', 'z'], json.map(&:title)
+  end
+
+  test 'it sorts descending' do
+    Post.create!(title: 'z')
+    Post.create!(title: 'a')
+
+    get('/posts', params: { sort: '-title' })
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['z', 'a'], json.map(&:title)
+  end
+
+  test 'it can do multiple sorts' do
+    Post.create!(title: 'z')
+    Post.create!(title: 'g', priority: 1)
+    Post.create!(title: 'g', priority: 10)
+    Post.create!(title: 'a')
+
+    get('/posts', params: { sort: '-title,-priority' })
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['z', 'g', 'g', 'a'], json.map(&:title)
+    assert_equal [nil, 10, 1, nil], json.map(&:priority)
+  end
+
+  test 'it errors on unknown fields' do
+    expected_json = {"errors"=>{"sort"=>["is not included in the list"]}}
+
+    get('/posts', params: { sort: '-not-there' })
+
+    json = JSON.parse(@response.body)
+    assert_equal expected_json, json
+  end
 end

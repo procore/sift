@@ -3,17 +3,17 @@ module Filterable
   # and applies them to create a new active record collection
   # with those filters applied.
   class Filtrator
-    attr_reader :collection, :params, :filters
+    attr_reader :collection, :params, :filters, :sort
 
-    def self.filter(collection, filter_params, filters)
-      new(collection, filter_params, filters).filter
+    def self.filter(collection, filter_params, filters, sort = "")
+      new(collection, filter_params, sort, filters).filter
     end
 
-    def initialize(collection, params, filters = [])
-      # TODO: rename collection, or alteast don't use it twice
-      self.collection = collection
-      self.params = params
-      self.filters = filters
+    def initialize(collection, params, sort, filters = [])
+      @collection = collection
+      @params = params
+      @filters = filters
+      @sort = sort
     end
 
     def filter
@@ -24,19 +24,17 @@ module Filterable
 
     private
 
-    attr_writer :collection, :params, :filters
-
     def apply(collection, filter)
       if filter.type == :scope
         apply_scope_filters(collection, filter)
       else
-        collection.where(filter.column_name => parameter(filter))
+        filter.apply!(collection, value: params[filter.param].to_s, sorts: sort)
       end
     end
 
     def apply_scope_filters(collection, filter)
       if params[filter.param].present?
-        collection.public_send(filter.column_name, parameter(filter))
+        collection.public_send(filter.internal_name, parameter(filter))
       elsif filter.default.present?
         filter.default.call(collection)
       else
@@ -60,7 +58,7 @@ module Filterable
 
     def active_filters
       filters.select { |filter|
-        params[filter.param].present? || filter.default
+        params[filter.param].present? || filter.default || filter.always_active?
       }
     end
   end

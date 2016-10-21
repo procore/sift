@@ -1,16 +1,22 @@
 require 'filterable/filter'
 require 'filterable/filter_validator'
 require 'filterable/filtrator'
+require 'filterable/sort'
+require 'filterable/subset_comparator'
 
 module Filterable
   extend ActiveSupport::Concern
 
   def filtrate(collection)
-    Filtrator.filter(collection, filter_params, filters)
+    Filtrator.filter(collection, filter_params, filters, sort_params)
   end
 
   def filter_params
     params.fetch(:filters, {})
+  end
+
+  def sort_params
+    params.fetch(:sort, '').split(',')
   end
 
   def filters_valid?
@@ -24,7 +30,7 @@ module Filterable
   private
 
   def filter_validator
-    @_filter_validator ||= FilterValidator.new(filters, filter_params)
+    @_filter_validator ||= FilterValidator.new(filters, params, self.class.sort_fields, filter_params: filter_params, sort_params: sort_params)
   end
 
   def filters
@@ -43,6 +49,16 @@ module Filterable
     # TODO: this is only used in tests, can I kill it?
     def reset_filters
       @_filters = []
+    end
+
+    def sort_fields
+      @_sort_fields ||= []
+    end
+
+    def sort_on(parameter, type:, internal_name: parameter)
+      filters << Sort.new(parameter, type, internal_name)
+      sort_fields << parameter.to_s
+      sort_fields << "-#{parameter}"
     end
   end
 end
