@@ -8,7 +8,7 @@ module Filterable
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
 
 
-    attr_reader :param, :type, :internal_name, :default
+    attr_reader :param, :type, :internal_name, :default, :custom_validate
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -20,12 +20,13 @@ module Filterable
                        :datetime,
                        :scope].freeze
 
-    def initialize(param, type, internal_name = param, default)
+    def initialize(param, type, internal_name = param, default, custom_validate)
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
       @param = param
       @type = type
       @internal_name = internal_name
       @default = default
+      @custom_validate = custom_validate
     end
 
     def supports_ranges?
