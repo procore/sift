@@ -15,6 +15,19 @@ class PostsController < ApplicationController
   filter_on :french_bread, type: :string, internal_name: :title
   filter_on :body2, type: :scope, internal_name: :body2, default: ->(c) { c.order(:body) }
 
+  filter_on :id_array, type: :int, internal_name: :id, validate: -> (validator) {
+    value = validator.instance_variable_get("@id_array")
+    if value.is_a? Array
+      if !value.inject(true) { |bool, val| bool && (Integer(val) rescue false) }
+        validator.errors.add(:id_array, "Not all values were valid integers")
+      end
+    else
+      if !(Integer(value) rescue false)
+        validator.errors.add(:id_array, "It not an integer")
+      end
+    end
+  }
+
   before_action :render_filter_errors, unless: :filters_valid?
 
 
