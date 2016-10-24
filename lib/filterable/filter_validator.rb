@@ -42,12 +42,10 @@ module Filterable
         attr_accessor(*unique_validations.map(&:validation_field))
 
         unique_validations.each do |filter|
-          if (params.fetch(:filters, {})[filter.validation_field])
-            if filter.custom_validate
-              validate filter.custom_validate
-            elsif filter.validation(sort_fields) || filter.validation_field == :sort
-              validates filter.validation_field.to_sym, filter.validation(sort_fields)
-            end
+          if (params.fetch(:filters, {})[filter.validation_field] && filter.custom_validate)
+            validate filter.custom_validate
+          elsif (params.fetch(:filters, {})[filter.validation_field] && filter.validation(sort_fields)) || filter.validation_field == :sort
+            validates filter.validation_field.to_sym, filter.validation(sort_fields)
           end
         end
       end
