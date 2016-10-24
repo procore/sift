@@ -38,8 +38,8 @@ module Filterable
   end
 
   class_methods do
-    def filter_on(parameter, type:, internal_name: parameter, default: nil)
-      filters << Filter.new(parameter, type, internal_name, default)
+    def filter_on(parameter, type:, internal_name: parameter, default: nil, validate: nil)
+      filters << Filter.new(parameter, type, internal_name, default, validate)
     end
 
     def filters

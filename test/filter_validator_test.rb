@@ -115,4 +115,24 @@ class FilterValidatorTest < ActiveSupport::TestCase
     assert !validator.valid?
     assert_equal expected_messages, validator.errors.messages
   end
+
+  test 'it respects a custom validation' do
+    error_message = "super duper error message"
+    filter = Filterable::Filter.new(:hi, :int, :hi, nil, -> (validator) {
+      validator.errors.add(:base, error_message)      
+    })
+    expected_messages = { :base => [error_message] }
+
+    validator = Filterable::FilterValidator.new([filter], {filters: { hi: 1 }}, [], filter_params: { hi: 1}, sort_params: '')
+    assert !validator.valid?
+    assert_equal expected_messages, validator.errors.messages
+  end
+
+  test 'custom validation supercedes type validation' do
+    filter = Filterable::Filter.new(:hi, :int, :hi, nil, -> (validator) {})
+
+    validator = Filterable::FilterValidator.new([filter], {filters: { hi: 'zebra' }}, [], filter_params: { hi: 'zebra'}, sort_params: '')
+    assert validator.valid?
+    assert_equal Hash.new, validator.errors.messages
+  end
 end

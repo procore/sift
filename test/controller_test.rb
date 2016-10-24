@@ -142,4 +142,24 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(@response.body)
     assert_equal expected_json, json
   end
+
+  test 'it custom filters' do
+    post = Post.create!
+    Post.create!
+
+    get('/posts', params: { filters: { id_array: [post.id] } })
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+    assert_equal post.id, json.first["id"]
+  end
+  
+  test 'it respects custom validation logic' do
+    expected_json = {"errors"=>{"id_array"=>["Not all values were valid integers"]}}
+    post = Post.create!
+    Post.create!
+
+    get('/posts', params: { filters: { id_array: [post.id, "zebra"] } })
+    json = JSON.parse(@response.body)
+    assert_equal json, expected_json
+  end
 end
