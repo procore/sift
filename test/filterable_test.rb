@@ -2,10 +2,11 @@ require 'test_helper'
 
 class FilterableTest < ActiveSupport::TestCase
   class MyClass
+    attr_accessor :params
     include Filterable
 
     def params
-      ActionController::Parameters.new({})
+      @params ||= ActionController::Parameters.new({})
     end
   end
 
@@ -26,5 +27,14 @@ class FilterableTest < ActiveSupport::TestCase
     MyClass.sort_on(:id, type: :int)
 
     assert_equal [:id], MyClass.filters.map(&:param)
+  end
+
+  test "it always allows sort parameters to flow through" do
+    MyClass.reset_filters
+    custom_sort = { sort: { attribute: "due_date", direction: "asc" } }
+    my_class = MyClass.new
+    my_class.params = custom_sort
+
+    assert_equal [], my_class.filtrate(Post.all)
   end
 end
