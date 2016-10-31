@@ -16,7 +16,7 @@ module Filterable
   end
 
   def sort_params
-    params.fetch(:sort, '').split(',')
+    params.fetch(:sort, '').split(',') if sorts_exist?
   end
 
   def filters_valid?
@@ -35,6 +35,10 @@ module Filterable
 
   def filters
     self.class.filters
+  end
+
+  def sorts_exist?
+    filters.any? { |filter| filter.is_a?(Sort) }
   end
 
   class_methods do
