@@ -17,7 +17,6 @@ module Filterable
     end
 
     def filter
-      collection.reorder!('') unless @sort.blank?
       active_filters.reduce(collection) do |col, filter|
         apply(col, filter)
       end

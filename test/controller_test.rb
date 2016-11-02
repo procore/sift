@@ -162,4 +162,14 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(@response.body)
     assert_equal json, expected_json
   end
+
+  test 'it clears the default sort if sort params exist' do
+    foo_post = Post.create!(title: "foo")
+    bar_post = Post.create!(title: "bar")
+    get('/posts', params: { sort: "-title" })
+    json = JSON.parse(@response.body)
+    json_ids = json.map{ |p| p["id"] }
+
+    assert_equal [foo_post.id, bar_post.id], json_ids
+  end
 end

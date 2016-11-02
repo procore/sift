@@ -24,12 +24,12 @@ class FiltratorTest < ActiveSupport::TestCase
   end
 
   test 'it returns default when filter param not passed' do
-    Post.create!(body: "foo")
-    Post.create!(body: "bar")
+    foo_post = Post.create!(body: "foo")
+    bar_post = Post.create!(body: "bar")
     filter = Filterable::Filter.new(:body2, :scope, :body2, ->(c) { c.order(:body) })
     collection = Filterable::Filtrator.filter(Post.all, {}, [filter])
 
-    assert_equal [Post.second, Post.first], collection.to_a
+    assert_equal [bar_post, foo_post], collection.to_a
   end
 
   test 'it will not return default if param passed' do
@@ -39,14 +39,5 @@ class FiltratorTest < ActiveSupport::TestCase
     collection = Filterable::Filtrator.filter(Post.all, { body2: "bar" }, [filter])
 
     assert_equal Post.where(id: filtered_post.id).to_a, collection.to_a
-  end
-
-  test 'it will clear default order if sort param is passed in' do
-    Post.create!(body: "foo")
-    Post.create!(body: "bar")
-    filter = Filterable::Sort.new(:body, :string, :body)
-    collection = Filterable::Filtrator.filter(Post.all.order(:id), {}, [filter], ['body'])
-
-    assert_equal [Post.second, Post.first], collection.to_a
   end
 end
