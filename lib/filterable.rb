@@ -8,6 +8,7 @@ module Filterable
   extend ActiveSupport::Concern
 
   def filtrate(collection)
+    collection.reorder!('') if !sort_params.blank? && sorts_exist?
     Filtrator.filter(collection, filter_params, filters, sort_params)
   end
 
