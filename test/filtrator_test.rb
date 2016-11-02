@@ -40,4 +40,13 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.where(id: filtered_post.id).to_a, collection.to_a
   end
+
+  test 'it will clear default order if sort param is passed in' do
+    Post.create!(body: "foo")
+    Post.create!(body: "bar")
+    filter = Filterable::Sort.new(:body, :string, :body)
+    collection = Filterable::Filtrator.filter(Post.all.order(:id), {}, [filter], ['body'])
+
+    assert_equal [Post.second, Post.first], collection.to_a
+  end
 end
