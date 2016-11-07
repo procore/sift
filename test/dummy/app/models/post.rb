@@ -6,4 +6,8 @@ class Post < ApplicationRecord
   scope :body2, -> (text) {
     where(body: text)
   }
+
+  scope :body_and_priority, -> (text, priority) {
+    where(body: text, priority: priority)
+  }
 end
