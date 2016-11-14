@@ -73,6 +73,19 @@ you can pass an array of arguments instead of a single argument.
 
 Scopes that accept no arguments are currently not supported.
 
+## The API
+
+Filter:
+`?filters[<field_name>]=<value>`
+
+Filters are translated to Active Record `where`s and are chained together. The order they are applied is not guarenteed.
+
+Sort:
+`?sort=-published_at,position`
+
+Sort is translated to Active Record `order` The sorts are applied in the order they are passed by the client.
+the `-` symbol means to sort in `desc` order. By default, keys are sorted in `asc` order.
+
 ## Installation
 Add this line to your application's Gemfile:
 
