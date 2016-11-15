@@ -18,6 +18,7 @@ module Filterable
                        :date,
                        :time,
                        :datetime,
+                       :array,
                        :scope].freeze
 
     def initialize(param, type, internal_name, default, custom_validate = nil)
@@ -30,7 +31,7 @@ module Filterable
     end
 
     def supports_ranges?
-      ![:string, :text, :scope].include?(type)
+      ![:string, :text, :scope, :array].include?(type)
     end
 
     def validation(_)
@@ -45,6 +46,7 @@ module Filterable
         BOOLEAN_PATTERN
       when :string
       when :text
+      when :array
       end
     end
 
