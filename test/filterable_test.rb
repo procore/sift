@@ -10,31 +10,41 @@ class FilterableTest < ActiveSupport::TestCase
     end
   end
 
-  test "does nothing if no filters are registered" do
-    MyClass.reset_filters
-    assert_equal [], MyClass.new.filtrate(Post.all)
-  end
+  # test "does nothing if no filters are registered" do
+  #   MyClass.reset_filters
+  #   assert_equal [], MyClass.new.filtrate(Post.all)
+  # end
 
-  test "it registers filters with filter_on" do
-    MyClass.reset_filters
-    MyClass.filter_on(:id, type: :int)
+  # test "it registers filters with filter_on" do
+  #   MyClass.reset_filters
+  #   MyClass.filter_on(:id, type: :int)
 
-    assert_equal [:id], MyClass.filters.map(&:param)
-  end
+  #   assert_equal [:id], MyClass.filters.map(&:param)
+  # end
+
+  # test "it registers sorts with sort_on" do
+  #   MyClass.reset_filters
+  #   MyClass.sort_on(:id, type: :int)
+
+  #   assert_equal [:id], MyClass.filters.map(&:param)
+  # end
+
+  # test "it always allows sort parameters to flow through" do
+  #   MyClass.reset_filters
+  #   custom_sort = { sort: { attribute: "due_date", direction: "asc" } }
+  #   my_class = MyClass.new
+  #   my_class.params = custom_sort
+
+  #   assert_equal [], my_class.filtrate(Post.all)
+  # end
 
   test "it registers sorts with sort_on" do
     MyClass.reset_filters
-    MyClass.sort_on(:id, type: :int)
+    MyClass.sort_on(:number, type: :scope, internal_name: :order_by, scope_params: [:submittal_log_number, :direction, :current_project, :current_company])
 
-    assert_equal [:id], MyClass.filters.map(&:param)
-  end
-
-  test "it always allows sort parameters to flow through" do
-    MyClass.reset_filters
-    custom_sort = { sort: { attribute: "due_date", direction: "asc" } }
+    assert_equal [:number], MyClass.filters.map(&:param)
     my_class = MyClass.new
-    my_class.params = custom_sort
-
-    assert_equal [], my_class.filtrate(Post.all)
+    my_class.params = { sort: '-number' }
+    my_class.filtrate(Post.all)
   end
 end
