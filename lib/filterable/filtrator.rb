@@ -54,8 +54,8 @@ module Filterable
     # Method that is called with a Filterable::Sort of type :scope
     def apply_scope_filterable_sort(collection, sort)
       # This shouldnt be params[sort.params]
-      if active_sorts.keys.include?(sort.param)
-        collection.public_send(sort.internal_name, *sort_scope_params(sort))
+      if active_sorts_hash.keys.include?(sort.param)
+        collection.public_send(sort.internal_name, *mapped_sort_scope_params(sort))
       elsif sort.default.present?
         # Stubbed because currently Filterable::Sort does not respect default
         # sort.default.call(collection)
@@ -65,20 +65,20 @@ module Filterable
       end
     end
 
-    def sort_scope_params(sort)
-      sort.scope_params.map{ |param| param == :direction ? active_sorts[sort.param] : param }
+    def mapped_sort_scope_params(sort)
+      sort.scope_params.map{ |param| param == :direction ? active_sorts_hash[sort.param] : param }
     end
 
-    def active_sorts
-      active_sorts = {}
+    def active_sorts_hash
+      active_sorts_hash = {}
       self.sort.each do |s|
         if s.starts_with?('-')
-          active_sorts[s[1..-1].to_sym] = :desc
+          active_sorts_hash[s[1..-1].to_sym] = :desc
         else
-          active_sorts[s.to_sym] = :asc
+          active_sorts_hash[s.to_sym] = :asc
         end
       end
-      active_sorts
+      active_sorts_hash
     end
 
     def parameter(filter)
