@@ -53,7 +53,6 @@ module Filterable
 
     # Method that is called with a Filterable::Sort of type :scope
     def apply_scope_filterable_sort(collection, sort)
-      # This shouldnt be params[sort.params]
       if active_sorts_hash.keys.include?(sort.param)
         collection.public_send(sort.internal_name, *mapped_sort_scope_params(sort))
       elsif sort.default.present?

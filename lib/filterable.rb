@@ -59,7 +59,7 @@ module Filterable
       @_sort_fields ||= []
     end
 
-    def sort_on(parameter, type:, internal_name: parameter, scope_params:)
+    def sort_on(parameter, type:, internal_name: parameter, scope_params: [])
       filters << Sort.new(parameter, type, internal_name, scope_params)
       sort_fields << parameter.to_s
       sort_fields << "-#{parameter}"

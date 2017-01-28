@@ -29,7 +29,6 @@ module Filterable
     end
 
     def apply!(collection, sorts:, value:)
-      binding.pry
       collection.order(order_hash(sorts))
     end
 
