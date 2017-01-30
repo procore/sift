@@ -5,7 +5,7 @@ module Filterable
   class Filtrator
     attr_reader :collection, :params, :filters, :sort
 
-    def self.filter(collection, filter_params, filters, sort = "")
+    def self.filter(collection, filter_params, filters, sort = [])
       new(collection, filter_params, sort, filters).filter
     end
 

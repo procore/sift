@@ -50,4 +50,37 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.where(id: filtered_post.id).to_a, collection.to_a
   end
+
+  test 'it can sort on scopes that do not require arguments' do
+    Post.create!(body: 'zzzz')
+    Post.create!(body: 'aaaa')
+    Post.create!(body: 'ffff')
+    sort = Filterable::Sort.new(:body, :scope, :order_on_body_no_params)
+    # scopes that take no param seem silly, as the user's designation of sort direction would be rendered useless
+    # unless the controller does some sort of parsing on user's input and handles the sort on its own
+    # nonetheless, Filterable supports it :)
+    collection = Filterable::Filtrator.filter(Post.all, {}, [sort], ['-body'])
+
+    assert_equal Post.order_on_body_no_params.to_a, collection.to_a
+  end
+
+  test 'it can sort on scopes that require one argument' do
+    Post.create!(body: 'zzzz')
+    Post.create!(body: 'aaaa')
+    Post.create!(body: 'ffff')
+    sort = Filterable::Sort.new(:body, :scope, :order_on_body_one_param, [:direction])
+    collection = Filterable::Filtrator.filter(Post.all, {}, [sort], ['-body'])
+
+    assert_equal Post.order_on_body_one_param(:desc).to_a, collection.to_a
+  end
+
+  test 'it can sort on scopes that require multiple arguments' do
+    Post.create!(body: 'zzzz')
+    Post.create!(body: 'aaaa')
+    Post.create!(body: 'ffff')
+    sort = Filterable::Sort.new(:body, :scope, :order_on_body_multi_param, ['aaaa', :direction])
+    collection = Filterable::Filtrator.filter(Post.all, {}, [sort], ['-body'])
+
+    assert_equal Post.order_on_body_multi_param('aaaa', :desc).to_a, collection.to_a
+  end
 end

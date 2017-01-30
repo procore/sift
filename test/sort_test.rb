@@ -15,5 +15,9 @@ class SortTest < ActiveSupport::TestCase
     end
   end
 
-  # TODO: more tests here
+  test 'it raises if the scope params is not an array' do
+    assert_raise RuntimeError do
+      sort = Filterable::Sort.new('hi', :int, 'hi', :direction)
+    end
+  end
 end
