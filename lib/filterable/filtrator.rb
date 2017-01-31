@@ -33,10 +33,10 @@ module Filterable
     end
 
     def apply_scope_filters(collection, filter)
-      if filter.is_a?(Filterable::Filter)
-        apply_scope_filterable_filter(collection, filter)
-      else
+      if filter.is_a?(Filterable::Sort)
         apply_scope_filterable_sort(collection, filter)
+      else
+        apply_scope_filterable_filter(collection, filter)
       end
     end
 
