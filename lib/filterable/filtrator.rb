@@ -34,14 +34,14 @@ module Filterable
 
     def apply_scope_filters(collection, filter)
       if filter.is_a?(Filterable::Sort)
-        apply_scope_filterable_sort(collection, filter)
+        apply_sort_on_scope(collection, filter)
       else
-        apply_scope_filterable_filter(collection, filter)
+        apply_filter_on_scope(collection, filter)
       end
     end
 
     # Method that is called with a Filterable::Filter of type :scope
-    def apply_scope_filterable_filter(collection, filter)
+    def apply_filter_on_scope(collection, filter)
       if params[filter.param].present?
         collection.public_send(filter.internal_name, parameter(filter))
       elsif filter.default.present?
@@ -52,7 +52,7 @@ module Filterable
     end
 
     # Method that is called with a Filterable::Sort of type :scope
-    def apply_scope_filterable_sort(collection, sort)
+    def apply_sort_on_scope(collection, sort)
       if active_sorts_hash.keys.include?(sort.param)
         collection.public_send(sort.internal_name, *mapped_sort_scope_params(sort))
       elsif sort.default.present?
