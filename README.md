@@ -98,9 +98,9 @@ end
 class PostsController < ApplicationController
   include Filterable
 
-  sort_on :body1, internal_name: :order_on_body_no_params, type: :scope
-  sort_on :body2, internal_name: :order_on_body, type: :scope, scope_params: [:direction]
-  sort_on :body3, internal_name: :order_on_body_then_id, type: :scope, scope_params: [:direction, :asc]
+  sort_on :order_by_body_ascending, internal_name: :order_on_body_no_params, type: :scope
+  sort_on :order_by_body, internal_name: :order_on_body, type: :scope, scope_params: [:direction]
+  sort_on :order_by_body_then_id, internal_name: :order_on_body_then_id, type: :scope, scope_params: [:direction, :asc]
 
 
   def index
@@ -109,12 +109,12 @@ class PostsController < ApplicationController
 end
 ```
 
-`scope_params` takes an order-specific array of the scope's arguments. Passing in the param :direction allows the consumer to choose which direction to sort in (ex. `-body2` will sort `:desc` while `body2` will sort `:asc`)
+`scope_params` takes an order-specific array of the scope's arguments. Passing in the param :direction allows the consumer to choose which direction to sort in (ex. `-order_by_body` will sort `:desc` while `order_by_body` will sort `:asc`)
 
-Passing `?sort=-body2` will call the `order_on_body` scope with
+Passing `?sort=-order_by_body` will call the `order_on_body` scope with
 `:desc` as the argument. The direction is the only argument that the consumer has control over.
-Passing `?sort=-body3` will call the `order_on_body_then_id` scope where the `body_direction` is `:desc`, and the `id_direction` is `:asc`. Note: in this example the user has no control over id_direction. To demonstrate:
-Passing `?sort=body3` will call the `order_on_body_then_id` scope where the `body_direction` this time is `:asc`, but the `id_direction` remains `:asc`.
+Passing `?sort=-order_by_body_then_id` will call the `order_on_body_then_id` scope where the `body_direction` is `:desc`, and the `id_direction` is `:asc`. Note: in this example the user has no control over id_direction. To demonstrate:
+Passing `?sort=order_by_body_then_id` will call the `order_on_body_then_id` scope where the `body_direction` this time is `:asc`, but the `id_direction` remains `:asc`.
 
 Scopes that accept no arguments are currently supported, but you should note that the user has no say in which direction it will sort on.
 
