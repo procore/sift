@@ -5,7 +5,7 @@ module Filterable
   class Filtrator
     attr_reader :collection, :params, :filters, :sort
 
-    def self.filter(collection, filter_params, filters, sort = "")
+    def self.filter(collection, filter_params, filters, sort = [])
       new(collection, filter_params, sort, filters).filter
     end
 
@@ -33,6 +33,15 @@ module Filterable
     end
 
     def apply_scope_filters(collection, filter)
+      if filter.is_a?(Filterable::Sort)
+        apply_sort_on_scope(collection, filter)
+      else
+        apply_filter_on_scope(collection, filter)
+      end
+    end
+
+    # Method that is called with a Filterable::Filter of type :scope
+    def apply_filter_on_scope(collection, filter)
       if params[filter.param].present?
         collection.public_send(filter.internal_name, parameter(filter))
       elsif filter.default.present?
@@ -40,6 +49,35 @@ module Filterable
       else
         collection
       end
+    end
+
+    # Method that is called with a Filterable::Sort of type :scope
+    def apply_sort_on_scope(collection, sort)
+      if active_sorts_hash.keys.include?(sort.param)
+        collection.public_send(sort.internal_name, *mapped_sort_scope_params(sort))
+      elsif sort.default.present?
+        # Stubbed because currently Filterable::Sort does not respect default
+        # sort.default.call(collection)
+        collection
+      else
+        collection
+      end
+    end
+
+    def mapped_sort_scope_params(sort)
+      sort.scope_params.map{ |param| param == :direction ? active_sorts_hash[sort.param] : param }
+    end
+
+    def active_sorts_hash
+      active_sorts_hash = {}
+      self.sort.each do |s|
+        if s.starts_with?('-')
+          active_sorts_hash[s[1..-1].to_sym] = :desc
+        else
+          active_sorts_hash[s.to_sym] = :asc
+        end
+      end
+      active_sorts_hash
     end
 
     def parameter(filter)

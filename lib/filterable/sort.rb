@@ -3,7 +3,7 @@ module Filterable
   # but instead of applying a `where` to the collection
   # it applies an `order`.
   class Sort
-    attr_reader :param, :type, :internal_name
+    attr_reader :param, :type, :internal_name, :scope_params
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -11,13 +11,16 @@ module Filterable
                        :text,
                        :date,
                        :time,
-                       :datetime].freeze
+                       :datetime,
+                       :scope].freeze
 
-    def initialize(param, type, internal_name = param)
+    def initialize(param, type, internal_name = param, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
+      raise "scope params must be an array" unless scope_params.is_a?(Array)
       @param = param
       @type = type
       @internal_name = internal_name
+      @scope_params = scope_params
     end
 
     def default
