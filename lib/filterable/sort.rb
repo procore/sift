@@ -62,7 +62,15 @@ module Filterable
     private
 
     def mapped_scope_params(direction)
-      scope_params.map{ |scope_param| scope_param == :direction ? direction : scope_param }
+      scope_params.map do |scope_param|
+        if scope_param == :direction
+          direction
+        elsif scope_param.is_a?(Proc)
+          scope_param.call
+        else
+          scope_param
+        end
+      end
     end
 
     def individual_sort_hash(active_sorts_hash)
