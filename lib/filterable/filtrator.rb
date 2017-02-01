@@ -25,18 +25,10 @@ module Filterable
     private
 
     def apply(collection, filter)
-      if filter.type == :scope
-        apply_scope_filters(collection, filter)
-      else
-        filter.apply!(collection, value: params[filter.param], sorts: sort)
-      end
-    end
-
-    def apply_scope_filters(collection, filter)
-      if filter.is_a?(Filterable::Sort)
-        apply_sort_on_scope(collection, filter)
-      else
+      if filter.type == :scope && filter.is_a?(Filterable::Filter)
         apply_filter_on_scope(collection, filter)
+      else
+        filter.apply!(collection, value: params[filter.param], active_sorts_hash: active_sorts_hash)
       end
     end
 
@@ -49,23 +41,6 @@ module Filterable
       else
         collection
       end
-    end
-
-    # Method that is called with a Filterable::Sort of type :scope
-    def apply_sort_on_scope(collection, sort)
-      if active_sorts_hash.keys.include?(sort.param)
-        collection.public_send(sort.internal_name, *mapped_sort_scope_params(sort))
-      elsif sort.default.present?
-        # Stubbed because currently Filterable::Sort does not respect default
-        # sort.default.call(collection)
-        collection
-      else
-        collection
-      end
-    end
-
-    def mapped_sort_scope_params(sort)
-      sort.scope_params.map{ |param| param == :direction ? active_sorts_hash[sort.param] : param }
     end
 
     def active_sorts_hash
