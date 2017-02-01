@@ -28,7 +28,7 @@ module Filterable
       false
     end
 
-    def apply!(collection, active_sorts_hash:, value:)
+    def apply!(collection, value:, active_sorts_hash:)
       if type == :scope
         if active_sorts_hash.keys.include?(param)
           collection.public_send(internal_name, *mapped_scope_params(active_sorts_hash[param]))

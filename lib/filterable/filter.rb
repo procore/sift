@@ -49,7 +49,17 @@ module Filterable
     end
 
     def apply!(collection, value:, active_sorts_hash:)
-      collection.where(internal_name => parameter(value))
+      if type == :scope
+        if value.present?
+          collection.public_send(internal_name, parameter(value))
+        elsif default.present?
+          default.call(collection)
+        else
+          collection
+        end
+      else
+        collection.where(internal_name => parameter(value))
+      end
     end
 
     def always_active?
