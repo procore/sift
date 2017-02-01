@@ -53,11 +53,11 @@ module Filterable
       sorts.reduce({}) { |order_hash, raw_field|
         if raw_field.starts_with?('-')
           if raw_field[1..-1] == param.to_s
-            order_hash[raw_field[1..-1]] = :desc
+            order_hash[internal_name] = :desc
           end
         else
           if raw_field == param.to_s
-            order_hash[raw_field] = :asc
+            order_hash[internal_name] = :asc
           end
         end
         order_hash
