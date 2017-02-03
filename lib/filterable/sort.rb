@@ -40,7 +40,7 @@ module Filterable
           collection
         end
       elsif type == :string || type == :text
-        collection.order("LOWER(#{individual_sort_hash(active_sorts_hash).keys.first}) #{individual_sort_hash(active_sorts_hash).values.first}")
+        collection.order("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
       else
         collection.order(individual_sort_hash(active_sorts_hash))
       end
