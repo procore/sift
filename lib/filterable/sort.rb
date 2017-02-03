@@ -39,6 +39,8 @@ module Filterable
         else
           collection
         end
+      elsif type == :string || type == :text
+        collection.order("LOWER(#{individual_sort_hash(active_sorts_hash).keys.first}) #{individual_sort_hash(active_sorts_hash).values.first}")
       else
         collection.order(individual_sort_hash(active_sorts_hash))
       end
