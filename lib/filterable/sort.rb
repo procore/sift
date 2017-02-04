@@ -41,12 +41,12 @@ module Filterable
         end
       elsif type == :string || type == :text
         if active_sorts_hash.keys.include?(param)
-          collection.reorder("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
+          collection.order("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
         else
           collection
         end
       else
-        collection.reorder(individual_sort_hash(active_sorts_hash))
+        collection.order(individual_sort_hash(active_sorts_hash))
       end
     end
 
