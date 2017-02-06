@@ -30,7 +30,7 @@ module Filterable
 
     def active_sorts_hash
       active_sorts_hash = {}
-      self.sort.each do |s|
+      Array(self.sort).each do |s|
         if s.starts_with?('-')
           active_sorts_hash[s[1..-1].to_sym] = :desc
         else
