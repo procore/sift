@@ -28,8 +28,26 @@ module Filterable
       false
     end
 
-    def apply!(collection, sorts:, value:)
-      collection.order(order_hash(sorts))
+    def apply!(collection, value:, active_sorts_hash:)
+      if type == :scope
+        if active_sorts_hash.keys.include?(param)
+          collection.public_send(internal_name, *mapped_scope_params(active_sorts_hash[param]))
+        elsif default.present?
+          # Stubbed because currently Filterable::Sort does not respect default
+          # default.call(collection)
+          collection
+        else
+          collection
+        end
+      elsif type == :string || type == :text
+        if active_sorts_hash.keys.include?(param)
+          collection.order("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
+        else
+          collection
+        end
+      else
+        collection.order(individual_sort_hash(active_sorts_hash))
+      end
     end
 
     def always_active?
@@ -49,19 +67,20 @@ module Filterable
 
     private
 
-    def order_hash(sorts)
-      sorts.reduce({}) { |order_hash, raw_field|
-        if raw_field.starts_with?('-')
-          if raw_field[1..-1] == param.to_s
-            order_hash[raw_field[1..-1]] = :desc
-          end
+    def mapped_scope_params(direction)
+      scope_params.map do |scope_param|
+        if scope_param == :direction
+          direction
+        elsif scope_param.is_a?(Proc)
+          scope_param.call
         else
-          if raw_field == param.to_s
-            order_hash[raw_field] = :asc
-          end
+          scope_param
         end
-        order_hash
-      }
+      end
+    end
+
+    def individual_sort_hash(active_sorts_hash)
+      active_sorts_hash.include?(param) ? { internal_name => active_sorts_hash[param] } : {}
     end
   end
 end

@@ -83,4 +83,14 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.order_on_body_multi_param('aaaa', :desc).to_a, collection.to_a
   end
+
+  test 'it can sort on scopes that are passed a lambda' do
+    Post.create!(body: 'zzzz')
+    Post.create!(body: 'aaaa')
+    Post.create!(body: 'ffff')
+    sort = Filterable::Sort.new(:body, :scope, :order_on_body_multi_param, [lambda { 'aaaa' }, :direction])
+    collection = Filterable::Filtrator.filter(Post.all, {}, [sort], ['-body'])
+
+    assert_equal Post.order_on_body_multi_param('aaaa', :desc).to_a, collection.to_a
+  end
 end
