@@ -162,4 +162,42 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(@response.body)
     assert_equal json, expected_json
   end
+
+  test "it sorts on string keys" do
+    Post.create!(title: 'a')
+    Post.create!(title: 'b')
+    Post.create!(title: 'z')
+    get('/posts', params: { 'sort' => '-title' })
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['z', 'b', 'a'], json.map(&:title)
+  end
+
+  test "it sorts on symbol keys" do
+    Post.create!(title: 'a')
+    Post.create!(title: 'b')
+    Post.create!(title: 'z')
+    get('/posts', params: { sort: '-title' })
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['z', 'b', 'a'], json.map(&:title)
+  end
+
+  test 'it sorts case-insensitively on text/string types' do
+    Post.create(title: 'b')
+    Post.create(title: 'A')
+    Post.create(title: 'C')
+    Post.create(title: 'd')
+    get('/posts', params: { sort: 'title' })
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['A', 'b', 'C', 'd'], json.map(&:title)
+  end
+
+  test 'it respects internal name for non-scope sorts' do
+    Post.create(title: 'b')
+    Post.create(title: 'A')
+    Post.create(title: 'C')
+    Post.create(title: 'd')
+    get('/posts', params: { sort: 'foobar' })
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ['A', 'b', 'C', 'd'], json.map(&:title)
+  end
 end

@@ -37,32 +37,4 @@ class FilterableTest < ActiveSupport::TestCase
 
     assert_equal [], my_class.filtrate(Post.all)
   end
-
-  test "it sorts on string keys" do
-    Post.create!
-    Post.create!
-    MyClass.reset_filters
-    MyClass.sort_on(:id, type: :int)
-    descending = MyClass.new
-    descending.params = { 'sort' => '-id' }
-    ascending = MyClass.new
-    ascending.params = { 'sort' => 'id' }
-
-    assert_equal  Post.order(id: :desc), descending.filtrate(Post.all)
-    assert_equal Post.order(id: :asc), ascending.filtrate(Post.all)
-  end
-
-  test "it sorts on symbol keys" do
-    Post.create!
-    Post.create!
-    MyClass.reset_filters
-    MyClass.sort_on(:id, type: :int)
-    descending = MyClass.new
-    descending.params = { sort: '-id' }
-    ascending = MyClass.new
-    ascending.params = { sort: 'id' }
-
-    assert_equal Post.order(id: :desc), descending.filtrate(Post.all)
-    assert_equal Post.order(id: :asc), ascending.filtrate(Post.all)
-  end
 end
