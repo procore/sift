@@ -2,7 +2,7 @@ module Filterable
   # Filter describes the way a parameter maps to a database column
   # and the type information helpful for validating input.
   class Filter
-    RANGE_PATTERN = { format: { with: /\A.+\.\.\..+\z/ , message: "must be a range" } }.freeze
+    RANGE_PATTERN = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/ , message: "must be a range" } }.freeze
     DIGIT_RANGE_PATTERN = { format: { with: /\A\d+(...\d+)?\z/ , message: "must be int or range" } }.freeze
     DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
