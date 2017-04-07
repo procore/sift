@@ -53,7 +53,7 @@ pass to a scope filter will be used as arguments to that scope. For example:
 
 ```ruby
 class Post < ActiveRecord::Base
-  scope :with_body, (text) -> { where(body: text) }
+  scope :with_body, ->(text) { where(body: text) }
 end
 
 class PostsController < ApplicationController
@@ -91,8 +91,8 @@ pass to a scope sort will be used as arguments to that scope. For example:
 ```ruby
 class Post < ActiveRecord::Base
   scope :order_on_body_no_params, -> { order(body: :asc) }
-  scope :order_on_body, (direction) -> { order(body: direction) }
-  scope :order_on_body_then_id, (body_direction, id_direction) -> { order(body: body_direction).order(id: id_direction) }
+  scope :order_on_body, ->(direction) { order(body: direction) }
+  scope :order_on_body_then_id, ->(body_direction, id_direction) { order(body: body_direction).order(id: id_direction) }
 end
 
 class PostsController < ApplicationController
