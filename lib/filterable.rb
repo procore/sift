@@ -12,11 +12,11 @@ module Filterable
   end
 
   def filter_params
-    params.with_indifferent_access.fetch(:filters, {})
+    params.fetch(:filters, {})
   end
 
   def sort_params
-    params.with_indifferent_access.fetch(:sort, '').split(',') if sorts_exist?
+    params.fetch(:sort, '').split(',') if sorts_exist?
   end
 
   def filters_valid?
