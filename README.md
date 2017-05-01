@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/procore/filterable/tree/master.svg?style=svg&circle-token=25a8c0e33d452c46febab9cc9cdd13c85a67af47)](https://circleci.com/gh/procore/filterable/tree/master)
 
-Short description and motivation.
+A tool to build your own filters!
 
 ## Developer Usage
 Include Filterable in your controllers, and define some filters.
@@ -53,7 +53,7 @@ pass to a scope filter will be used as arguments to that scope. For example:
 
 ```ruby
 class Post < ActiveRecord::Base
-  scope :with_body, (text) -> { where(body: text) }
+  scope :with_body, ->(text) { where(body: text) }
 end
 
 class PostsController < ApplicationController
@@ -91,8 +91,8 @@ pass to a scope sort will be used as arguments to that scope. For example:
 ```ruby
 class Post < ActiveRecord::Base
   scope :order_on_body_no_params, -> { order(body: :asc) }
-  scope :order_on_body, (direction) -> { order(body: direction) }
-  scope :order_on_body_then_id, (body_direction, id_direction) -> { order(body: body_direction).order(id: id_direction) }
+  scope :order_on_body, ->(direction) { order(body: direction) }
+  scope :order_on_body_then_id, ->(body_direction, id_direction) { order(body: body_direction).order(id: id_direction) }
 end
 
 class PostsController < ApplicationController
