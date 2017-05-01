@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/procore/filterable/tree/master.svg?style=svg&circle-token=25a8c0e33d452c46febab9cc9cdd13c85a67af47)](https://circleci.com/gh/procore/filterable/tree/master)
 
-Short description and motivation.
+A tool to build your own filters!
 
 ## Developer Usage
 Include Filterable in your controllers, and define some filters.
