@@ -54,12 +54,14 @@ pass to a scope filter will be used as arguments to that scope. For example:
 ```ruby
 class Post < ActiveRecord::Base
   scope :with_body, ->(text) { where(body: text) }
+  scope :published, -> { where(published: true) }
 end
 
 class PostsController < ApplicationController
   include Filterable
 
   filter_on :with_body, type: :text
+  filter_on :published, type: :scope
 
   def index
     render json: filtrate(Post.all)
@@ -71,7 +73,9 @@ Passing `?filters[with_body]=my_text` will call the `with_body` scope with
 `my_text` as the argument. If you have a scope that takes multiple arguments,
 you can pass an array of arguments instead of a single argument.
 
-Scopes that accept no arguments are currently not supported.
+When the scope doesn't have any arguments, simply pass any value in the query
+string to use it. `filters[published]=true` and `filters[published]=stuff` have
+the same result when the scope on the model doesn't have any arguments.
 
 ### Sort Types
 Every sort must have a type, so that Filterable knows what to do with it. The current valid sort types are:
