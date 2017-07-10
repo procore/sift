@@ -11,6 +11,10 @@ class Post < ApplicationRecord
     where(body: text, priority: priority)
   }
 
+  scope :published, -> {
+    where.not(published_at: nil)
+  }
+
   scope :order_on_body_no_params, -> {
     order(body: :desc)
   }

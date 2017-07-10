@@ -92,6 +92,17 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
   end
 
+  test 'it filters on named scope without arguments' do
+    Post.create!(published_at: DateTime.now)
+    Post.create!(published_at: nil)
+    Post.create!(published_at: nil)
+
+    get('/posts', params: { filters: { published: true } })
+
+    json = JSON.parse(@response.body)
+    assert_equal 1, json.size
+  end
+
   test 'the param can have a different name from the internal name' do
     post = Post.create!(title: 'hi')
     Post.create!(title: 'friend')
