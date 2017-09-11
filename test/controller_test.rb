@@ -200,4 +200,13 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(@response.body, object_class: OpenStruct)
     assert_equal ['A', 'b', 'C', 'd'], json.map(&:title)
   end
+
+  test 'it sorts with dependent params' do
+    Post.create(body: 'b', expiration: "2017-11-11")
+    Post.create(body: 'A', expiration: "2017-10-10")
+    Post.create(body: 'C', expiration: "2090-08-08")
+    get('/posts', params: { sort: 'dynamic_sort', date: "2017-12-12" })
+    json = JSON.parse(@response.body)
+    assert_equal ['A', 'b'], json.map { |post| post.fetch("body") }
+  end
 end
