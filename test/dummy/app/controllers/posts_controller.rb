@@ -34,6 +34,7 @@ class PostsController < ApplicationController
   sort_on :title, type: :string
   sort_on :priority, type: :string
   sort_on :foobar, type: :string, internal_name: :title
+  sort_on :dynamic_sort, type: :scope, internal_name: :expired_before_ordered_by_body, scope_params: [:date, :direction]
 
   def index
     render json: filtrate(Post.all)
