@@ -5,15 +5,15 @@ module Filterable
   class Filtrator
     attr_reader :collection, :params, :filters, :sort
 
-    def self.filter(collection, filter_params, filters, sort = [])
-      new(collection, filter_params, sort, filters).filter
+    def self.filter(collection, params, filters, sort = [])
+      new(collection, params, sort, filters).filter
     end
 
     def initialize(collection, params, sort, filters = [])
       @collection = collection
       @params = params
       @filters = filters
-      @sort = sort
+      @sort = params.fetch(:sort, '').split(',') if filters.any? { |filter| filter.is_a?(Sort) }
     end
 
     def filter
@@ -25,7 +25,11 @@ module Filterable
     private
 
     def apply(collection, filter)
-      filter.apply!(collection, value: params[filter.param], active_sorts_hash: active_sorts_hash)
+      filter.apply!(collection, value: filter_params[filter.param], active_sorts_hash: active_sorts_hash, params: params)
+    end
+
+    def filter_params
+      params.fetch(:filters, {})
     end
 
     def active_sorts_hash
@@ -42,7 +46,7 @@ module Filterable
 
     def active_filters
       filters.select { |filter|
-        params[filter.param].present? || filter.default || filter.always_active?
+        filter_params[filter.param].present? || filter.default || filter.always_active?
       }
     end
   end

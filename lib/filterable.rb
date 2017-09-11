@@ -8,7 +8,7 @@ module Filterable
   extend ActiveSupport::Concern
 
   def filtrate(collection)
-    Filtrator.filter(collection, filter_params, filters, sort_params)
+    Filtrator.filter(collection, params, filters)
   end
 
   def filter_params
@@ -16,7 +16,7 @@ module Filterable
   end
 
   def sort_params
-    params.fetch(:sort, '').split(',') if sorts_exist?
+    params.fetch(:sort, '').split(',') if filters.any? { |filter| filter.is_a?(Sort) }
   end
 
   def filters_valid?

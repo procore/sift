@@ -48,7 +48,7 @@ module Filterable
       end
     end
 
-    def apply!(collection, value:, active_sorts_hash:)
+    def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
         if value.present?
           collection.public_send(internal_name, parameter(value))
