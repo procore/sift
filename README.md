@@ -118,6 +118,8 @@ Passing `?sort=order_by_body_then_id` will call the `order_on_body_then_id` scop
 
 Scopes that accept no arguments are currently supported, but you should note that the user has no say in which direction it will sort on.
 
+`scope_params` can also accept symbols that are keys in the `params` hash. The value will be fetched and passed on as an argument to the scope.
+
 
 ## Consumer Usage
 

@@ -28,10 +28,10 @@ module Filterable
       false
     end
 
-    def apply!(collection, value:, active_sorts_hash:)
+    def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
         if active_sorts_hash.keys.include?(param)
-          collection.public_send(internal_name, *mapped_scope_params(active_sorts_hash[param]))
+          collection.public_send(internal_name, *mapped_scope_params(active_sorts_hash[param], params))
         elsif default.present?
           # Stubbed because currently Filterable::Sort does not respect default
           # default.call(collection)
@@ -67,12 +67,14 @@ module Filterable
 
     private
 
-    def mapped_scope_params(direction)
+    def mapped_scope_params(direction, params)
       scope_params.map do |scope_param|
         if scope_param == :direction
           direction
         elsif scope_param.is_a?(Proc)
           scope_param.call
+        elsif params.include?(scope_param)
+          params[scope_param]
         else
           scope_param
         end

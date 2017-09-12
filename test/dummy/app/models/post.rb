@@ -22,4 +22,8 @@ class Post < ApplicationRecord
   scope :order_on_body_multi_param, -> (body, direction) {
     where(body: body).order(id: direction)
   }
+
+  scope :expired_before_ordered_by_body, -> (date, direction) {
+    expired_before(date).order_on_body_one_param(direction)
+  }
 end
