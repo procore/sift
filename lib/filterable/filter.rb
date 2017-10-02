@@ -8,7 +8,7 @@ module Filterable
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
 
 
-    attr_reader :param, :type, :internal_name, :default, :custom_validate
+    attr_reader :param, :type, :internal_name, :default, :custom_validate, :scope_params
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -20,13 +20,14 @@ module Filterable
                        :datetime,
                        :scope].freeze
 
-    def initialize(param, type, internal_name, default, custom_validate = nil)
+    def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
       @param = param
       @type = type
       @internal_name = internal_name || @param
       @default = default
       @custom_validate = custom_validate
+      @scope_params = scope_params
     end
 
     def supports_ranges?
@@ -50,7 +51,9 @@ module Filterable
 
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
-        if value.present?
+        if scope_params && value.present?
+          collection.public_send(internal_name, parameter(value), *mapped_scope_params(params))
+        elsif value.present?
           collection.public_send(internal_name, parameter(value))
         elsif default.present?
           default.call(collection)
@@ -71,6 +74,12 @@ module Filterable
     end
 
     private
+
+    def mapped_scope_params(params)
+      scope_params.map do |scope_param|
+          params.fetch(scope_param)
+      end
+    end
 
     def parameter(value)
       if supports_ranges? && value.to_s.include?('...')
