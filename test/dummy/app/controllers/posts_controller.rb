@@ -11,6 +11,7 @@ class PostsController < ApplicationController
   filter_on :hidden_after, type: :time
   filter_on :published_at, type: :datetime
   filter_on :expired_before, type: :scope
+  filter_on :expired_before_and_priority, type: :scope, scope_params: [:priority]
 
   filter_on :french_bread, type: :string, internal_name: :title
   filter_on :body2, type: :scope, internal_name: :body2, default: ->(c) { c.order(:body) }

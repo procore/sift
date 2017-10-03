@@ -26,4 +26,12 @@ class Post < ApplicationRecord
   scope :expired_before_ordered_by_body, -> (date, direction) {
     expired_before(date).order_on_body_one_param(direction)
   }
+
+  scope :expired_before_and_priority, -> (date, priority) {
+    expired_before(date).where('priority <= ?', priority)
+  }
+
+  scope :ordered_expired_before_and_priority, -> (direction, date, priority) {
+    expired_before_and_priority(date,priority).order(id: direction)
+  }
 end
