@@ -202,19 +202,23 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'it sorts with dependent params' do
-    Post.create(body: 'b', expiration: "2017-11-11")
-    Post.create(body: 'A', expiration: "2017-10-10")
-    Post.create(body: 'C', expiration: "2090-08-08")
+    Post.create!(body: 'b', expiration: "2017-11-11")
+    Post.create!(body: 'A', expiration: "2017-10-10")
+    Post.create!(body: 'C', expiration: "2090-08-08")
+
     get('/posts', params: { sort: 'dynamic_sort', date: "2017-12-12" })
     json = JSON.parse(@response.body)
+
     assert_equal ['A', 'b'], json.map { |post| post.fetch("body") }
   end
 
   test 'it filters with dependent params' do
-    Post.create(priority: 7, expiration: "2017-11-11")
-    Post.create(priority: 3, expiration: "2017-10-10")
+    Post.create!(priority: 7, expiration: "2017-11-11")
+    Post.create!(priority: 5, expiration: "2017-10-10")
+
     get('/posts', params: { filters: { expired_before_and_priority: "2017-12-12"}, priority: 5})
     json = JSON.parse(@response.body)
-    assert_equal [3], json.map { |post| post.fetch("priority") }
+
+    assert_equal [5], json.map { |post| post.fetch("priority") }
   end
 end

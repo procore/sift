@@ -28,7 +28,7 @@ class Post < ApplicationRecord
   }
 
   scope :expired_before_and_priority, -> (date, priority) {
-    expired_before(date).where('priority <= ?', priority)
+    expired_before(date).where(priority: priority)
   }
 
   scope :ordered_expired_before_and_priority, -> (direction, date, priority) {

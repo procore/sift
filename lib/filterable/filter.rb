@@ -22,6 +22,7 @@ module Filterable
 
     def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
+      raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params(scope_params)
       @param = param
       @type = type
       @internal_name = internal_name || @param
@@ -51,10 +52,8 @@ module Filterable
 
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
-        if scope_params && value.present?
+        if value.present?
           collection.public_send(internal_name, parameter(value), *mapped_scope_params(params))
-        elsif value.present?
-          collection.public_send(internal_name, parameter(value))
         elsif default.present?
           default.call(collection)
         else
@@ -93,6 +92,10 @@ module Filterable
       else
         value
       end
+    end
+
+    def valid_scope_params(scope_params)
+      scope_params.is_a?(Array) && scope_params.all? { |symbol| symbol.is_a?(Symbol) }
     end
   end
 end

@@ -52,8 +52,8 @@ class FiltratorTest < ActiveSupport::TestCase
   end
 
   test 'it can filter on scopes that need values from params' do
-    Post.create!(priority: 1, expiration: "2017-01-01")
-    Post.create!(priority: 3, expiration: "2017-01-02")
+    Post.create!(priority: 5, expiration: "2017-01-01")
+    Post.create!(priority: 5, expiration: "2017-01-02")
     Post.create!(priority: 7, expiration: "2020-10-20")
     filter = Filterable::Filter.new(:expired_before_and_priority, :scope, :expired_before_and_priority, nil, nil, [:priority])
     collection = Filterable::Filtrator.filter(Post.all, { filters: { expired_before_and_priority: "2017-12-31"}, priority: 5 }, [filter])
@@ -66,8 +66,8 @@ class FiltratorTest < ActiveSupport::TestCase
   end
 
   test 'it can filter on scopes that need multiple values from params' do
-    Post.create!(priority: 1, expiration: "2017-01-01")
-    Post.create!(priority: 3, expiration: "2017-01-02")
+    Post.create!(priority: 5, expiration: "2017-01-01")
+    Post.create!(priority: 5, expiration: "2017-01-02")
     Post.create!(priority: 7, expiration: "2020-10-20")
 
     filter = Filterable::Filter.new(:ordered_expired_before_and_priority, :scope, :ordered_expired_before_and_priority, nil, nil, [:date, :priority])
