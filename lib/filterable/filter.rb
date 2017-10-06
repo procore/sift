@@ -52,8 +52,10 @@ module Filterable
 
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
-        if value.present?
-          collection.public_send(internal_name, parameter(value), *mapped_scope_params(params))
+        if value.present? && scope_params.empty?
+          collection.public_send(internal_name, parameter(value))
+        elsif value.present? && scope_params.any?
+          collection.public_send(internal_name, parameter(value), mapped_scope_params(params))
         elsif default.present?
           default.call(collection)
         else
@@ -75,8 +77,8 @@ module Filterable
     private
 
     def mapped_scope_params(params)
-      scope_params.map do |scope_param|
-          params.fetch(scope_param)
+      scope_params.each_with_object({}) do |scope_param,hash|
+          hash[scope_param] = params.fetch(scope_param)
       end
     end
 

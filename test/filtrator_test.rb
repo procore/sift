@@ -59,10 +59,10 @@ class FiltratorTest < ActiveSupport::TestCase
     collection = Filterable::Filtrator.filter(Post.all, { filters: { expired_before_and_priority: "2017-12-31"}, priority: 5 }, [filter])
 
     assert_equal 3, Post.count
-    assert_equal 2, Post.expired_before_and_priority("2017-12-31", 5).count
+    assert_equal 2, Post.expired_before_and_priority("2017-12-31", { priority: 5 }).count
     assert_equal 2, collection.count
 
-    assert_equal Post.expired_before_and_priority('2017-12-31', 5).to_a, collection.to_a
+    assert_equal Post.expired_before_and_priority('2017-12-31', { priority: 5 }).to_a, collection.to_a
   end
 
   test 'it can filter on scopes that need multiple values from params' do
@@ -74,10 +74,10 @@ class FiltratorTest < ActiveSupport::TestCase
     collection = Filterable::Filtrator.filter(Post.all, { filters: { ordered_expired_before_and_priority: 'ASC'}, priority: 5, date: "2017-12-31"}, [filter])
 
     assert_equal 3, Post.count
-    assert_equal 2, Post.ordered_expired_before_and_priority("ASC","2017-12-31", 5).count
+    assert_equal 2, Post.ordered_expired_before_and_priority("ASC", { date: "2017-12-31", priority: 5 }).count
     assert_equal 2, collection.count
 
-    assert_equal Post.ordered_expired_before_and_priority("ASC","2017-12-31", 5).to_a, collection.to_a
+    assert_equal Post.ordered_expired_before_and_priority("ASC", { date: "2017-12-31", priority: 5 }).to_a, collection.to_a
   end
 
   test 'it can sort on scopes that do not require arguments' do
