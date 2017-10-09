@@ -73,6 +73,28 @@ you can pass an array of arguments instead of a single argument.
 
 Scopes that accept no arguments are currently not supported.
 
+#### Accessing Params with Filter Scopes
+
+Filters with `type: :scope` have access to the params hash by passing in the desired keys to the `scope_params`. The keys passed in will be returned as a hash with their associated values, and should always appear as the last argument in your scope.  
+
+```ruby
+class Post < ActiveRecord::Base
+  scope :user_posts_on_date, ->(date, options) { where(user_id: user_id, blog_id: options[:blog_id], date: options[:date]) }
+end
+
+class UsersController < ApplicationController
+  include Filterable
+
+  filter_on :user_posts_on_date, type: :scope, scope_params: [:user_id, :blog_id]
+
+  def show
+    render json: filtrate(Post.all)
+  end
+end
+``` 
+Passing `?filters[user_posts_on_date]=10/12/20` will call the `user_posts_on_date` scope with
+`10/12/20` as the the first argument, and will grab the `user_id` and `blog_id` out of the params and pass them as a hash, as the second argument.  
+
 ### Sort Types
 Every sort must have a type, so that Filterable knows what to do with it. The current valid sort types are:
 * int - Sort on an integer column
