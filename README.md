@@ -59,7 +59,7 @@ end
 class PostsController < ApplicationController
   include Filterable
 
-  filter_on :with_body, type: :text
+  filter_on :with_body, type: :scope
 
   def index
     render json: filtrate(Post.all)
