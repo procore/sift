@@ -79,7 +79,9 @@ Filters with `type: :scope` have access to the params hash by passing in the des
 
 ```ruby
 class Post < ActiveRecord::Base
-  scope :user_posts_on_date, ->(date, options) { where(user_id: user_id, blog_id: options[:blog_id], date: options[:date]) }
+  scope :user_posts_on_date, ->(date, options) {
+    where(user_id: options[:user_id], blog_id: options[:blog_id], date: date)
+  }
 end
 
 class UsersController < ApplicationController
