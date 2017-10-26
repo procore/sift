@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    filterable (0.2.8)
+    filterable (0.3.0)
       rails (> 4.2.0)
 
 GEM

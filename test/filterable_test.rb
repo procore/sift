@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FilterableTest < ActiveSupport::TestCase
   class MyClass
-    attr_accessor :params
+    attr_writer :params
     include Filterable
 
     def params

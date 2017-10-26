@@ -59,7 +59,7 @@ end
 class PostsController < ApplicationController
   include Filterable
 
-  filter_on :with_body, type: :text
+  filter_on :with_body, type: :scope
 
   def index
     render json: filtrate(Post.all)
@@ -72,6 +72,43 @@ Passing `?filters[with_body]=my_text` will call the `with_body` scope with
 you can pass an array of arguments instead of a single argument.
 
 Scopes that accept no arguments are currently not supported.
+
+#### Accessing Params with Filter Scopes
+
+Filters with `type: :scope` have access to the params hash by passing in the desired keys to the `scope_params`. The keys passed in will be returned as a hash with their associated values, and should always appear as the last argument in your scope.  
+
+```ruby
+class Post < ActiveRecord::Base
+  scope :user_posts_on_date, ->(date, options) {
+    where(user_id: options[:user_id], blog_id: options[:blog_id], date: date)
+  }
+end
+
+class UsersController < ApplicationController
+  include Filterable
+
+  filter_on :user_posts_on_date, type: :scope, scope_params: [:user_id, :blog_id]
+
+  def show
+    render json: filtrate(Post.all)
+  end
+end
+``` 
+Passing `?filters[user_posts_on_date]=10/12/20` will call the `user_posts_on_date` scope with
+`10/12/20` as the the first argument, and will grab the `user_id` and `blog_id` out of the params and pass them as a hash, as the second argument.  
+
+### Renaming Filter Params
+
+A filter param can have a different field name than the column or scope. Use `internal_name` with the correct name of the column or scope.
+
+```ruby
+class PostsController < ApplicationController
+  include Filterable
+
+  filter_on :post_id, type: :int, internal_name: :id
+
+end
+```
 
 ### Sort Types
 Every sort must have a type, so that Filterable knows what to do with it. The current valid sort types are:
@@ -117,6 +154,8 @@ Passing `?sort=-order_by_body_then_id` will call the `order_on_body_then_id` sco
 Passing `?sort=order_by_body_then_id` will call the `order_on_body_then_id` scope where the `body_direction` this time is `:asc`, but the `id_direction` remains `:asc`.
 
 Scopes that accept no arguments are currently supported, but you should note that the user has no say in which direction it will sort on.
+
+`scope_params` can also accept symbols that are keys in the `params` hash. The value will be fetched and passed on as an argument to the scope.
 
 
 ## Consumer Usage

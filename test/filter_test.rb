@@ -15,6 +15,18 @@ class FilterTest < ActiveSupport::TestCase
     end
   end
 
+  test 'it raises an exception if scope_params is not an array' do
+    assert_raise ArgumentError do
+      Filterable::Filter.new('hi', :scope, 'hi', nil, nil, {})
+    end
+  end
+
+  test 'it raises an exception if scope_params does not contain symbols' do
+    assert_raise ArgumentError do
+      Filterable::Filter.new('hi', :scope, 'hi', nil, nil, ['foo'])
+    end
+  end
+
   test 'it knows what validation it needs when a datetime' do
     filter = Filterable::Filter.new('hi', :datetime, 'hi', nil)
     expected_validation = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/ , message: "must be a range" } }

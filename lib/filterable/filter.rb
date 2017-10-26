@@ -8,7 +8,7 @@ module Filterable
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
 
 
-    attr_reader :param, :type, :internal_name, :default, :custom_validate
+    attr_reader :param, :type, :internal_name, :default, :custom_validate, :scope_params
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -20,13 +20,15 @@ module Filterable
                        :datetime,
                        :scope].freeze
 
-    def initialize(param, type, internal_name, default, custom_validate = nil)
+    def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
+      raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params(scope_params)
       @param = param
       @type = type
       @internal_name = internal_name || @param
       @default = default
       @custom_validate = custom_validate
+      @scope_params = scope_params
     end
 
     def supports_ranges?
@@ -48,14 +50,12 @@ module Filterable
       end
     end
 
-    def apply!(collection, value:, active_sorts_hash:)
+    def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
-        if value.present?
-          if parameter(value).is_a?(Array)
-            collection.public_send(internal_name, *parameter(value))
-          else
-            collection.public_send(internal_name, parameter(value))
-          end
+        if value.present? && scope_params.empty?
+          collection.public_send(internal_name, *Array(parameter(value)))
+        elsif value.present? && scope_params.any?
+            collection.public_send(internal_name, *Array(parameter(value)), mapped_scope_params(params))
         elsif default.present?
           default.call(collection)
         else
@@ -76,6 +76,12 @@ module Filterable
 
     private
 
+    def mapped_scope_params(params)
+      scope_params.each_with_object({}) do |scope_param,hash|
+          hash[scope_param] = params.fetch(scope_param)
+      end
+    end
+
     def parameter(value)
       if supports_ranges? && value.to_s.include?('...')
         Range.new(*value.split('...'))
@@ -88,6 +94,10 @@ module Filterable
       else
         value
       end
+    end
+
+    def valid_scope_params(scope_params)
+      scope_params.is_a?(Array) && scope_params.all? { |symbol| symbol.is_a?(Symbol) }
     end
   end
 end

@@ -11,6 +11,7 @@ class PostsController < ApplicationController
   filter_on :hidden_after, type: :time
   filter_on :published_at, type: :datetime
   filter_on :expired_before, type: :scope
+  filter_on :expired_before_and_priority, type: :scope, scope_params: [:priority]
 
   filter_on :french_bread, type: :string, internal_name: :title
   filter_on :body2, type: :scope, internal_name: :body2, default: ->(c) { c.order(:body) }
@@ -34,6 +35,7 @@ class PostsController < ApplicationController
   sort_on :title, type: :string
   sort_on :priority, type: :string
   sort_on :foobar, type: :string, internal_name: :title
+  sort_on :dynamic_sort, type: :scope, internal_name: :expired_before_ordered_by_body, scope_params: [:date, :direction]
 
   def index
     render json: filtrate(Post.all)
