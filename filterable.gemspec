@@ -7,11 +7,11 @@ require 'filterable/version'
 Gem::Specification.new do |s|
   s.name        = 'filterable'
   s.version     = Filterable::VERSION
-  s.authors     = ['Adam Hess']
-  s.email       = ['adamhess1991@gmail.com']
-  # s.homepage    = 'TODO'
+  s.authors     = ['Procore Technologies']
+  s.email       = ['dev@procore.com']
+  s.homepage    = 'https://github.com/procore/filterable'
   s.summary     = 'Summary of Filterable.'
-  # s.description = 'TODO: Description of Filterable.'
+  s.description = 'Easily write arbitrary filters'
   s.license     = 'MIT'
 
   s.files = Dir['{app,config,db,lib}/**/*',
