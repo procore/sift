@@ -16,7 +16,7 @@ module Filterable
 
     def initialize(param, type, internal_name = param, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
-      raise "scope params must be an array" unless scope_params.is_a?(Array)
+      raise 'scope params must be an array' unless scope_params.is_a?(Array)
       @param = param
       @type = type
       @internal_name = internal_name
