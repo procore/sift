@@ -51,7 +51,11 @@ module Filterable
     def apply!(collection, value:, active_sorts_hash:)
       if type == :scope
         if value.present?
-          collection.public_send(internal_name, parameter(value))
+          if parameter(value).is_a?(Array)
+            collection.public_send(internal_name, *parameter(value))
+          else
+            collection.public_send(internal_name, parameter(value))
+          end
         elsif default.present?
           default.call(collection)
         else
