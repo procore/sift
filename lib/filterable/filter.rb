@@ -2,12 +2,6 @@ module Filterable
   # Filter describes the way a parameter maps to a database column
   # and the type information helpful for validating input.
   class Filter
-    RANGE_PATTERN = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: 'must be a range' } }.freeze
-    DIGIT_RANGE_PATTERN = { format: { with: /\A\d+(...\d+)?\z/, message: 'must be int or range' } }.freeze
-    DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
-    BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
-
-
     attr_reader :param, :type, :internal_name, :default, :custom_validate, :scope_params
 
     WHITELIST_TYPES = [:int,
@@ -22,7 +16,7 @@ module Filterable
 
     def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
-      raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params(scope_params)
+      raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params?(scope_params)
       @param = param
       @type = type
       @internal_name = internal_name || @param
@@ -36,18 +30,7 @@ module Filterable
     end
 
     def validation(_)
-      case type
-      when :datetime, :date, :time
-        RANGE_PATTERN
-      when :int
-        valid_int?
-      when :decimal
-        DECIMAL_PATTERN
-      when :boolean
-        BOOLEAN_PATTERN
-      when :string
-      when :text
-      end
+      Filterable::TypeValidator.new(param, type).validate
     end
 
     def apply!(collection, value:, active_sorts_hash:, params: {})
@@ -96,16 +79,8 @@ module Filterable
       end
     end
 
-    def valid_scope_params(scope_params)
+    def valid_scope_params?(scope_params)
       scope_params.is_a?(Array) && scope_params.all? { |symbol| symbol.is_a?(Symbol) }
-    end
-
-    def valid_int?
-      is_int_array? || DIGIT_RANGE_PATTERN 
-    end
-
-    def is_int_array?
-      param.is_a?(Array) && param.any? && param.all? { |param| param.is_a?(Integer) }
     end
   end
 end
