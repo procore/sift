@@ -41,6 +41,26 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal expected_validation, filter.validation(nil)
   end
 
+  test 'it accepts a singular int or array of ints' do
+    filter = Filterable::Filter.new([1,2], :int, [1,2], nil)
+
+    assert_equal true, filter.validation(nil)
+  end
+
+  test 'it does not accept a mixed array when the type is int' do
+    filter = Filterable::Filter.new([1,2,"a"], :int, [1,2,"a"], nil)
+    expected_validation = { format: { with: /\A\d+(...\d+)?\z/, message: 'must be int or range' } }
+
+    assert_equal expected_validation, filter.validation(nil)
+  end
+
+  test 'it does not accept an empty array for type int' do
+    filter = Filterable::Filter.new([], :int, [], nil)
+    expected_validation = { format: { with: /\A\d+(...\d+)?\z/, message: 'must be int or range' } }
+
+    assert_equal expected_validation, filter.validation(nil)
+  end
+
   test 'it knows what validation it needs when a decimal' do
     filter = Filterable::Filter.new('hi', :decimal, 'hi', nil)
     expected_validation = { numericality: true, allow_nil: true }

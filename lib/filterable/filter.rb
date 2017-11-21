@@ -40,7 +40,7 @@ module Filterable
       when :datetime, :date, :time
         RANGE_PATTERN
       when :int
-        DIGIT_RANGE_PATTERN
+        valid_int?
       when :decimal
         DECIMAL_PATTERN
       when :boolean
@@ -98,6 +98,14 @@ module Filterable
 
     def valid_scope_params(scope_params)
       scope_params.is_a?(Array) && scope_params.all? { |symbol| symbol.is_a?(Symbol) }
+    end
+
+    def valid_int?
+      is_int_array? || DIGIT_RANGE_PATTERN 
+    end
+
+    def is_int_array?
+      param.is_a?(Array) && param.any? && param.all? { |param| param.is_a?(Integer) }
     end
   end
 end
