@@ -4,25 +4,15 @@ module Filterable
   class Filter
     attr_reader :param, :type, :internal_name, :default, :custom_validate, :scope_params
 
-    WHITELIST_TYPES = [:int,
-                       :decimal,
-                       :boolean,
-                       :string,
-                       :text,
-                       :date,
-                       :time,
-                       :datetime,
-                       :scope].freeze
-
     def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
-      raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
-      raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params?(scope_params)
       @param = param
       @type = type
       @internal_name = internal_name || @param
       @default = default
       @custom_validate = custom_validate
       @scope_params = scope_params
+      raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params?(scope_params)
+      raise "unknown filter type: #{type}" unless type_validator.valid_type?
     end
 
     def supports_ranges?
@@ -30,7 +20,7 @@ module Filterable
     end
 
     def validation(_)
-      Filterable::TypeValidator.new(param, type).validate
+      type_validator.validate
     end
 
     def apply!(collection, value:, active_sorts_hash:, params: {})
@@ -55,6 +45,10 @@ module Filterable
 
     def validation_field
       param
+    end
+
+    def type_validator
+      @type_validator ||= Filterable::TypeValidator.new(param, type)
     end
 
     private

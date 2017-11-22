@@ -2,9 +2,18 @@ module Filterable
   # TypeValidator validates that the incoming param is of the specified type
   class TypeValidator
     RANGE_PATTERN = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: 'must be a range' } }.freeze
-    DIGIT_RANGE_PATTERN = { format: { with: /\A\d+(...\d+)?\z/, message: 'must be int or range' } }.freeze
     DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
+
+    WHITELIST_TYPES = [:int,
+                       :decimal,
+                       :boolean,
+                       :string,
+                       :text,
+                       :date,
+                       :time,
+                       :datetime,
+                       :scope].freeze
 
     def initialize(param, type)
       @param = param
@@ -28,14 +37,14 @@ module Filterable
       end
     end
 
+    def valid_type?
+      WHITELIST_TYPES.include?(type)
+    end
+
     private
 
     def valid_int?
-      is_int_array? || DIGIT_RANGE_PATTERN 
-    end
-
-    def is_int_array?
-      param.is_a?(Array) && param.any? && param.all? { |param| param.is_a?(Integer) }
+      { valid_int: true }
     end
   end
 end
