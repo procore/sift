@@ -3,7 +3,7 @@ require 'test_helper'
 class FilterValidatorTest < ActiveSupport::TestCase
   test 'it validates that integers are numeric integers' do
     filter = Filterable::Filter.new(:hi, :int, :hi, nil)
-    validator = Filterable::FilterValidator.new([filter], {filters: { hi: 1 }}, [], filter_params: { hi: 1}, sort_params: '')
+    validator = Filterable::FilterValidator.new([filter], {filters: { hi: '1' }}, [], filter_params: { hi: '1'}, sort_params: '')
 
     assert validator.valid?
     assert_equal Hash.new, validator.errors.messages

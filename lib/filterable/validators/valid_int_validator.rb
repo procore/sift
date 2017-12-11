@@ -7,14 +7,14 @@ class ValidIntValidator < ActiveModel::EachValidator
   private
 
   def valid_int?(value)
-    is_integer_or_range?(value) || is_integer_array?(value)
+    is_integer_array?(value) || is_integer_or_range?(value)
   end
 
   def is_integer_array?(value)
-    value.is_a?(Array) && value.any? && value.all? { |value| value.is_a?(Integer) }
+    value.is_a?(Array) && value.any? && value.all? { |value| is_integer_or_range?(value) }
   end
 
   def is_integer_or_range?(value)
-    value.is_a?(Integer) || !!(/\A\d+(...\d+)?\z/ =~ value)
+    !!(/\A\d+(...\d+)?\z/ =~ value)
   end
 end

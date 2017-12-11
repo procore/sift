@@ -80,7 +80,14 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'it filters on id with an array' do
+    post = Post.create!
+    post2 = Post.create!
+    Post.create!
 
+    get('/posts', params: { filters: { id: [post.id, post2.id] } })
+
+    json = JSON.parse(@response.body)
+    assert_equal 2, json.size
   end
 
   test 'it filters on named scope' do
