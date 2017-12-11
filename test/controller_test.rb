@@ -58,7 +58,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test 'it invalidates id' do
     Post.create!(visible: false)
     Post.create!
-    expected_json = { 'errors' => { 'id' => ['must be int or range'] } }
+    expected_json = { 'errors' => { 'id' => ['must be integer, array of integers, or range'] } }
 
 
     get('/posts', params: { filters: { id: 'poopie' } })

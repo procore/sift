@@ -11,7 +11,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
 
   test 'it validates integers cannot be strings' do
     filter = Filterable::Filter.new(:hi, :int, :hi, nil)
-    expected_messages = { hi: ["must be int or range"] }
+    expected_messages = { hi: ["must be integer, array of integers, or range"] }
 
     validator = Filterable::FilterValidator.new([filter], {filters: { hi: 'hi123' }}, [], filter_params: { hi: 'hi123' }, sort_params: '')
     assert !validator.valid?
