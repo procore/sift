@@ -3,15 +3,15 @@ require 'test_helper'
 class FilterValidatorTest < ActiveSupport::TestCase
   test 'it validates that integers are numeric integers' do
     filter = Filterable::Filter.new(:hi, :int, :hi, nil)
+    validator = Filterable::FilterValidator.new([filter], {filters: { hi: '1' }}, [], filter_params: { hi: '1'}, sort_params: '')
 
-    validator = Filterable::FilterValidator.new([filter], {filters: { hi: 1 }}, [], filter_params: { hi: 1}, sort_params: '')
     assert validator.valid?
     assert_equal Hash.new, validator.errors.messages
   end
 
   test 'it validates integers cannot be strings' do
     filter = Filterable::Filter.new(:hi, :int, :hi, nil)
-    expected_messages = { hi: ["must be int or range"] }
+    expected_messages = { hi: ["must be integer, array of integers, or range"] }
 
     validator = Filterable::FilterValidator.new([filter], {filters: { hi: 'hi123' }}, [], filter_params: { hi: 'hi123' }, sort_params: '')
     assert !validator.valid?

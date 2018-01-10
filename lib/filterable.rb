@@ -3,6 +3,8 @@ require 'filterable/filter_validator'
 require 'filterable/filtrator'
 require 'filterable/sort'
 require 'filterable/subset_comparator'
+require 'filterable/type_validator'
+require 'filterable/validators/valid_int_validator'
 
 module Filterable
   extend ActiveSupport::Concern
