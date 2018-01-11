@@ -1,9 +1,17 @@
 require 'test_helper'
 
 class FilterValidatorTest < ActiveSupport::TestCase
-  test 'it validates that integers are numeric integers' do
+  test 'it validates that integers are string integers' do
     filter = Filterable::Filter.new(:hi, :int, :hi, nil)
     validator = Filterable::FilterValidator.new([filter], {filters: { hi: '1' }}, [], filter_params: { hi: '1'}, sort_params: '')
+
+    assert validator.valid?
+    assert_equal Hash.new, validator.errors.messages
+  end
+  
+  test 'it validates that integers are numeric integers' do
+    filter = Filterable::Filter.new(:hola, :int, :hola, nil)
+    validator = Filterable::FilterValidator.new([filter], {filters: { hola: 2 }}, [], filter_params: { hola: 2}, sort_params: '')
 
     assert validator.valid?
     assert_equal Hash.new, validator.errors.messages
