@@ -41,16 +41,6 @@ class FiltratorTest < ActiveSupport::TestCase
     assert_equal Post.where(id: filtered_post.id).to_a, collection.to_a
   end
 
-  test 'it can filter on scopes that accept multiple arguments' do
-    Post.create!(body: "foo", priority: 1)
-    Post.create!(body: "bar", priority: 10)
-    filtered_post = Post.create!(body: "foo", priority: 10)
-    filter = Filterable::Filter.new(:body_and_priority, :scope, :body_and_priority, nil)
-    collection = Filterable::Filtrator.filter(Post.all, { filters: { body_and_priority: ["foo", 10] } }, [filter])
-
-    assert_equal Post.where(id: filtered_post.id).to_a, collection.to_a
-  end
-
   test 'it can filter on scopes that need values from params' do
     Post.create!(priority: 5, expiration: "2017-01-01")
     Post.create!(priority: 5, expiration: "2017-01-02")

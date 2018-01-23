@@ -7,10 +7,6 @@ class Post < ApplicationRecord
     where(body: text)
   }
 
-  scope :body_and_priority, -> (text, priority) {
-    where(body: text, priority: priority)
-  }
-
   scope :order_on_body_no_params, -> {
     order(body: :desc)
   }
