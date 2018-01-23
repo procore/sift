@@ -169,7 +169,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
     assert_equal post.id, json.first["id"]
   end
-  
+
   test 'it respects custom validation logic' do
     expected_json = {"errors"=>{"id_array"=>["Not all values were valid integers"]}}
     post = Post.create!

@@ -46,9 +46,9 @@ class FiltratorTest < ActiveSupport::TestCase
     Post.create!(body: "bar", priority: 10)
     filtered_post = Post.create!(body: "foo", priority: 10)
     filter = Filterable::Filter.new(:body_and_priority, :scope, :body_and_priority, nil)
-    collection = Filterable::Filtrator.filter(Post.all, { filters: { body_and_priority: ["foo", 10] } }, [filter])
-
-    assert_equal Post.where(id: filtered_post.id).to_a, collection.to_a
+    assert_raises ArgumentError do
+      Filterable::Filtrator.filter(Post.all, { filters: { body_and_priority: ["foo", 10] } }, [filter])
+    end
   end
 
   test 'it can filter on scopes that need values from params' do

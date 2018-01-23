@@ -68,14 +68,13 @@ end
 ```
 
 Passing `?filters[with_body]=my_text` will call the `with_body` scope with
-`my_text` as the argument. If you have a scope that takes multiple arguments,
-you can pass an array of arguments instead of a single argument.
+`my_text` as the argument.
 
 Scopes that accept no arguments are currently not supported.
 
 #### Accessing Params with Filter Scopes
 
-Filters with `type: :scope` have access to the params hash by passing in the desired keys to the `scope_params`. The keys passed in will be returned as a hash with their associated values, and should always appear as the last argument in your scope.  
+Filters with `type: :scope` have access to the params hash by passing in the desired keys to the `scope_params`. The keys passed in will be returned as a hash with their associated values, and should always appear as the last argument in your scope.
 
 ```ruby
 class Post < ActiveRecord::Base
@@ -93,9 +92,9 @@ class UsersController < ApplicationController
     render json: filtrate(Post.all)
   end
 end
-``` 
+```
 Passing `?filters[user_posts_on_date]=10/12/20` will call the `user_posts_on_date` scope with
-`10/12/20` as the the first argument, and will grab the `user_id` and `blog_id` out of the params and pass them as a hash, as the second argument.  
+`10/12/20` as the the first argument, and will grab the `user_id` and `blog_id` out of the params and pass them as a hash, as the second argument.
 
 ### Renaming Filter Params
 
