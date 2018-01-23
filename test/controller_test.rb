@@ -99,6 +99,16 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
   end
 
+  test 'it can filter on a scope with multiple values' do
+    Post.create!(body: "hi")
+    Post.create!(body: "hello")
+    Post.create!(body: "hola")
+    get('/posts', params: { filters: { body2: ["hi", "hello"] } })
+
+    json = JSON.parse(@response.body)
+    assert_equal 2, json.size
+  end
+
   test 'the param can have a different name from the internal name' do
     post = Post.create!(title: 'hi')
     Post.create!(title: 'friend')

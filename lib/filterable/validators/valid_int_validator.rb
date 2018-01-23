@@ -15,6 +15,6 @@ class ValidIntValidator < ActiveModel::EachValidator
   end
 
   def is_integer_or_range?(value)
-    !!(/\A\d+(...\d+)?\z/ =~ value)
+    !!(/\A\d+(...\d+)?\z/ =~ value.to_s)
   end
 end
