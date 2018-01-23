@@ -3,7 +3,7 @@ class Post < ApplicationRecord
     where('expiration < ?', date)
   }
 
-  scope :body2, -> (text) {
+  scope :body2, -> (*text) {
     where(body: text)
   }
 
@@ -32,6 +32,6 @@ class Post < ApplicationRecord
   }
 
   scope :ordered_expired_before_and_priority, -> (direction, options) {
-    expired_before_and_priority(options[:date],options).order(id: direction)
+    expired_before_and_priority(options[:date], options).order(id: direction)
   }
 end

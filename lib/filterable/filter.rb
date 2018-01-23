@@ -25,15 +25,7 @@ module Filterable
 
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
-        if value.present? && scope_params.empty?
-          collection.public_send(internal_name, parameter(value))
-        elsif value.present? && scope_params.any?
-          collection.public_send(internal_name, parameter(value), mapped_scope_params(params))
-        elsif default.present?
-          default.call(collection)
-        else
-          collection
-        end
+        apply_scope_filter(collection, value, active_sorts_hash, params)
       else
         collection.where(internal_name => parameter(value))
       end
@@ -52,6 +44,18 @@ module Filterable
     end
 
     private
+
+    def apply_scope_filter(collection, value, active_sorts_hash, params)
+      if value.present? && scope_params.empty?
+        collection.public_send(internal_name, *parameter(value))
+      elsif value.present? && scope_params.any?
+        collection.public_send(internal_name, *parameter(value), mapped_scope_params(params))
+      elsif default.present?
+        default.call(collection)
+      else
+        collection
+      end
+    end
 
     def mapped_scope_params(params)
       scope_params.each_with_object({}) do |scope_param, hash|
