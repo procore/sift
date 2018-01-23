@@ -1,6 +1,7 @@
 .bundle/
 log/*.log
 *.swp
+Gemfile.lock
 pkg/
 test/dummy/db/*.sqlite3
 test/dummy/db/*.sqlite3-journal
