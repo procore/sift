@@ -23,7 +23,7 @@ module Filterable
       elsif should_apply_default?(value)
         default.call(collection)
       else
-        parameter.handler.call(collection, parameterize(value), params, scope_params)
+        handler.call(collection, parameterize(value), params, scope_params)
       end
     end
 
@@ -64,7 +64,7 @@ module Filterable
     end
 
     def parameterize(value)
-      if parameter.supports_ranges? && value.to_s.include?('...')
+      if supports_ranges? && value.to_s.include?('...')
         Range.new(*value.split('...'))
       elsif type == :boolean
         if Rails.version.starts_with?('5')
@@ -79,6 +79,14 @@ module Filterable
 
     def valid_scope_params?(scope_params)
       scope_params.is_a?(Array) && scope_params.all? { |symbol| symbol.is_a?(Symbol) }
+    end
+
+    def handler
+      parameter.handler
+    end
+
+    def supports_ranges?
+      parameter.supports_ranges?
     end
   end
 end

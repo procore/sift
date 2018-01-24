@@ -29,7 +29,7 @@ module Filterable
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
         if active_sorts_hash.keys.include?(param)
-          collection.public_send(parameter.internal_name, *mapped_scope_params(active_sorts_hash[param], params))
+          collection.public_send(internal_name, *mapped_scope_params(active_sorts_hash[param], params))
         elsif default.present?
           # Stubbed because currently Filterable::Sort does not respect default
           # default.call(collection)
@@ -39,7 +39,7 @@ module Filterable
         end
       elsif type == :string || type == :text
         if active_sorts_hash.keys.include?(param)
-          collection.order("LOWER(#{parameter.internal_name}) #{individual_sort_hash(active_sorts_hash)[parameter.internal_name]}")
+          collection.order("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
         else
           collection
         end
@@ -90,7 +90,11 @@ module Filterable
     end
 
     def individual_sort_hash(active_sorts_hash)
-      active_sorts_hash.include?(param) ? { parameter.internal_name => active_sorts_hash[param] } : {}
+      active_sorts_hash.include?(param) ? { internal_name => active_sorts_hash[param] } : {}
+    end
+
+    def internal_name
+      parameter.internal_name
     end
   end
 end
