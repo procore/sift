@@ -39,7 +39,6 @@ module Filterable
       unique_validations_filters = filters.uniq { |filter| filter.validation_field }
 
       class_eval do
-
         attr_accessor(*unique_validations_filters.map(&:validation_field))
         unique_validations_filters.each do |filter|
           if (params.fetch(:filters, {})[filter.validation_field] && filter.custom_validate)

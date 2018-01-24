@@ -10,7 +10,7 @@ module Filterable
       @custom_validate = custom_validate
       @scope_params = scope_params
       raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params?(scope_params)
-      raise "unknown filter type: #{parameter.type}" unless type_validator.valid_type?
+      raise "unknown filter type: #{type}" unless type_validator.valid_type?
     end
 
     def validation(_)
@@ -36,7 +36,15 @@ module Filterable
     end
 
     def type_validator
-      @type_validator ||= Filterable::TypeValidator.new(parameter.param, parameter.type)
+      @type_validator ||= Filterable::TypeValidator.new(param, type)
+    end
+
+    def type
+      parameter.type
+    end
+
+    def param
+      parameter.param
     end
 
     private
@@ -58,7 +66,7 @@ module Filterable
     def parameterize(value)
       if parameter.supports_ranges? && value.to_s.include?('...')
         Range.new(*value.split('...'))
-      elsif parameter.type == :boolean
+      elsif type == :boolean
         if Rails.version.starts_with?('5')
           ActiveRecord::Type::Boolean.new.cast(value)
         else
