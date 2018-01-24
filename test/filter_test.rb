@@ -75,12 +75,4 @@ class FilterTest < ActiveSupport::TestCase
 
     assert_equal expected_validation, filter.validation(nil)
   end
-
-  # test 'stringy types do not support ranges' do
-  #   filter = Filterable::Filter.new('hi', :string, 'hi', nil)
-
-  #   assert !filter.supports_ranges?
-  # end
-  # TODO: move to param tests
-
 end
