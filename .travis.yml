@@ -1,0 +1,12 @@
+language: ruby
+rvm:
+  - 2.3
+  - 2.4
+  - 2.5
+
+cache: bundler
+
+script: bundle exec rake
+
+notifications:
+  email: false
