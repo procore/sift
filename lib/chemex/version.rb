@@ -1,3 +1,3 @@
 module Chemex
-  VERSION = "0.4.1".freeze
+  VERSION = "0.9.0".freeze
 end
