@@ -35,7 +35,12 @@ module Filterable
   private
 
   def filter_validator
-    @_filter_validator ||= FilterValidator.new(filters, params, self.class.sort_fields, filter_params: filter_params, sort_params: sort_params)
+    @_filter_validator ||= FilterValidator.build(
+      filters: filters,
+      sort_fields: self.class.sort_fields,
+      filter_params: filter_params,
+      sort_params: sort_params,
+    )
   end
 
   def filters
