@@ -90,7 +90,11 @@ module Filterable
     end
 
     def individual_sort_hash(active_sorts_hash)
-      active_sorts_hash.include?(param) ? { internal_name => active_sorts_hash[param] } : {}
+      if active_sorts_hash.include?(param)
+        { internal_name => active_sorts_hash[param] }
+      else
+        {}
+      end
     end
 
     def internal_name
