@@ -22,16 +22,16 @@ module Filterable
     private
 
     def to_type(filter, params)
-      if filter.type == :boolean
+      if filter.parameter.type == :boolean
         if Rails.version.starts_with?('5')
-          ActiveRecord::Type::Boolean.new.cast(filter_params[filter.param])
+          ActiveRecord::Type::Boolean.new.cast(filter_params[filter.parameter.param])
         else
-          ActiveRecord::Type::Boolean.new.type_cast_from_user(filter_params[filter.param])
+          ActiveRecord::Type::Boolean.new.type_cast_from_user(filter_params[filter.parameter.param])
         end
       elsif filter.validation_field == :sort
         params.fetch(:sort, '').split(',')
       else
-        filter_params[filter.param]
+        filter_params[filter.parameter.param]
       end
     end
 

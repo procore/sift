@@ -4,9 +4,9 @@ class SortTest < ActiveSupport::TestCase
   test 'it is initialized with the a param and a type' do
     sort = Filterable::Sort.new('hi', :int, 'hi')
 
-    assert_equal 'hi', sort.param
-    assert_equal :int, sort.type
-    assert_equal 'hi', sort.internal_name
+    assert_equal 'hi', sort.parameter.param
+    assert_equal :int, sort.parameter.type
+    assert_equal 'hi', sort.parameter.internal_name
   end
 
   test 'it raises if the type is unknown' do

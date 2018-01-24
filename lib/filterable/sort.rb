@@ -3,7 +3,7 @@ module Filterable
   # but instead of applying a `where` to the collection
   # it applies an `order`.
   class Sort
-    attr_reader :param, :type, :internal_name, :scope_params
+    attr_reader :parameter, :scope_params
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -17,9 +17,7 @@ module Filterable
     def initialize(param, type, internal_name = param, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
       raise 'scope params must be an array' unless scope_params.is_a?(Array)
-      @param = param
-      @type = type
-      @internal_name = internal_name
+      @parameter = Parameter.new(param, type, internal_name)
       @scope_params = scope_params
     end
 
@@ -29,9 +27,9 @@ module Filterable
     end
 
     def apply!(collection, value:, active_sorts_hash:, params: {})
-      if type == :scope
-        if active_sorts_hash.keys.include?(param)
-          collection.public_send(internal_name, *mapped_scope_params(active_sorts_hash[param], params))
+      if parameter.type == :scope
+        if active_sorts_hash.keys.include?(parameter.param)
+          collection.public_send(parameter.internal_name, *mapped_scope_params(active_sorts_hash[parameter.param], params))
         elsif default.present?
           # Stubbed because currently Filterable::Sort does not respect default
           # default.call(collection)
@@ -39,9 +37,9 @@ module Filterable
         else
           collection
         end
-      elsif type == :string || type == :text
-        if active_sorts_hash.keys.include?(param)
-          collection.order("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
+      elsif parameter.type == :string || parameter.type == :text
+        if active_sorts_hash.keys.include?(parameter.param)
+          collection.order("LOWER(#{parameter.internal_name}) #{individual_sort_hash(active_sorts_hash)[parameter.internal_name]}")
         else
           collection
         end
@@ -82,7 +80,7 @@ module Filterable
     end
 
     def individual_sort_hash(active_sorts_hash)
-      active_sorts_hash.include?(param) ? { internal_name => active_sorts_hash[param] } : {}
+      active_sorts_hash.include?(parameter.param) ? { parameter.internal_name => active_sorts_hash[parameter.param] } : {}
     end
   end
 end
