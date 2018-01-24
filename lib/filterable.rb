@@ -1,13 +1,13 @@
-require 'filterable/filter'
-require 'filterable/filter_validator'
-require 'filterable/filtrator'
-require 'filterable/sort'
-require 'filterable/subset_comparator'
-require 'filterable/type_validator'
-require 'filterable/parameter'
-require 'filterable/scope_handler'
-require 'filterable/where_handler'
-require 'filterable/validators/valid_int_validator'
+require "filterable/filter"
+require "filterable/filter_validator"
+require "filterable/filtrator"
+require "filterable/sort"
+require "filterable/subset_comparator"
+require "filterable/type_validator"
+require "filterable/parameter"
+require "filterable/scope_handler"
+require "filterable/where_handler"
+require "filterable/validators/valid_int_validator"
 
 module Filterable
   extend ActiveSupport::Concern
@@ -21,7 +21,7 @@ module Filterable
   end
 
   def sort_params
-    params.fetch(:sort, '').split(',') if filters.any? { |filter| filter.is_a?(Sort) }
+    params.fetch(:sort, "").split(",") if filters.any? { |filter| filter.is_a?(Sort) }
   end
 
   def filters_valid?

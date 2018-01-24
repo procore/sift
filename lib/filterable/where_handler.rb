@@ -4,7 +4,7 @@ module Filterable
       @param = param
     end
 
-    def call(collection, value, params, scope_params)
+    def call(collection, value, _params, _scope_params)
       collection.where(@param.internal_name => value)
     end
   end

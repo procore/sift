@@ -9,11 +9,11 @@ module Filterable
       new(collection, params, sort, filters).filter
     end
 
-    def initialize(collection, params, sort, filters = [])
+    def initialize(collection, params, _sort, filters = [])
       @collection = collection
       @params = params
       @filters = filters
-      @sort = params.fetch(:sort, '').split(',') if filters.any? { |filter| filter.is_a?(Sort) }
+      @sort = params.fetch(:sort, "").split(",") if filters.any? { |filter| filter.is_a?(Sort) }
     end
 
     def filter
@@ -35,7 +35,7 @@ module Filterable
     def active_sorts_hash
       active_sorts_hash = {}
       Array(sort).each do |s|
-        if s.starts_with?('-')
+        if s.starts_with?("-")
           active_sorts_hash[s[1..-1].to_sym] = :desc
         else
           active_sorts_hash[s.to_sym] = :asc
@@ -45,9 +45,9 @@ module Filterable
     end
 
     def active_filters
-      filters.select { |filter|
+      filters.select do |filter|
         filter_params[filter.param].present? || filter.default || filter.always_active?
-      }
+      end
     end
   end
 end

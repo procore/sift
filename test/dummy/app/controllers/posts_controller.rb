@@ -16,19 +16,19 @@ class PostsController < ApplicationController
   filter_on :french_bread, type: :string, internal_name: :title
   filter_on :body2, type: :scope, internal_name: :body2, default: ->(c) { c.order(:body) }
 
-  filter_on :id_array, type: :int, internal_name: :id, validate: -> (validator) {
+  # rubocop:disable Style/RescueModifier
+  filter_on :id_array, type: :int, internal_name: :id, validate: ->(validator) {
     value = validator.instance_variable_get("@id_array")
-    if value.is_a? Array
+    if value.is_a?(Array)
       # Verify all variables in the array are integers
       unless value.all? { |v| (Integer(v) rescue false) }
         validator.errors.add(:id_array, "Not all values were valid integers")
       end
-    else
-      if !(Integer(value) rescue false)
-        validator.errors.add(:id_array, "It not an integer")
-      end
+    elsif !(Integer(value) rescue false)
+      validator.errors.add(:id_array, "It not an integer")
     end
   }
+  # rubocop:enable Style/RescueModifier
 
   before_action :render_filter_errors, unless: :filters_valid?
 

@@ -9,7 +9,7 @@ module Filterable
       @default = default
       @custom_validate = custom_validate
       @scope_params = scope_params
-      raise ArgumentError, 'scope_params must be an array of symbols' unless valid_scope_params?(scope_params)
+      raise ArgumentError, "scope_params must be an array of symbols" unless valid_scope_params?(scope_params)
       raise "unknown filter type: #{type}" unless type_validator.valid_type?
     end
 
@@ -17,6 +17,7 @@ module Filterable
       type_validator.validate
     end
 
+    # rubocop:disable Lint/UnusedMethodArgument
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if not_processable?(value)
         collection
@@ -26,6 +27,7 @@ module Filterable
         handler.call(collection, parameterize(value), params, scope_params)
       end
     end
+    # rubocop:enable Lint/UnusedMethodArgument
 
     def always_active?
       false
@@ -64,10 +66,10 @@ module Filterable
     end
 
     def parameterize(value)
-      if supports_ranges? && value.to_s.include?('...')
-        Range.new(*value.split('...'))
+      if supports_ranges? && value.to_s.include?("...")
+        Range.new(*value.split("..."))
       elsif type == :boolean
-        if Rails.version.starts_with?('5')
+        if Rails.version.starts_with?("5")
           ActiveRecord::Type::Boolean.new.cast(value)
         else
           ActiveRecord::Type::Boolean.new.type_cast_from_user(value)

@@ -1,35 +1,35 @@
-require 'test_helper'
+require "test_helper"
 
 class TypeValidatorTest < ActiveSupport::TestCase
-  test 'it does not accept a type that is not whitelisted' do
+  test "it does not accept a type that is not whitelisted" do
     validator = Filterable::TypeValidator.new("test", :foo_bar)
 
     assert_equal false, validator.valid_type?
   end
 
-  test 'it accepts types that are whitelisted' do
+  test "it accepts types that are whitelisted" do
     validator = Filterable::TypeValidator.new("test", :string)
 
     assert_equal true, validator.valid_type?
   end
 
-  test 'it accepts arrays of integers for type int' do
-    validator = Filterable::TypeValidator.new([1,2], :int)
-    expected_validation = { :valid_int => true }
+  test "it accepts arrays of integers for type int" do
+    validator = Filterable::TypeValidator.new([1, 2], :int)
+    expected_validation = { valid_int: true }
 
     assert_equal expected_validation, validator.validate
   end
 
-  test 'it accepts a single integer for type int' do
+  test "it accepts a single integer for type int" do
     validator = Filterable::TypeValidator.new(1, :int)
-    expected_validation = { :valid_int => true }
+    expected_validation = { valid_int: true }
 
     assert_equal expected_validation, validator.validate
   end
 
-  test 'it accepts a range for type int' do
+  test "it accepts a range for type int" do
     validator = Filterable::TypeValidator.new("1..10", :int)
-    expected_validation = { :valid_int => true }
+    expected_validation = { valid_int: true }
 
     assert_equal expected_validation, validator.validate
   end

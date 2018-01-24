@@ -1,7 +1,7 @@
 module Filterable
   # TypeValidator validates that the incoming param is of the specified type
   class TypeValidator
-    RANGE_PATTERN = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: 'must be a range' } }.freeze
+    RANGE_PATTERN = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: "must be a range" } }.freeze
     DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
 
@@ -32,8 +32,6 @@ module Filterable
         DECIMAL_PATTERN
       when :boolean
         BOOLEAN_PATTERN
-      when :string
-      when :text
       end
     end
 

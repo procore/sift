@@ -16,7 +16,7 @@ module Filterable
 
     def initialize(param, type, internal_name = param, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
-      raise 'scope params must be an array' unless scope_params.is_a?(Array)
+      raise "scope params must be an array" unless scope_params.is_a?(Array)
       @parameter = Parameter.new(param, type, internal_name)
       @scope_params = scope_params
     end
@@ -26,6 +26,8 @@ module Filterable
       false
     end
 
+    # rubocop:disable Lint/UnusedMethodArgument
+    # rubocop:disable Metrics/PerceivedComplexity
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if type == :scope
         if active_sorts_hash.keys.include?(param)
@@ -47,6 +49,8 @@ module Filterable
         collection.order(individual_sort_hash(active_sorts_hash))
       end
     end
+    # rubocop:enable Metrics/PerceivedComplexity
+    # rubocop:enable Lint/UnusedMethodArgument
 
     def always_active?
       true
@@ -59,7 +63,7 @@ module Filterable
     def validation(sort)
       {
         inclusion: { in: SubsetComparator.new(sort) },
-        allow_nil: true
+        allow_nil: true,
       }
     end
 
@@ -72,8 +76,6 @@ module Filterable
     end
 
     private
-
-
 
     def mapped_scope_params(direction, params)
       scope_params.map do |scope_param|

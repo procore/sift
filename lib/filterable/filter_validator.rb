@@ -23,25 +23,25 @@ module Filterable
 
     def to_type(filter, params)
       if filter.type == :boolean
-        if Rails.version.starts_with?('5')
+        if Rails.version.starts_with?("5")
           ActiveRecord::Type::Boolean.new.cast(filter_params[filter.param])
         else
           ActiveRecord::Type::Boolean.new.type_cast_from_user(filter_params[filter.param])
         end
       elsif filter.validation_field == :sort
-        params.fetch(:sort, '').split(',')
+        params.fetch(:sort, "").split(",")
       else
         filter_params[filter.param]
       end
     end
 
     def add_validations(filters, params, sort_fields)
-      unique_validations_filters = filters.uniq { |filter| filter.validation_field }
+      unique_validations_filters = filters.uniq(&:validation_field)
 
       class_eval do
         attr_accessor(*unique_validations_filters.map(&:validation_field))
         unique_validations_filters.each do |filter|
-          if (params.fetch(:filters, {})[filter.validation_field] && filter.custom_validate)
+          if params.fetch(:filters, {})[filter.validation_field] && filter.custom_validate
             validate filter.custom_validate
           elsif (params.fetch(:filters, {})[filter.validation_field] && filter.validation(sort_fields)) || filter.validation_field == :sort
             validates filter.validation_field.to_sym, filter.validation(sort_fields)
