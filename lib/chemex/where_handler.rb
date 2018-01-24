@@ -1,4 +1,4 @@
-module Filterable
+module Chemex
   class WhereHandler
     def initialize(param)
       @param = param

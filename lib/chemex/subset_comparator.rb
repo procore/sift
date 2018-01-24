@@ -1,4 +1,4 @@
-module Filterable
+module Chemex
   class SubsetComparator
     def initialize(array)
       @array = array

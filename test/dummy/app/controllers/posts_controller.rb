@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  include Filterable
+  include Chemex
 
   filter_on :id, type: :int
   filter_on :priority, type: :int

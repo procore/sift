@@ -1,4 +1,4 @@
-module Filterable
+module Chemex
   class ScopeHandler
     def initialize(param)
       @param = param

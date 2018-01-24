@@ -1,15 +1,15 @@
-require "filterable/filter"
-require "filterable/filter_validator"
-require "filterable/filtrator"
-require "filterable/sort"
-require "filterable/subset_comparator"
-require "filterable/type_validator"
-require "filterable/parameter"
-require "filterable/scope_handler"
-require "filterable/where_handler"
-require "filterable/validators/valid_int_validator"
+require "chemex/filter"
+require "chemex/filter_validator"
+require "chemex/filtrator"
+require "chemex/sort"
+require "chemex/subset_comparator"
+require "chemex/type_validator"
+require "chemex/parameter"
+require "chemex/scope_handler"
+require "chemex/where_handler"
+require "chemex/validators/valid_int_validator"
 
-module Filterable
+module Chemex
   extend ActiveSupport::Concern
 
   def filtrate(collection)

@@ -1,4 +1,4 @@
-module Filterable
+module Chemex
   # Filter describes the way a parameter maps to a database column
   # and the type information helpful for validating input.
   class Filter
@@ -38,7 +38,7 @@ module Filterable
     end
 
     def type_validator
-      @type_validator ||= Filterable::TypeValidator.new(param, type)
+      @type_validator ||= Chemex::TypeValidator.new(param, type)
     end
 
     def type

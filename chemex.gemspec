@@ -1,16 +1,16 @@
 $LOAD_PATH.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "filterable/version"
+require "chemex/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "filterable"
-  s.version     = Filterable::VERSION
+  s.name        = "chemex"
+  s.version     = Chemex::VERSION
   s.authors     = ["Procore Technologies"]
   s.email       = ["dev@procore.com"]
-  s.homepage    = "https://github.com/procore/filterable"
-  s.summary     = "Summary of Filterable."
+  s.homepage    = "https://github.com/procore/chemex"
+  s.summary     = "Summary of Chemex."
   s.description = "Easily write arbitrary filters"
   s.license     = "MIT"
 

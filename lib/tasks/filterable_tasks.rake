@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :filterable do
+# task :chemex do
 #   # Task goes here
 # end

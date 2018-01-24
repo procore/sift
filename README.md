@@ -1,15 +1,15 @@
-# Filterable
+# Chemex
 
-[![Build Status](https://travis-ci.org/procore/filterable.svg?branch=master)](https://travis-ci.org/procore/filterable)
+[![Build Status](https://travis-ci.org/procore/chemex.svg?branch=master)](https://travis-ci.org/procore/chemex)
 
 A tool to build your own filters!
 
 ## Developer Usage
-Include Filterable in your controllers, and define some filters.
+Include Chemex in your controllers, and define some filters.
 
 ```ruby
 class PostsController < ApplicationController
-  include Filterable
+  include Chemex
 
   filter_on :title, type: :string
 
@@ -21,7 +21,7 @@ end
 
 This will allow users to pass `?filters[title]=foo` and get the `Post`s with the title `foo`.
 
-Filterable will also handle rendering errors using the standard rails errors structure. You can add this to your controller by adding,
+Chemex will also handle rendering errors using the standard rails errors structure. You can add this to your controller by adding,
 
 ```ruby
 before_action :render_filter_errors, unless: :filters_valid?
@@ -33,10 +33,10 @@ end
 
 to your controller.
 
-These errors are based on the type that you told filterable your param was.
+These errors are based on the type that you told chemex your param was.
 
 ### Filter Types
-Every filter must have a type, so that Filterable knows what to do with it. The current valid filter types are:
+Every filter must have a type, so that Chemex knows what to do with it. The current valid filter types are:
 * int - Filter on an integer column
 * decimal - Filter on a decimal column
 * boolean - Filter on a boolean column
@@ -57,7 +57,7 @@ class Post < ActiveRecord::Base
 end
 
 class PostsController < ApplicationController
-  include Filterable
+  include Chemex
 
   filter_on :with_body, type: :scope
 
@@ -84,7 +84,7 @@ class Post < ActiveRecord::Base
 end
 
 class UsersController < ApplicationController
-  include Filterable
+  include Chemex
 
   filter_on :user_posts_on_date, type: :scope, scope_params: [:user_id, :blog_id]
 
@@ -102,7 +102,7 @@ A filter param can have a different field name than the column or scope. Use `in
 
 ```ruby
 class PostsController < ApplicationController
-  include Filterable
+  include Chemex
 
   filter_on :post_id, type: :int, internal_name: :id
 
@@ -110,7 +110,7 @@ end
 ```
 
 ### Sort Types
-Every sort must have a type, so that Filterable knows what to do with it. The current valid sort types are:
+Every sort must have a type, so that Chemex knows what to do with it. The current valid sort types are:
 * int - Sort on an integer column
 * decimal - Sort on a decimal column
 * string - Sort on a string column
@@ -132,7 +132,7 @@ class Post < ActiveRecord::Base
 end
 
 class PostsController < ApplicationController
-  include Filterable
+  include Chemex
 
   sort_on :order_by_body_ascending, internal_name: :order_on_body_no_params, type: :scope
   sort_on :order_by_body, internal_name: :order_on_body, type: :scope, scope_params: [:direction]
@@ -174,7 +174,7 @@ the `-` symbol means to sort in `desc` order. By default, keys are sorted in `as
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'filterable'
+gem 'chemex'
 ```
 
 And then execute:
@@ -184,7 +184,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install filterable
+$ gem install chemex
 ```
 
 ## Contributing
