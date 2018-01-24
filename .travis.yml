@@ -11,5 +11,14 @@ before_install:
 
 script: bundle exec rake
 
+deploy:
+  provider: rubygems
+  api_key:
+    secure: GYH7nTi2D9ZwbCP+JYSgHceDUvZT9RQSP6yXFndwSyxdiSmB6wfq6EtoH4Wpznd6ALT6IxrtbR4aftTI9DO6HPq+PVO6NdxjkdlbdxxAqRQJBAwFwFATT8jCuuDjGPLf8PF0ouzcMvAIdIgHypwmLdevWdEMomWdRWlm1UFP/0C3RDjY1v04XDrRb+fEagPNnzMDCcO352nyFm06jnCq/ezjCRXBvNtHTZeqd7t9pbNw7gtYebZ3b9hfd4IIa68budeh+URygiPnNNWr6TCjO95IuHIeMDele3tir0KzqVBNsVAqEb7WpB26rf1JgneAoYZwVMFh+hk09cs68EbIELD4MX6/PzEUz2Ws20dIMjs1pcDtlw35ixoEpwC/vz2qVJyMRYXg8af5rpsZkKXRl7QP2LrX+xSEt4LiRnylj4PaRZWu1gvhC7fsCHXEM3mW3WlXFUmb9W4Jv8VooqOJtGhpD9Qs9pYtTOgJoEmYqttbuCaiYKaiPutBY4+t+t2ZmyCopv41nkjv/UCWXfo11ew1qK0rxDJVE2/JYTUDZ+zuHypTf2lHCWjyP65vGwBnmdixLnEMCUOkzKUmqFR4kAE6jRMEhtki4fTlFSIHJGM5oIXeRXDR43NIh7xWNvhl7lHkwWoRA0BfSITtvO8k0SefGnFwhNfOglQ/GKfyAaY=
+  gem: procore
+  on:
+    tags: true
+    repo: procore/chemex
+
 notifications:
   email: false
