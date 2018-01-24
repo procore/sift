@@ -25,7 +25,7 @@ module Filterable
     private
 
     def apply(collection, filter)
-      filter.apply!(collection, value: filter_params[filter.parameter.param], active_sorts_hash: active_sorts_hash, params: params)
+      filter.apply!(collection, value: filter_params[filter.param], active_sorts_hash: active_sorts_hash, params: params)
     end
 
     def filter_params
@@ -46,7 +46,7 @@ module Filterable
 
     def active_filters
       filters.select { |filter|
-        filter_params[filter.parameter.param].present? || filter.default || filter.always_active?
+        filter_params[filter.param].present? || filter.default || filter.always_active?
       }
     end
   end

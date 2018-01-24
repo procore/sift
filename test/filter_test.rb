@@ -4,8 +4,8 @@ class FilterTest < ActiveSupport::TestCase
   test 'it is initialized with the a param and a type' do
     filter = Filterable::Filter.new('hi', :int, 'hi', nil)
 
-    assert_equal 'hi', filter.parameter.param
-    assert_equal :int, filter.parameter.type
+    assert_equal 'hi', filter.param
+    assert_equal :int, filter.type
     assert_equal 'hi', filter.parameter.internal_name
   end
 

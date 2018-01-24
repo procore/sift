@@ -19,14 +19,14 @@ class FilterableTest < ActiveSupport::TestCase
     MyClass.reset_filters
     MyClass.filter_on(:id, type: :int)
 
-    assert_equal [:id], MyClass.filters.map(&:parameter).map(&:param)
+    assert_equal [:id], MyClass.filters.map(&:param)
   end
 
   test "it registers sorts with sort_on" do
     MyClass.reset_filters
     MyClass.sort_on(:id, type: :int)
 
-    assert_equal [:id], MyClass.filters.map(&:parameter).map(&:param)
+    assert_equal [:id], MyClass.filters.map(&:param)
   end
 
   test "it always allows sort parameters to flow through" do
