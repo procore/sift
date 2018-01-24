@@ -6,6 +6,9 @@ rvm:
 
 cache: bundler
 
+before_install:
+  - gem update --system --no-document
+
 script: bundle exec rake
 
 notifications:
