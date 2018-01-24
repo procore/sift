@@ -20,8 +20,10 @@ module Filterable
     def apply!(collection, value:, active_sorts_hash:, params: {})
       if not_processable?(value)
         collection
+      elsif should_apply_default?(value)
+        default.call(collection)
       else
-        parameter.handler.call(collection, parameterize(value), params, default, scope_params)
+        parameter.handler.call(collection, parameterize(value), params, scope_params)
       end
     end
 
@@ -41,6 +43,10 @@ module Filterable
 
     def not_processable?(value)
       value.nil? && default.nil?
+    end
+
+    def should_apply_default?(value)
+      value.nil? && !default.nil?
     end
 
     def mapped_scope_params(params)

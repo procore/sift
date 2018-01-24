@@ -5,6 +5,8 @@ require 'filterable/sort'
 require 'filterable/subset_comparator'
 require 'filterable/type_validator'
 require 'filterable/parameter'
+require 'filterable/scope_handler'
+require 'filterable/where_handler'
 require 'filterable/validators/valid_int_validator'
 
 module Filterable
