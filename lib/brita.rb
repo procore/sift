@@ -1,15 +1,15 @@
-require "chemex/filter"
-require "chemex/filter_validator"
-require "chemex/filtrator"
-require "chemex/sort"
-require "chemex/subset_comparator"
-require "chemex/type_validator"
-require "chemex/parameter"
-require "chemex/scope_handler"
-require "chemex/where_handler"
-require "chemex/validators/valid_int_validator"
+require "brita/filter"
+require "brita/filter_validator"
+require "brita/filtrator"
+require "brita/sort"
+require "brita/subset_comparator"
+require "brita/type_validator"
+require "brita/parameter"
+require "brita/scope_handler"
+require "brita/where_handler"
+require "brita/validators/valid_int_validator"
 
-module Chemex
+module Brita
   extend ActiveSupport::Concern
 
   def filtrate(collection)

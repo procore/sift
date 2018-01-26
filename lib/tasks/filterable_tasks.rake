@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :chemex do
+# task :brita do
 #   # Task goes here
 # end

@@ -1,9 +1,9 @@
 require "test_helper"
 
-class ChemexTest < ActiveSupport::TestCase
+class BritaTest < ActiveSupport::TestCase
   class MyClass
     attr_writer :params
-    include Chemex
+    include Brita
 
     def params
       @params ||= ActionController::Parameters.new({})

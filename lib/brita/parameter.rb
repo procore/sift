@@ -1,4 +1,4 @@
-module Chemex
+module Brita
   # Value Object that wraps some handling of filter params
   class Parameter
     attr_reader :param, :type, :internal_name

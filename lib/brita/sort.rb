@@ -1,4 +1,4 @@
-module Chemex
+module Brita
   # Sort provides the same interface as a filter,
   # but instead of applying a `where` to the collection
   # it applies an `order`.
@@ -33,7 +33,7 @@ module Chemex
         if active_sorts_hash.keys.include?(param)
           collection.public_send(internal_name, *mapped_scope_params(active_sorts_hash[param], params))
         elsif default.present?
-          # Stubbed because currently Chemex::Sort does not respect default
+          # Stubbed because currently Brita::Sort does not respect default
           # default.call(collection)
           collection
         else

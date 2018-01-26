@@ -1,4 +1,4 @@
-module Chemex
+module Brita
   # TypeValidator validates that the incoming param is of the specified type
   class TypeValidator
     RANGE_PATTERN = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: "must be a range" } }.freeze

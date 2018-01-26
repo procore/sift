@@ -1,4 +1,4 @@
-module Chemex
+module Brita
   class ScopeHandler
     def initialize(param)
       @param = param

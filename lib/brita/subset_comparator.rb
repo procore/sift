@@ -1,4 +1,4 @@
-module Chemex
+module Brita
   class SubsetComparator
     def initialize(array)
       @array = array

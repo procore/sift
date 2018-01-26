@@ -1,4 +1,4 @@
-module Chemex
+module Brita
   # Filtrator takes a collection, params and a set of filters
   # and applies them to create a new active record collection
   # with those filters applied.

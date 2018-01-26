@@ -1,4 +1,4 @@
-module Chemex
+module Brita
   class WhereHandler
     def initialize(param)
       @param = param
