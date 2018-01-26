@@ -188,7 +188,25 @@ $ gem install brita
 ```
 
 ## Contributing
+
 Contribution directions go here.
 
 ## License
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+The gem is available as open source under the terms of the [MIT
+License](http://opensource.org/licenses/MIT).
+
+## About Procore
+
+<img
+  src="https://www.procore.com/images/procore_logo.png"
+  alt="Procore Logo"
+  width="250px"
+/>
+
+The Procore Gem is maintained by Procore Technologies.
+
+Procore - building the software that builds the world.
+
+Learn more about the #1 most widely used construction management software at
+[procore.com](https://www.procore.com/)
