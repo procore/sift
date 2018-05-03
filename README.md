@@ -209,12 +209,11 @@ $ gem install brita
 
 ## Contributing
 
-Test may be run:
+Running tests:
 ```bash
 $ bundle exec rake test
 ```
-
-If tests are not running, try using bash shell
+Bash shell is recommend if tests are not working in your shell of choice.
 
 ## License
 
