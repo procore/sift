@@ -20,5 +20,23 @@ module Brita
         WhereHandler.new(self)
       end
     end
+
+    def parse(value)
+      if parse_as_range?(value)
+        range(value)
+      else
+        value
+      end
+    end
+
+    private
+
+    def parse_as_range?(value)
+      supports_ranges? && value.to_s.include?("...")
+    end
+
+    def range(value)
+      Range.new(*value.split("..."))
+    end
   end
 end

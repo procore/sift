@@ -5,12 +5,16 @@ module Brita
     attr_reader :parameter, :default, :custom_validate, :scope_params
 
     def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
-      @parameter = Parameter.new(param, type, internal_name)
+      @parameter = ParameterFactory.parameter(param, type, internal_name)
       @default = default
       @custom_validate = custom_validate
       @scope_params = scope_params
       raise ArgumentError, "scope_params must be an array of symbols" unless valid_scope_params?(scope_params)
       raise "unknown filter type: #{type}" unless type_validator.valid_type?
+    end
+
+    def filter_on(parameter, type:, internal_name: parameter, default: nil, validate: nil, scope_params: [])
+      filters << Filter.new(parameter, type, internal_name, default, validate, scope_params)
     end
 
     def validation(_)
@@ -24,7 +28,7 @@ module Brita
       elsif should_apply_default?(value)
         default.call(collection)
       else
-        handler.call(collection, parameterize(value), params, scope_params)
+        handler.call(collection, parameter.parse(value), params, scope_params)
       end
     end
     # rubocop:enable Lint/UnusedMethodArgument
@@ -62,20 +66,6 @@ module Brita
     def mapped_scope_params(params)
       scope_params.each_with_object({}) do |scope_param, hash|
         hash[scope_param] = params.fetch(scope_param)
-      end
-    end
-
-    def parameterize(value)
-      if supports_ranges? && value.to_s.include?("...")
-        Range.new(*value.split("..."))
-      elsif type == :boolean
-        if Rails.version.starts_with?("5")
-          ActiveRecord::Type::Boolean.new.cast(value)
-        else
-          ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
-        end
-      else
-        value
       end
     end
 
