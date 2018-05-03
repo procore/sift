@@ -189,7 +189,12 @@ $ gem install brita
 
 ## Contributing
 
-Contribution directions go here.
+Test may be run:
+```bash
+$ bundle exec rake test
+```
+
+If tests are not running, try using bash shell
 
 ## License
 
