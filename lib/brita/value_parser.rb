@@ -35,7 +35,7 @@ module Brita
 
     def json_value
       JSON.parse(value)
-    rescue TypeError
+    rescue JSON::ParserError
       value
     end
 

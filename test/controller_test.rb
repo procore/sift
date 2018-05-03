@@ -22,6 +22,19 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal post.id, json.first["id"]
   end
 
+  test "it filters on id by value for a JSON string array" do
+    post1 = Post.create!
+    post2 = Post.create!
+    post3 = Post.create!
+
+    get("/posts", params: { filters: { id: "[#{post1.id},#{post2.id}]" } })
+
+    json = JSON.parse(@response.body)
+    assert_equal 2, json.size
+    ids_array = json.map { |json_hash| json_hash["id"] }
+    assert_equal [post1.id, post2.id], ids_array
+  end
+
   test "it filters on decimals" do
     post = Post.create!(rating: 1.25)
     Post.create!
