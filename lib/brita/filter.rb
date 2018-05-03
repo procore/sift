@@ -13,10 +13,6 @@ module Brita
       raise "unknown filter type: #{type}" unless type_validator.valid_type?
     end
 
-    def filter_on(parameter, type:, internal_name: parameter, default: nil, validate: nil, scope_params: [])
-      filters << Filter.new(parameter, type, internal_name, default, validate, scope_params)
-    end
-
     def validation(_)
       type_validator.validate
     end
