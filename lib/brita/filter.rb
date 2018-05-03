@@ -5,7 +5,7 @@ module Brita
     attr_reader :parameter, :default, :custom_validate, :scope_params
 
     def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
-      @parameter = ParameterFactory.parameter(param, type, internal_name)
+      @parameter = Parameter.new(param, type, internal_name)
       @default = default
       @custom_validate = custom_validate
       @scope_params = scope_params
@@ -28,7 +28,7 @@ module Brita
       elsif should_apply_default?(value)
         default.call(collection)
       else
-        handler.call(collection, parameter.parse(value), params, scope_params)
+        handler.call(collection, parameterize(value), params, scope_params)
       end
     end
     # rubocop:enable Lint/UnusedMethodArgument
@@ -54,6 +54,10 @@ module Brita
     end
 
     private
+
+    def parameterize(value)
+      ValueParser.new(value: value, options: parameter.parse_options).parse
+    end
 
     def not_processable?(value)
       value.nil? && default.nil?

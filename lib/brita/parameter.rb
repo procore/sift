@@ -9,8 +9,12 @@ module Brita
       @internal_name = internal_name
     end
 
-    def supports_ranges?
-      ![:string, :text, :scope].include?(type)
+    def parse_options
+      {
+        supports_boolean: supports_boolean?,
+        supports_ranges: supports_ranges?,
+        supports_json: supports_json?
+      }
     end
 
     def handler
@@ -21,22 +25,18 @@ module Brita
       end
     end
 
-    def parse(value)
-      if parse_as_range?(value)
-        range(value)
-      else
-        value
-      end
-    end
-
     private
 
-    def parse_as_range?(value)
-      supports_ranges? && value.to_s.include?("...")
+    def supports_ranges?
+      ![:string, :text, :scope].include?(type)
     end
 
-    def range(value)
-      Range.new(*value.split("..."))
+    def supports_json?
+      type == :int
+    end
+
+    def supports_boolean?
+      type == :boolean
     end
   end
 end
