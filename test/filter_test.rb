@@ -49,7 +49,6 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   test "it accepts a JSON string array of ints" do
-    param, type, internal_name, default, custom_validate = nil, scope_params = []
     filter = Brita::Filter.new("[1, 2]", :int, "[1, 2]" , nil)
     expected_validation = { valid_int: true }
 
