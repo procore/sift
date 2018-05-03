@@ -15,11 +15,24 @@ module Brita
         elsif parse_as_boolean?
           boolean_value
         elsif parse_as_json?
-          json_value
+          array_from_json
         else
           value
         end
     end
+
+    def array_from_json
+      result = JSON.parse(value)
+      if result.is_a?(Array)
+        result
+      else
+        value
+      end
+    rescue JSON::ParserError
+      value
+    end
+
+    private
 
     def parse_as_range?
       supports_ranges && value.to_s.include?("...")
@@ -33,8 +46,13 @@ module Brita
       supports_json && value.is_a?(String)
     end
 
-    def json_value
-      JSON.parse(value)
+    def array_from_json
+      result = JSON.parse(value)
+      if result.is_a?(Array)
+        result
+      else
+        value
+      end
     rescue JSON::ParserError
       value
     end

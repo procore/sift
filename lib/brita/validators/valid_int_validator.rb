@@ -12,7 +12,7 @@ class ValidIntValidator < ActiveModel::EachValidator
 
   def integer_array?(value)
     if value.is_a?(String)
-      value = array_from_json(value)
+      value = ValueParser.new(value: value).array_from_json
     end
 
     value.is_a?(Array) && value.any? && value.all? { |v| integer_or_range?(v) }
@@ -20,16 +20,5 @@ class ValidIntValidator < ActiveModel::EachValidator
 
   def integer_or_range?(value)
     !!(/\A\d+(...\d+)?\z/ =~ value.to_s)
-  end
-
-  def array_from_json(value)
-    result = JSON.parse(value)
-    if result.is_a?(Array)
-      result
-    else
-      value
-    end
-  rescue JSON::ParserError
-    value
   end
 end
