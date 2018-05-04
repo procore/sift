@@ -6,7 +6,7 @@ require "brita/subset_comparator"
 require "brita/type_validator"
 require "brita/parameter"
 require "brita/scope_handler"
-require "brita/where_handler"
+require "brita/collection_handler"
 require "brita/validators/valid_int_validator"
 
 module Brita
