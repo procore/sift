@@ -48,13 +48,6 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal expected_validation, filter.validation(nil)
   end
 
-  test "it accepts a JSON string array of ints" do
-    filter = Brita::Filter.new("[1, 2]", :int, "[1, 2]" , nil)
-    expected_validation = { valid_int: true }
-
-    assert_equal expected_validation, filter.validation(nil)
-  end
-
   test "it does not accept a mixed array when the type is int" do
     filter = Brita::Filter.new([1, 2, "a"], :int, [1, 2, "a"], nil)
     expected_validation = { valid_int: true }
