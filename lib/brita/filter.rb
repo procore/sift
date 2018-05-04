@@ -74,6 +74,12 @@ module Brita
         else
           ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
         end
+      elsif type == :int
+        if Rails.version.starts_with?("5")
+          ActiveRecord::Type::Integer.new.cast(value)
+        else
+          ActiveRecord::Type::Integer.new.type_cast_from_user(value)
+        end
       else
         value
       end
