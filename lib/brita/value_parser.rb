@@ -46,17 +46,6 @@ module Brita
       supports_json && value.is_a?(String)
     end
 
-    def array_from_json
-      result = JSON.parse(value)
-      if result.is_a?(Array)
-        result
-      else
-        value
-      end
-    rescue JSON::ParserError
-      value
-    end
-
     def parse_as_boolean?
       supports_boolean
     end

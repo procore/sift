@@ -12,7 +12,7 @@ class ValidIntValidator < ActiveModel::EachValidator
 
   def integer_array?(value)
     if value.is_a?(String)
-      value = ValueParser.new(value: value).array_from_json
+      value = Brita::ValueParser.new(value: value).array_from_json
     end
 
     value.is_a?(Array) && value.any? && value.all? { |v| integer_or_range?(v) }

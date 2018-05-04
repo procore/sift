@@ -37,14 +37,14 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal "[1,2,3", parser.parse
   end
 
-  test "with valid json string is parsed to a hash" do
+  test "JSON parsing only supports arrays" do
     options = {
       supports_json: true
     }
-    parser = Brita::ValueParser.new(value: "{\"a\":4}", options: options)
-    expected_value = { 'a' => 4 }
+    json_string = "{\"a\":4}"
+    parser = Brita::ValueParser.new(value: json_string, options: options)
 
-    assert_equal expected_value, parser.parse
+    assert_equal json_string, parser.parse
   end
 
   test "With options a range string of integers results in a range" do
