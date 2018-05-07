@@ -51,6 +51,10 @@ module Brita
 
     private
 
+    def parameterize(value)
+      ValueParser.new(value: value, options: parameter.parse_options).parse
+    end
+
     def not_processable?(value)
       value.nil? && default.nil?
     end
@@ -62,20 +66,6 @@ module Brita
     def mapped_scope_params(params)
       scope_params.each_with_object({}) do |scope_param, hash|
         hash[scope_param] = params.fetch(scope_param)
-      end
-    end
-
-    def parameterize(value)
-      if supports_ranges? && value.to_s.include?("...")
-        Range.new(*value.split("..."))
-      elsif type == :boolean
-        if Rails.version.starts_with?("5")
-          ActiveRecord::Type::Boolean.new.cast(value)
-        else
-          ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
-        end
-      else
-        value
       end
     end
 

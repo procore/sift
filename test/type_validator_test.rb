@@ -33,4 +33,11 @@ class TypeValidatorTest < ActiveSupport::TestCase
 
     assert_equal expected_validation, validator.validate
   end
+
+  test "it accepts a json array for type int" do
+    validator = Brita::TypeValidator.new("[1,10]", :int)
+    expected_validation = { valid_int: true }
+
+    assert_equal expected_validation, validator.validate
+  end
 end
