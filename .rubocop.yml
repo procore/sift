@@ -15,6 +15,10 @@ Naming/AccessorMethodName:
   Description: Check the naming of accessor methods for get_/set_.
   Enabled: false
 
+Naming/MemoizedInstanceVariableName:
+  Description: Check the naming convention for caching variables @_name ||=
+  Enabled: false
+
 # Waiting for https://github.com/bbatsov/rubocop/pull/5230
 Style/FormatStringToken:
   Enabled: false
@@ -556,13 +560,6 @@ Lint/RequireParentheses:
 
 Lint/UnderscorePrefixedVariableName:
   Description: 'Do not use prefix `_` for a variable that is used.'
-  Enabled: false
-
-Lint/UnneededDisable:
-  Description: >-
-                 Checks for rubocop:disable comments that can be removed.
-                 Note: this cop is not disabled when disabling all cops.
-                 It must be explicitly disabled.
   Enabled: false
 
 Lint/Void:
