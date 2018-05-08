@@ -257,7 +257,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get("/posts", params: { sort: "dynamic_sort", date: "2017-12-12" })
     json = JSON.parse(@response.body)
 
-    assert_equal(["A", "b"], json.map { |post| post.fetch("body") })
+    assert_equal ["A", "b"], (json.map { |post| post.fetch("body") })
   end
 
   test "it filters with dependent params" do
@@ -267,11 +267,11 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get("/posts", params: { filters: { expired_before_and_priority: "2017-12-12" }, priority: 5 })
     json = JSON.parse(@response.body)
 
-    assert_equal([5], json.map { |post| post.fetch("priority") })
+    assert_equal [5], (json.map { |post| post.fetch("priority") })
   end
 
   test "it sorts by datetime range" do
-    base_date = DateTime.new(2018,01,01)
+    base_date = Date.new(2018, 1, 1)
     post1 = Post.create(published_at: base_date)
     Post.create(published_at: (base_date + 3.days))
     date_time_range_string = "2017-12-31T00:00:00+00:00...2018-01-02T00:00:00+00:00"
@@ -279,6 +279,6 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get("/posts", params: { filters: { published_at: date_time_range_string } })
 
     json = JSON.parse(@response.body)
-    assert_equal [post1.id], json.map { |post| post.fetch("id") }
+    assert_equal [post1.id], (json.map { |post| post.fetch("id") })
   end
 end
