@@ -227,7 +227,6 @@ Running tests:
 ```bash
 $ bundle exec rake test
 ```
-Bash shell is recommend if tests are not working in your shell of choice.
 
 ## License
 
