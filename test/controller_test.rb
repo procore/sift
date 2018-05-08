@@ -43,7 +43,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal "400", @response.code
     json = JSON.parse(@response.body)
-    assert_equal json, {"errors" => { "id" => ["must be integer, array of integers, or range"] } }
+    assert_equal json, "errors" => { "id" => ["must be integer, array of integers, or range"] }
   end
 
   test "it filters on JSON string in combination with other filters to return values that meet all conditions" do
@@ -53,7 +53,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get("/posts", params: { filters: { id: "[#{post1.id},#{post2.id}]", rating: post1.rating } })
 
     json = JSON.parse(@response.body)
-    assert_equal json.map{ |post| post["id"] }, [post1.id]
+    assert_equal json.map { |post| post["id"] }, [post1.id]
   end
 
   test "it filters on decimals" do

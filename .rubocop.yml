@@ -16,7 +16,9 @@ Naming/AccessorMethodName:
   Enabled: false
 
 Naming/MemoizedInstanceVariableName:
-  Description: Check the naming convention for caching variables @_name ||=
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
   Enabled: false
 
 # Waiting for https://github.com/bbatsov/rubocop/pull/5230
@@ -69,6 +71,9 @@ Style/ClassAndModuleChildren:
   EnforcedStyle: nested
   Exclude:
     - 'test/**/*'
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
 
 Metrics/ClassLength:
   Description: 'Avoid classes longer than 100 lines of code.'
