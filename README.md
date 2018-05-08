@@ -129,6 +129,17 @@ On the server side, the params will be received as:
 `"filters"=>{"id"=>"[1,2]"}` compared to the standard format of
 `"filters"=>{"id"=>["1", "2"]}`.
 
+Note that this feature cannot currently be wrapped in an array and should not be used in combination with sending array parameters individually.
+`?filters[id][]=[1,2]` => invalid
+`?filters[id][]=[1,2]&filters[id][3]` => invalid
+`?filters[id]=[1,2]` => valid
+
+#### A note on encoding for JSON Array feature
+For the example `?filters[id]=[1,2]`:
+This may be encoded using as `?filters%5Bid%5D=%5B1,2%5D`
+OR an alternative encoding also escapes the "," character in the array. `?filters%5Bid%5D%3D%5B1%2C2%5D`.
+In both cases Rails will correctly decode to the expected result of `{ "filters" => { "id" => "[1,2]" } }`
+
 ### Sort Types
 Every sort must have a type, so that Brita knows what to do with it. The current valid sort types are:
 * int - Sort on an integer column
