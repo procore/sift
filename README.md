@@ -136,8 +136,11 @@ Note that this feature cannot currently be wrapped in an array and should not be
 
 #### A note on encoding for JSON Array feature
 For the example `?filters[id]=[1,2]`:
+
 This may be encoded using as `?filters%5Bid%5D=%5B1,2%5D`
-OR an alternative encoding also escapes the "," character in the array. `?filters%5Bid%5D%3D%5B1%2C2%5D`.
+*OR*
+an alternative encoding also escapes the "," character in the array. `?filters%5Bid%5D%3D%5B1%2C2%5D`.
+
 In both cases Rails will correctly decode to the expected result of `{ "filters" => { "id" => "[1,2]" } }`
 
 ### Sort Types
