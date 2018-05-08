@@ -74,4 +74,47 @@ class FilterTest < ActiveSupport::TestCase
 
     assert_equal false, parser.parse
   end
+
+  test "parses range for datetime string range" do
+    options = {
+      supports_ranges: true
+    }
+    start_date = DateTime.new(2016, 10, 19)
+    end_date = DateTime.new(2017, 01, 17)
+    range_string = "#{start_date}...#{end_date}"
+    parser = Brita::ValueParser.new(value: range_string, options: options)
+
+    result = parser.parse
+    assert_instance_of Range, result
+    assert_equal result.max, end_date.to_s
+  end
+
+  test "parses range for time string range" do
+    options = {
+      supports_ranges: true
+    }
+    start_time = Time.new(2008,6,21, 13,30,0, "+09:00")
+    end_time = Time.new(2008,6,21, 13,45,0, "+09:00")
+    range_string = "#{start_time}...#{end_time}"
+    parser = Brita::ValueParser.new(value: range_string, options: options)
+
+    result = parser.parse
+    assert_instance_of Range, result
+    assert_equal result.max, end_time.to_s
+  end
+
+  test "parses range for Date string range" do
+    options = {
+      supports_ranges: true
+    }
+    start_date = Date.new(2018,01,26)
+    end_date = Time.new(2018,01,29)
+    range_string = "#{start_date}...#{end_date}"
+    parser = Brita::ValueParser.new(value: range_string, options: options)
+
+    result = parser.parse
+    assert_instance_of Range, result
+    assert_equal result.max, end_date.to_s
+  end
+
 end
