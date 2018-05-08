@@ -109,6 +109,26 @@ class PostsController < ApplicationController
 end
 ```
 
+### Filter on Ranges
+Some parameter types support ranges. Ranges are expected to be a string with the bounding values separated by `...`
+
+For example `?filters[price]=3...50` would return records with a price between 3 and 50.
+
+The following types support ranges
+* int
+* decimal
+* boolean
+* date
+* time
+* datetime
+
+### Filter on JSON Array
+`int` type filters support sending the values as an array in the URL Query parameters. For example `?filters[id]=[1,2]`. This is a way to keep payloads smaller for GET requests. When URI encoded this will become `filters%5Bid%5D=%5B1,2%5D` which is much smaller the standard format of `filters%5Bid%5D%5B%5D=1&&filters%5Bid%5D%5B%5D=2`.
+
+On the server side, the params will be received as:
+`"filters"=>{"id"=>"[1,2]"}` compared to the standard format of
+`"filters"=>{"id"=>["1", "2"]}`.
+
 ### Sort Types
 Every sort must have a type, so that Brita knows what to do with it. The current valid sort types are:
 * int - Sort on an integer column
@@ -189,7 +209,11 @@ $ gem install brita
 
 ## Contributing
 
-Contribution directions go here.
+Running tests:
+```bash
+$ bundle exec rake test
+```
+Bash shell is recommend if tests are not working in your shell of choice.
 
 ## License
 
