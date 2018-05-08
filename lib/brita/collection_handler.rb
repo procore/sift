@@ -13,15 +13,17 @@ module Brita
     end
 
     def select_from_collection(collection, value)
-      if value.is_a?(Array)
-        collection.select do |item|
-          value.include?(item.with_indifferent_access[@param.internal_name])
-        end
-      else
-        collection.select do |item|
-          item.with_indifferent_access[@param.internal_name] == value
-        end
+      binding.pry
+      values = Array.wrap(value).map { |v| check_for_integer(v) }
+      internal_name = @param.internal_name
+
+      collection.select do |item|
+        values.include?(item.with_indifferent_access[internal_name])
       end
+    end
+
+    def check_for_integer(value)
+      Integer(value) rescue value
     end
   end
 end
