@@ -13,7 +13,7 @@ module Brita
     end
 
     def select_from_collection(collection, value)
-      values = Array.wrap(value).map { |v| check_for_integer(v) }
+      values = get_parsed_values(value)
       internal_name = @param.internal_name
 
       collection.select do |item|
@@ -23,6 +23,10 @@ module Brita
 
     def check_for_integer(value)
       Integer(value) rescue value
+    end
+
+    def get_parsed_values(value)
+      Array.wrap(value).map { |v| check_for_integer(v) }
     end
   end
 end
