@@ -13,7 +13,6 @@ module Brita
     end
 
     def select_from_collection(collection, value)
-      binding.pry
       values = Array.wrap(value).map { |v| check_for_integer(v) }
       internal_name = @param.internal_name
 
