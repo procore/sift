@@ -89,8 +89,8 @@ class FilterTest < ActiveSupport::TestCase
     options = {
       supports_ranges: true
     }
-    start_date = Date.new(2018, 01, 26)
-    end_date = Time.new(2018, 01, 29)
+    start_date = Date.new(2018, 1, 26)
+    end_date = Time.new(2018, 1, 29)
     range_string = "#{start_date}...#{end_date}"
     parser = Brita::ValueParser.new(value: range_string, options: options)
 
