@@ -11,4 +11,4 @@ gemspec
 # your gem to rubygems.org.
 
 gem 'byebug', group: [:development, :test]
-gem 'rails', ">= 5.2.0", group: :test
+gem 'rails', ">= 5.1.2", group: :test
