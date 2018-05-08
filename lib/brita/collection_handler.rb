@@ -26,7 +26,7 @@ module Brita
     end
 
     def get_parsed_values(value)
-      Array.wrap(value).map { |v| check_for_integer(v) }
+      Array.wrap(value).map { |v| v.is_a?(String) ? check_for_integer(v) : v }
     end
   end
 end
