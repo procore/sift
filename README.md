@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/procore/brita.svg?branch=master)](https://travis-ci.org/procore/brita)
 
-A tool to build your own filters!
+A tool to build your own filters and sorts with Rails and Active Record!
 
 ## Developer Usage
 Include Brita in your controllers, and define some filters.
@@ -220,6 +220,10 @@ Or install it yourself as:
 ```bash
 $ gem install brita
 ```
+
+## Without Rails
+
+We have some future plans to remove the rails dependency so that other frameworks such as Sinatra could leverage this gem.
 
 ## Contributing
 
