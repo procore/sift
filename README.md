@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/procore/brita.svg?branch=master)](https://travis-ci.org/procore/brita)
 
-A tool to build your own filters!
+A tool to build your own filters and sorts with Rails and Active Record!
 
 ## Developer Usage
 Include Brita in your controllers, and define some filters.
@@ -126,8 +126,30 @@ The following types support ranges
 `int` type filters support sending the values as an array in the URL Query parameters. For example `?filters[id]=[1,2]`. This is a way to keep payloads smaller for GET requests. When URI encoded this will become `filters%5Bid%5D=%5B1,2%5D` which is much smaller the standard format of `filters%5Bid%5D%5B%5D=1&&filters%5Bid%5D%5B%5D=2`.
 
 On the server side, the params will be received as:
-`"filters"=>{"id"=>"[1,2]"}` compared to the standard format of
-`"filters"=>{"id"=>["1", "2"]}`.
+```ruby
+# JSON array encoded result
+"filters"=>{"id"=>"[1,2]"}
+
+# standard array format
+"filters"=>{"id"=>["1", "2"]}
+```
+
+Note that this feature cannot currently be wrapped in an array and should not be used in combination with sending array parameters individually.
+ * `?filters[id][]=[1,2]` => invalid
+ * `?filters[id][]=[1,2]&filters[id][]=3` => invalid
+ * `?filters[id]=[1,2]&filters[id]=3` => valid but only 3 is passed through to the server
+ * `?filters[id]=[1,2]` => valid
+
+#### A note on encoding for JSON Array feature
+JSON arrays contain the reserved characters "`,`" and "`[`" and "`]`". When encoding a JSON array in the URL there are two different ways to handle the encoding. Both ways are supported by Rails.
+For example, lets look at the following filter with a JSON array `?filters[id]=[1,2]`:
+ * `?filters%5Bid%5D=%5B1,2%5D`
+ * `?filters%5Bid%5D%3D%5B1%2C2%5D`
+
+In both cases Rails will correctly decode to the expected result of
+```ruby
+{ "filters" => { "id" => "[1,2]" } }
+```
 
 ### Sort Types
 Every sort must have a type, so that Brita knows what to do with it. The current valid sort types are:
@@ -207,13 +229,16 @@ Or install it yourself as:
 $ gem install brita
 ```
 
+## Without Rails
+
+We have some future plans to remove the rails dependency so that other frameworks such as Sinatra could leverage this gem.
+
 ## Contributing
 
 Running tests:
 ```bash
 $ bundle exec rake test
 ```
-Bash shell is recommend if tests are not working in your shell of choice.
 
 ## License
 
