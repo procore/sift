@@ -130,9 +130,9 @@ On the server side, the params will be received as:
 `"filters"=>{"id"=>["1", "2"]}`.
 
 Note that this feature cannot currently be wrapped in an array and should not be used in combination with sending array parameters individually.
-`?filters[id][]=[1,2]` => invalid
-`?filters[id][]=[1,2]&filters[id][3]` => invalid
-`?filters[id]=[1,2]` => valid
+ * `?filters[id][]=[1,2]` => invalid
+ * `?filters[id][]=[1,2]&filters[id][3]` => invalid
+ * `?filters[id]=[1,2]` => valid
 
 #### A note on encoding for JSON Array feature
 For the example `?filters[id]=[1,2]`:
