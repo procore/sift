@@ -63,7 +63,7 @@ module Brita
     def validation(sort)
       {
         inclusion: { in: SubsetComparator.new(sort) },
-        allow_nil: true,
+        allow_nil: true
       }
     end
 

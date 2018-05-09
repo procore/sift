@@ -25,7 +25,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "it filters on id by value for a JSON string array" do
     post1 = Post.create!
     post2 = Post.create!
-    post3 = Post.create!
+    _post3 = Post.create!
 
     get("/posts", params: { filters: { id: "[#{post1.id},#{post2.id}]" } })
 

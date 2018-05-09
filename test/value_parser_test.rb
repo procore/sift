@@ -8,13 +8,9 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   test "With options an array of integers results in an array of integers" do
-    options = {
-      supports_ranges: true,
-      supports_json: true
-    }
-    parser = Brita::ValueParser.new(value: [1,2,3])
+    parser = Brita::ValueParser.new(value: [1, 2, 3])
 
-    assert_equal [1,2,3], parser.parse
+    assert_equal [1, 2, 3], parser.parse
   end
 
   test "With options a json string array of integers results in an array of integers" do
@@ -24,7 +20,7 @@ class FilterTest < ActiveSupport::TestCase
     }
     parser = Brita::ValueParser.new(value: "[1,2,3]", options: options)
 
-    assert_equal [1,2,3], parser.parse
+    assert_equal [1, 2, 3], parser.parse
   end
 
   test "with invalid json returns original value" do

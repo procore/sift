@@ -15,6 +15,9 @@ Naming/AccessorMethodName:
   Description: Check the naming of accessor methods for get_/set_.
   Enabled: false
 
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
 # Waiting for https://github.com/bbatsov/rubocop/pull/5230
 Style/FormatStringToken:
   Enabled: false
