@@ -140,10 +140,11 @@ Note that this feature cannot currently be wrapped in an array and should not be
  * `?filters[id]=[1,2]` => valid
 
 #### A note on encoding for JSON Array feature
-JSON arrays contain the reserved characters "," and "[]". When encoding a JSON array in the URL there are two different ways to handle the encoding. Both ways are supported by Rails.
+JSON arrays contain the reserved characters "`,`" and "`[`" and "`]`". When encoding a JSON array in the URL there are two different ways to handle the encoding. Both ways are supported by Rails.
 For example, lets look at the following filter with a JSON array `?filters[id]=[1,2]`:
  * `?filters%5Bid%5D=%5B1,2%5D`
  * `?filters%5Bid%5D%3D%5B1%2C2%5D`
+
 In both cases Rails will correctly decode to the expected result of
 ```ruby
 { "filters" => { "id" => "[1,2]" } }
