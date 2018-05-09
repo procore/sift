@@ -9,6 +9,3 @@ gemspec
 # your gemspec. These might include edge Rails or gems from your path or
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
-
-gem "byebug", group: [:development, :test]
-gem "rails", ">= 5.1.2", group: :test
