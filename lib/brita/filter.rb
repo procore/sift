@@ -13,7 +13,7 @@ module Brita
       raise "unknown filter type: #{type}" unless type_validator.valid_type?
     end
 
-    def validation(_)
+    def validation(_sort)
       type_validator.validate
     end
 

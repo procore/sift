@@ -18,9 +18,6 @@ Naming/AccessorMethodName:
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
-Naming/UncommunicativeMethodParamName:
-  Enabled: false
-
 # Waiting for https://github.com/bbatsov/rubocop/pull/5230
 Style/FormatStringToken:
   Enabled: false
