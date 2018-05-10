@@ -41,6 +41,12 @@ class PostsController < ApplicationController
     render json: filtrate(Post.all)
   end
 
+  def list
+    posts = Post.all.map(&:attributes)
+
+    render json: filtrate(posts)
+  end
+
   private
 
   def render_filter_errors

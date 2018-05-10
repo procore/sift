@@ -1,4 +1,5 @@
 require "brita/filter"
+require "brita/collection"
 require "brita/filter_validator"
 require "brita/filtrator"
 require "brita/sort"
@@ -7,13 +8,15 @@ require "brita/type_validator"
 require "brita/parameter"
 require "brita/value_parser"
 require "brita/scope_handler"
-require "brita/collection_handler"
+require "brita/where_handler"
 require "brita/validators/valid_int_validator"
 
 module Brita
   extend ActiveSupport::Concern
 
   def filtrate(collection)
+    collection = collection.is_a?(Array) ? Collection.new(collection) : collection
+
     Filtrator.filter(collection, params, filters)
   end
 

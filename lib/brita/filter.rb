@@ -19,6 +19,8 @@ module Brita
 
     # rubocop:disable Lint/UnusedMethodArgument
     def apply!(collection, value:, active_sorts_hash:, params: {})
+      collection = collection.is_a?(Array) ? Collection.new(collection) : collection
+
       if not_processable?(value)
         collection
       elsif should_apply_default?(value)

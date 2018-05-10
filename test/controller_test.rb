@@ -250,4 +250,48 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal([5], json.map { |post| post.fetch("priority") })
   end
+
+  test "it filters on integers for array collections" do
+    Post.create!(priority: 7)
+    Post.create!(priority: 5)
+
+    get("/posts/list", params: { filters: { priority: 7 } })
+
+    json = JSON.parse(@response.body)
+
+    assert_equal [7], (json.map { |post| post["priority"] })
+  end
+
+  test "it filters on strings for array collections" do
+    Post.create!(title: "a")
+    Post.create!(title: "B")
+
+    get("/posts/list", params: { filters: { title: "B" } })
+
+    json = JSON.parse(@response.body)
+
+    assert_equal ["B"], (json.map { |post| post["title"] })
+  end
+
+  test "it filters on booleans for array collections" do
+    Post.create!(visible: true)
+    Post.create!(visible: false)
+
+    get("/posts/list", params: { filters: { visible: true } })
+
+    json = JSON.parse(@response.body)
+
+    assert_equal [true], (json.map { |post| post["visible"] })
+  end
+
+  # test "it filters on decimals for array collections" do
+  #   Post.create!(rating: 1.2)
+  #   Post.create!(rating: 5.0)
+  #
+  #   get("/posts/list", params: { filters: { rating: 5.0 } })
+  #
+  #   json = JSON.parse(@response.body)
+  #
+  #   assert_equal [5.0], (json.map { |post| post["rating"] })
+  # end
 end

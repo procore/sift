@@ -21,7 +21,7 @@ module Brita
       if type == :scope
         ScopeHandler.new(self)
       else
-        CollectionHandler.new(self)
+        WhereHandler.new(self)
       end
     end
 

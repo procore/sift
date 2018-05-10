@@ -10,7 +10,7 @@ module Brita
     end
 
     def initialize(collection, params, _sort, filters = [])
-      @collection = collection
+      @collection = collection.is_a?(Array) ? Collection.new(collection) : collection
       @params = params
       @filters = filters
       @sort = params.fetch(:sort, "").split(",") if filters.any? { |filter| filter.is_a?(Sort) }
@@ -18,6 +18,7 @@ module Brita
 
     def filter
       active_filters.reduce(collection) do |col, filter|
+
         apply(col, filter)
       end
     end
