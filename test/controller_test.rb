@@ -54,6 +54,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get("/posts", params: { filters: { id: "[#{post1.id},#{post2.id}]", rating: post1.rating } })
 
     json = JSON.parse(@response.body)
+
     assert_equal json.map { |post| post["id"] }, [post1.id]
   end
 
@@ -316,14 +317,34 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [true], (json.map { |post| post["visible"] })
   end
 
-  # test "it filters on decimals for array collections" do
-  #   Post.create!(rating: 1.2)
-  #   Post.create!(rating: 5.0)
-  #
-  #   get("/posts/list", params: { filters: { rating: 5.0 } })
-  #
-  #   json = JSON.parse(@response.body)
-  #
-  #   assert_equal [5.0], (json.map { |post| post["rating"] })
-  # end
+  test "it filters on decimals for array collections" do
+    Post.create!(rating: 1.2)
+    filtered_post = Post.create!(rating: 5.0)
+
+    get("/posts/list", params: { filters: { rating: 5.0 } })
+
+    json = JSON.parse(@response.body)
+
+    assert_equal [filtered_post.id], (json.map { |post| post["id"] })
+  end
+
+  test "it sorts array collections" do
+    Post.create!(title: "z")
+    Post.create!(title: "a")
+
+    get("/posts/list", params: { sort: "title" })
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ["a", "z"], (json.map { |post| post["title"] })
+  end
+
+  test "it sorts descending for array collections" do
+    Post.create!(title: "a")
+    Post.create!(title: "z")
+
+    get("/posts/list", params: { sort: "-title" })
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal ["z", "a"], json.map(&:title)
+  end
 end

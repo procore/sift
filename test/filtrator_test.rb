@@ -204,7 +204,7 @@ class FiltratorTest < ActiveSupport::TestCase
     posts = Post.all.map { |post| post.attributes }
 
     collection = Brita::Filtrator.filter(
-      Brita::Collection.new(posts),
+      Brita::Collection::Wrapper.new(posts),
       { filters: { id: post.id } },
       [filter]
     )
