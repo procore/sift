@@ -50,6 +50,6 @@ class PostsController < ApplicationController
   private
 
   def render_filter_errors
-    render json: { errors: filter_errors } and return
+    render json: { errors: filter_errors }, status: :bad_request and return
   end
 end

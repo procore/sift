@@ -25,7 +25,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "it filters on id by value for a JSON string array" do
     post1 = Post.create!
     post2 = Post.create!
-    post3 = Post.create!
+    _post3 = Post.create!
 
     get("/posts", params: { filters: { id: "[#{post1.id},#{post2.id}]" } })
 
@@ -35,8 +35,30 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [post1.id, post2.id], ids_array
   end
 
+  test "it fails validation for a JSON string array included with other integers" do
+    post1 = Post.create!
+    post2 = Post.create!
+    post3 = Post.create!
+
+    get("/posts", params: { filters: { id: [post3.id, "[#{post1.id},#{post2.id}]"] } })
+
+    assert_equal "400", @response.code
+    json = JSON.parse(@response.body)
+    assert_equal json, "errors" => { "id" => ["must be integer, array of integers, or range"] }
+  end
+
+  test "it filters on JSON string in combination with other filters to return values that meet all conditions" do
+    post1 = Post.create!(rating: 1.25)
+    post2 = Post.create!(rating: 1.75)
+
+    get("/posts", params: { filters: { id: "[#{post1.id},#{post2.id}]", rating: post1.rating } })
+
+    json = JSON.parse(@response.body)
+    assert_equal json.map { |post| post["id"] }, [post1.id]
+  end
+
   test "it filters on decimals" do
-    post = Post.create!(rating: 1.25)
+    post = Post.create!(rating: 4.75)
     Post.create!
 
     get("/posts", params: { filters: { rating: post.rating } })
@@ -81,22 +103,20 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "it filters on id with a range" do
-    post = Post.create!
+    post1 = Post.create!
     post2 = Post.create!
     Post.create!
-
-    get("/posts", params: { filters: { id: "#{post.id}...#{post2.id}" } })
+    get("/posts", params: { filters: { id: "#{post1.id}...#{post2.id}" } })
 
     json = JSON.parse(@response.body)
     assert_equal 2, json.size
   end
 
   test "it filters on id with an array" do
-    post = Post.create!
+    post1 = Post.create!
     post2 = Post.create!
     Post.create!
-
-    get("/posts", params: { filters: { id: [post.id, post2.id] } })
+    get("/posts", params: { filters: { id: [post1.id, post2.id] } })
 
     json = JSON.parse(@response.body)
     assert_equal 2, json.size
@@ -238,7 +258,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get("/posts", params: { sort: "dynamic_sort", date: "2017-12-12" })
     json = JSON.parse(@response.body)
 
-    assert_equal(["A", "b"], json.map { |post| post.fetch("body") })
+    assert_equal ["A", "b"], (json.map { |post| post.fetch("body") })
   end
 
   test "it filters with dependent params" do
@@ -248,7 +268,19 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get("/posts", params: { filters: { expired_before_and_priority: "2017-12-12" }, priority: 5 })
     json = JSON.parse(@response.body)
 
-    assert_equal([5], json.map { |post| post.fetch("priority") })
+    assert_equal [5], (json.map { |post| post.fetch("priority") })
+  end
+
+  test "it sorts by datetime range" do
+    base_date = Date.new(2018, 1, 1)
+    post1 = Post.create(published_at: base_date)
+    Post.create(published_at: (base_date + 3.days))
+    date_time_range_string = "2017-12-31T00:00:00+00:00...2018-01-02T00:00:00+00:00"
+
+    get("/posts", params: { filters: { published_at: date_time_range_string } })
+
+    json = JSON.parse(@response.body)
+    assert_equal [post1.id], (json.map { |post| post.fetch("id") })
   end
 
   test "it filters on integers for array collections" do

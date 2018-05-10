@@ -99,7 +99,7 @@ class FiltratorTest < ActiveSupport::TestCase
       {
         filters: { ordered_expired_before_and_priority: "ASC" },
         priority: 5,
-        date: "2017-12-31",
+        date: "2017-12-31"
       },
       [filter],
     )

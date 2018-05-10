@@ -1,4 +1,4 @@
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
 require "brita/version"
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "> 4.2.0"
 
   s.add_development_dependency "pry"
+  s.add_development_dependency "rails", ">= 5.1"
   s.add_development_dependency "rake"
   s.add_development_dependency "rubocop"
   s.add_development_dependency "sqlite3"
