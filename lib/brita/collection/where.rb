@@ -18,13 +18,9 @@ module Brita
       private
 
       def set_filter_criteria(clause)
-        if clause.length == 1
-          clause.each do |k, v|
-            @filter_param = k
-            @filter_values = get_parsed_values(v)
-          end
-        else
-          raise(StandardError)
+        clause.each do |k, v|
+          @filter_param = k
+          @filter_values = get_parsed_values(v)
         end
       end
 
