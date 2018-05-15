@@ -327,24 +327,4 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal [filtered_post.id], (json.map { |post| post["id"] })
   end
-
-  test "it sorts array collections" do
-    Post.create!(title: "z")
-    Post.create!(title: "a")
-
-    get("/posts/list", params: { sort: "title" })
-
-    json = JSON.parse(@response.body, object_class: OpenStruct)
-    assert_equal ["a", "z"], (json.map { |post| post["title"] })
-  end
-
-  test "it sorts descending for array collections" do
-    Post.create!(title: "a")
-    Post.create!(title: "z")
-
-    get("/posts/list", params: { sort: "-title" })
-
-    json = JSON.parse(@response.body, object_class: OpenStruct)
-    assert_equal ["z", "a"], json.map(&:title)
-  end
 end

@@ -41,16 +41,12 @@ module Brita
         end
       elsif type == :string || type == :text
         if active_sorts_hash.keys.include?(param)
-          col = collection.is_a?(Array) ? Collection::Wrapper.new(collection) : collection
-
-          col.order("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
+          collection.order("LOWER(#{internal_name}) #{individual_sort_hash(active_sorts_hash)[internal_name]}")
         else
           collection
         end
       else
-        col = collection.is_a?(Array) ? Collection::Wrapper.new(collection) : collection
-
-        col.order(individual_sort_hash(active_sorts_hash))
+        collection.order(individual_sort_hash(active_sorts_hash))
       end
     end
     # rubocop:enable Metrics/PerceivedComplexity

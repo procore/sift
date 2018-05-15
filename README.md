@@ -151,6 +151,25 @@ In both cases Rails will correctly decode to the expected result of
 { "filters" => { "id" => "[1,2]" } }
 ```
 
+### Filtering Non Active Record Collections
+Currently there is basic support for filtering arrays.  
+
+#### Usage
+Use an array in place of your active record query.
+  ```ruby
+  #active record
+  filtrate(Post.all)
+  
+  #array
+  filtrate([{ id: 1, title: "One"}, {id: 2, title: "Two" }])
+  ```
+
+#### Supported Array Filter Types
+* int - Sort on an integer column
+* decimal - Sort on a decimal column
+* string - Sort on a string column
+* text - Sort on a text column
+
 ### Sort Types
 Every sort must have a type, so that Brita knows what to do with it. The current valid sort types are:
 * int - Sort on an integer column
@@ -198,6 +217,9 @@ Scopes that accept no arguments are currently supported, but you should note tha
 
 `scope_params` can also accept symbols that are keys in the `params` hash. The value will be fetched and passed on as an argument to the scope.
 
+
+### Sorting on Arrays (Non Active Record Collection)
+This feature is not currently supported.  Brita will not error if you attempt to sort on an array, but it will just return the original collection without sorting applied.
 
 ## Consumer Usage
 
