@@ -1,6 +1,6 @@
 module Brita
   module Collection
-    class Order
+    class ArraySort
       attr_reader :collection
 
       def initialize(collection)

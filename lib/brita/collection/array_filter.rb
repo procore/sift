@@ -1,6 +1,6 @@
 module Brita
   module Collection
-    class Where
+    class ArrayFilter
       attr_reader :collection
 
       def initialize(collection)

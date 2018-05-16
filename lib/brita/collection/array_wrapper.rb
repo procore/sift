@@ -1,6 +1,6 @@
 module Brita
   module Collection
-    class Wrapper
+    class ArrayWrapper
       attr_reader :attributes
 
       def initialize(attributes)
@@ -8,11 +8,11 @@ module Brita
       end
 
       def where(clause)
-        Where.new(attributes).where(clause)
+        ArrayFilter.new(attributes).where(clause)
       end
 
       def order(clause)
-        Order.new(attributes).order(clause)
+        ArraySort.new(attributes).order(clause)
       end
     end
   end

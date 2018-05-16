@@ -199,15 +199,15 @@ Scopes that accept no arguments are currently supported, but you should note tha
 `scope_params` can also accept symbols that are keys in the `params` hash. The value will be fetched and passed on as an argument to the scope.
 
 ### Filtering Non Active Record Collections
-Currently there is basic support for filtering arrays.  
+Currently there is basic support for filtering arrays that are passed into `filtrate(..)` instead of an Active Record collection.
 
 #### Usage
-Use an array in place of your active record query.
+Use an array in place of the result of your active record query.
   ```ruby
-  #active record
+  # active record
   filtrate(Post.all)
   
-  #array
+  # array
   filtrate([{ id: 1, title: "One"}, {id: 2, title: "Two" }])
   ```
 

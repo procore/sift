@@ -22,7 +22,7 @@ module Brita
       if not_processable?(value)
         collection
       elsif should_apply_default?(value)
-        default.call(collection.is_a?(Array) ? Collection::Wrapper.new(collection) : collection)
+        default.call(collection.is_a?(Array) ? Collection::ArrayWrapper.new(collection) : collection)
       else
         handler.call(collection, parameterize(value), params, scope_params)
       end

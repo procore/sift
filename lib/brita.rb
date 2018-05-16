@@ -1,7 +1,7 @@
 require "brita/filter"
-require "brita/collection/wrapper"
-require "brita/collection/where"
-require "brita/collection/order"
+require "brita/collection/array_wrapper"
+require "brita/collection/array_filter"
+require "brita/collection/array_sort"
 require "brita/filter_validator"
 require "brita/filtrator"
 require "brita/sort"
@@ -17,7 +17,7 @@ module Brita
   extend ActiveSupport::Concern
 
   def filtrate(collection)
-    collection = collection.is_a?(Array) ? Collection::Wrapper.new(collection) : collection
+    collection = collection.is_a?(Array) ? Collection::ArrayWrapper.new(collection) : collection
 
     Filtrator.filter(collection, params, filters)
   end
