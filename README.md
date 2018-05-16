@@ -198,6 +198,27 @@ Scopes that accept no arguments are currently supported, but you should note tha
 
 `scope_params` can also accept symbols that are keys in the `params` hash. The value will be fetched and passed on as an argument to the scope.
 
+### Filtering Non Active Record Collections
+Currently there is basic support for filtering arrays that are passed into `filtrate(..)` instead of an Active Record collection.
+
+#### Usage
+Use an array in place of the result of your active record query.
+  ```ruby
+  # active record
+  filtrate(Post.all)
+  
+  # array
+  filtrate([{ id: 1, title: "One"}, {id: 2, title: "Two" }])
+  ```
+
+#### Supported Array Filter Types
+* int - Sort on an integer column
+* decimal - Sort on a decimal column
+* string - Sort on a string column
+* text - Sort on a text column
+
+### Sorting on Non Active Record Collections
+This feature is not currently supported.  Brita will not error if you attempt to sort on an array, and will return the original collection without sorting applied.
 
 ## Consumer Usage
 

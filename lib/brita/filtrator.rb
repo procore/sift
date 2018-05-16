@@ -18,6 +18,7 @@ module Brita
 
     def filter
       active_filters.reduce(collection) do |col, filter|
+
         apply(col, filter)
       end
     end

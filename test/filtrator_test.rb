@@ -197,4 +197,18 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.expired_before_ordered_by_body("2017-12-31", :asc).to_a, collection.to_a
   end
+
+  test "it can filter arrays" do
+    post = Post.create!
+    filter = Brita::Filter.new(:id, :int, :id, nil)
+    posts = Post.all.map { |post| post.attributes }
+
+    collection = Brita::Filtrator.filter(
+      Brita::Collection::ArrayWrapper.new(posts),
+      { filters: { id: post.id } },
+      [filter]
+    )
+
+    assert_equal posts.select { |item| item['id'] == post.id }, collection
+  end
 end
