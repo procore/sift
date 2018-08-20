@@ -1,4 +1,4 @@
-module Brita
+module Sift
   class ValueParser
     def initialize(value:, options: {})
       @value = value

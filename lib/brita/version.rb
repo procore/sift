@@ -1,3 +1,3 @@
-module Brita
-  VERSION = "0.10.0".freeze
+module Sift
+  VERSION = "0.11.0".freeze
 end

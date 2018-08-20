@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  include Brita
+  include Sift
 
   filter_on :id, type: :int
   filter_on :priority, type: :int

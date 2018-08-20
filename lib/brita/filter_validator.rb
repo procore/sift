@@ -3,7 +3,7 @@
 # instance variables are being dynamically set based on the param name
 # and we are class evaling `validates` to create dynamic validations
 # based on the filters being validated.
-module Brita
+module Sift
   class FilterValidator
     include ActiveModel::Validations
 

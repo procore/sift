@@ -2,13 +2,13 @@ require "test_helper"
 
 class FilterTest < ActiveSupport::TestCase
   test "returns the original value without options" do
-    parser = Brita::ValueParser.new(value: "hi")
+    parser = Sift::ValueParser.new(value: "hi")
 
     assert_equal "hi", parser.parse
   end
 
   test "With options an array of integers results in an array of integers" do
-    parser = Brita::ValueParser.new(value: [1, 2, 3])
+    parser = Sift::ValueParser.new(value: [1, 2, 3])
 
     assert_equal [1, 2, 3], parser.parse
   end
@@ -18,7 +18,7 @@ class FilterTest < ActiveSupport::TestCase
       supports_ranges: true,
       supports_json: true
     }
-    parser = Brita::ValueParser.new(value: "[1,2,3]", options: options)
+    parser = Sift::ValueParser.new(value: "[1,2,3]", options: options)
 
     assert_equal [1, 2, 3], parser.parse
   end
@@ -28,7 +28,7 @@ class FilterTest < ActiveSupport::TestCase
       supports_ranges: true,
       supports_json: true
     }
-    parser = Brita::ValueParser.new(value: "[1,2,3", options: options)
+    parser = Sift::ValueParser.new(value: "[1,2,3", options: options)
 
     assert_equal "[1,2,3", parser.parse
   end
@@ -38,7 +38,7 @@ class FilterTest < ActiveSupport::TestCase
       supports_json: true
     }
     json_string = "{\"a\":4}"
-    parser = Brita::ValueParser.new(value: json_string, options: options)
+    parser = Sift::ValueParser.new(value: json_string, options: options)
 
     assert_equal json_string, parser.parse
   end
@@ -48,7 +48,7 @@ class FilterTest < ActiveSupport::TestCase
       supports_ranges: true,
       supports_json: true
     }
-    parser = Brita::ValueParser.new(value: "1...3", options: options)
+    parser = Sift::ValueParser.new(value: "1...3", options: options)
 
     assert_instance_of Range, parser.parse
   end
@@ -57,7 +57,7 @@ class FilterTest < ActiveSupport::TestCase
     options = {
       supports_boolean: true
     }
-    parser = Brita::ValueParser.new(value: 1, options: options)
+    parser = Sift::ValueParser.new(value: 1, options: options)
 
     assert_equal true, parser.parse
   end
@@ -66,7 +66,7 @@ class FilterTest < ActiveSupport::TestCase
     options = {
       supports_boolean: true
     }
-    parser = Brita::ValueParser.new(value: 0, options: options)
+    parser = Sift::ValueParser.new(value: 0, options: options)
 
     assert_equal false, parser.parse
   end
@@ -78,7 +78,7 @@ class FilterTest < ActiveSupport::TestCase
     start_time = Time.new(2008, 6, 21, 13, 30, 0, "+09:00")
     end_time = Time.new(2008, 6, 21, 13, 45, 0, "+09:00")
     range_string = "#{start_time}...#{end_time}"
-    parser = Brita::ValueParser.new(value: range_string, options: options)
+    parser = Sift::ValueParser.new(value: range_string, options: options)
 
     result = parser.parse
     assert_instance_of Range, result
@@ -92,7 +92,7 @@ class FilterTest < ActiveSupport::TestCase
     start_date = Date.new(2018, 1, 26)
     end_date = Time.new(2018, 1, 29)
     range_string = "#{start_date}...#{end_date}"
-    parser = Brita::ValueParser.new(value: range_string, options: options)
+    parser = Sift::ValueParser.new(value: range_string, options: options)
 
     result = parser.parse
     assert_instance_of Range, result
