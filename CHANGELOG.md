@@ -2,7 +2,7 @@
 
 ## 0,11.0
 
-Rename to Sift
+Rename gem to Sift
 
 ## 0.10.0
 
