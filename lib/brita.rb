@@ -10,7 +10,7 @@ require "brita/scope_handler"
 require "brita/where_handler"
 require "brita/validators/valid_int_validator"
 
-module Brita
+module Sift
   extend ActiveSupport::Concern
 
   def filtrate(collection)

@@ -1,4 +1,4 @@
-module Brita
+module Sift
   class ValueParser
     attr_accessor :value, :supports_boolean, :supports_json, :supports_ranges
     def initialize(value:, options: {})
