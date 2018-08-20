@@ -1,7 +1,7 @@
 $LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
-require "brita/version"
+require "sift/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|

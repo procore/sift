@@ -1,6 +1,6 @@
 # Sift
 
-[![Build Status](https://travis-ci.org/procore/brita.svg?branch=master)](https://travis-ci.org/procore/brita)
+[![Build Status](https://travis-ci.org/procore/sift.svg?branch=master)](https://travis-ci.org/procore/sift)
 
 A tool to build your own filters and sorts with Rails and Active Record!
 
@@ -33,7 +33,7 @@ end
 
 to your controller.
 
-These errors are based on the type that you told brita your param was.
+These errors are based on the type that you told sift your param was.
 
 ### Filter Types
 Every filter must have a type, so that Sift knows what to do with it. The current valid filter types are:
@@ -216,7 +216,7 @@ the `-` symbol means to sort in `desc` order. By default, keys are sorted in `as
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'brita'
+gem 'sift'
 ```
 
 And then execute:
@@ -226,7 +226,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install brita
+$ gem install sift
 ```
 
 ## Without Rails
