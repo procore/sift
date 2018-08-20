@@ -5,7 +5,7 @@ require "brita/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "Sift"
+  s.name        = "sift"
   s.version     = Sift::VERSION
   s.authors     = ["Procore Technologies"]
   s.email       = ["dev@procore.com"]
