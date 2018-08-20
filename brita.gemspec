@@ -5,11 +5,11 @@ require "brita/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "brita"
+  s.name        = "Sift"
   s.version     = Sift::VERSION
   s.authors     = ["Procore Technologies"]
   s.email       = ["dev@procore.com"]
-  s.homepage    = "https://github.com/procore/brita"
+  s.homepage    = "https://github.com/procore/sift"
   s.summary     = "Summary of Sift."
   s.description = "Easily write arbitrary filters"
   s.license     = "MIT"
