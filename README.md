@@ -198,6 +198,52 @@ Scopes that accept no arguments are currently supported, but you should note tha
 
 `scope_params` can also accept symbols that are keys in the `params` hash. The value will be fetched and passed on as an argument to the scope.
 
+### Default Sorts
+
+To ensure that a specific sort is applied when a `sort` param has not been passed, `default_sort_on` can be used.
+
+```ruby
+class PostsController < ApplicationController
+  include Brita
+
+  sort_on :order_by_body_ascending, internal_name: :order_on_body_no_params, type: :scope
+  sort_on :order_by_body, internal_name: :order_on_body, type: :scope, scope_params: [:direction]
+
+  default_sort_on :order_by_body, direction: :asc
+
+  def index
+    render json: filtrate(Post.all)
+  end
+end
+```
+
+In this example, the collection will always be sorted by the `order_by_body` sort in ascending order, unless a `sort` param was supplied in the request.
+
+`default_sort_on` takes two arguments:
+
+1. The name of the sort to be applied. This must match the name of a sort defined through `sort_on`.
+
+2. An optional `direction` argument. If direction is not specified, it will default to ascending order.
+
+It's also possible to specify more than one default sort:
+
+```ruby
+class PostsController < ApplicationController
+  include Brita
+
+  sort_on :order_by_body_ascending, internal_name: :order_on_body_no_params, type: :scope
+  sort_on :order_by_name, type: :string
+
+  default_sort_on :order_by_body, direction: :asc
+  default_sort_on :order_by_name, direction: :desc
+
+  def index
+    render json: filtrate(Post.all)
+  end
+end
+```
+
+The default sorts will be applied in the order that they are defined in.
 
 ## Consumer Usage
 
