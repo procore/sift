@@ -231,7 +231,7 @@ It's also possible to specify more than one default sort:
 class PostsController < ApplicationController
   include Brita
 
-  sort_on :order_by_body_ascending, internal_name: :order_on_body_no_params, type: :scope
+  sort_on :order_by_body, internal_name: :order_on_body, type: :scope, scope_params: [:direction]
   sort_on :order_by_name, type: :string
 
   default_sort_on :order_by_body, direction: :asc
