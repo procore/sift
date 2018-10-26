@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class FilterTest < ActiveSupport::TestCase
   test "it is initialized with the a param and a type" do

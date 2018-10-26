@@ -9,6 +9,7 @@ require "brita/value_parser"
 require "brita/scope_handler"
 require "brita/where_handler"
 require "brita/validators/valid_int_validator"
+require "brita/default_sort"
 
 module Brita
   extend ActiveSupport::Concern
@@ -22,6 +23,7 @@ module Brita
   end
 
   def sort_params
+    apply_default_sort_params
     params.fetch(:sort, "").split(",") if filters.any? { |filter| filter.is_a?(Sort) }
   end
 
@@ -48,8 +50,17 @@ module Brita
     self.class.filters
   end
 
+  def default_sorts
+    self.class.default_sorts
+  end
+
   def sorts_exist?
     filters.any? { |filter| filter.is_a?(Sort) }
+  end
+
+  def apply_default_sort_params
+    return unless default_sorts && params[:sort].blank?
+    params[:sort] = default_sorts.map { |default_sort| default_sort.sort_condition }.join(',')
   end
 
   class_methods do
@@ -64,16 +75,28 @@ module Brita
     # TODO: this is only used in tests, can I kill it?
     def reset_filters
       @_filters = []
+      @_default_sorts = []
     end
 
     def sort_fields
       @_sort_fields ||= []
     end
 
+    def default_sorts
+      @_default_sorts ||= []
+    end
+
     def sort_on(parameter, type:, internal_name: parameter, scope_params: [])
       filters << Sort.new(parameter, type, internal_name, scope_params)
       sort_fields << parameter.to_s
       sort_fields << "-#{parameter}"
+    end
+
+    def default_sort(parameter, direction: :asc)
+      default_sorts << DefaultSort.new(
+        parameter: parameter,
+        direction: direction
+      )
     end
   end
 end

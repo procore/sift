@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class BritaTest < ActiveSupport::TestCase
   class MyClass
@@ -27,6 +27,25 @@ class BritaTest < ActiveSupport::TestCase
     MyClass.sort_on(:id, type: :int)
 
     assert_equal [:id], MyClass.filters.map(&:param)
+  end
+
+  test "it registers default sort with default_sort" do
+    MyClass.reset_filters
+    MyClass.default_sort(:id, direction: :asc)
+    assert_equal ['id'], MyClass.default_sorts.map(&:sort_condition)
+  end
+
+  test "it registers multiple default sorts with default_sort" do
+    MyClass.reset_filters
+    MyClass.default_sort(:id, direction: :asc)
+    MyClass.default_sort(:title, direction: :desc)
+    assert_equal ['id', '-title'], MyClass.default_sorts.map(&:sort_condition)
+  end
+
+  test "it registers a default sort with a direction of ascending when direction is not specified" do
+    MyClass.reset_filters
+    MyClass.default_sort(:id)
+    assert_equal [:asc], MyClass.default_sorts.map(&:direction)
   end
 
   test "it always allows sort parameters to flow through" do

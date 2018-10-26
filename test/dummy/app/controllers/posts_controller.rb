@@ -32,6 +32,9 @@ class PostsController < ApplicationController
 
   before_action :render_filter_errors, unless: :filters_valid?
 
+  default_sort :title, direction: :asc
+  default_sort :priority, direction: :desc
+
   sort_on :title, type: :string
   sort_on :priority, type: :string
   sort_on :foobar, type: :string, internal_name: :title

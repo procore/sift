@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class TypeValidatorTest < ActiveSupport::TestCase
   test "it does not accept a type that is not whitelisted" do

@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class FilterValidatorTest < ActiveSupport::TestCase
   test "it validates that integers are string integers" do

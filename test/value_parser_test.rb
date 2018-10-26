@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class FilterTest < ActiveSupport::TestCase
   test "returns the original value without options" do

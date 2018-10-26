@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
   test "it works" do
@@ -170,6 +170,29 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal ["z", "a"], json.map(&:title)
   end
 
+  test "it sorts by the default sort when sort params aren't provided" do
+    Post.create!(title: "z")
+    Post.create!(title: "a")
+
+    get('/posts', params: {})
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal %w(a z), json.map(&:title)
+  end
+
+  test "it sorts by multiple default sorts (when specified) when sort params aren't provided" do
+    Post.create!(title: "z")
+    Post.create!(title: "g", priority: 1)
+    Post.create!(title: "g", priority: 10)
+    Post.create!(title: "a")
+
+    get('/posts', params: {})
+
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal %w(a g g z), json.map(&:title)
+    assert_equal [nil, 10, 1, nil], json.map(&:priority)
+  end
+
   test "it can do multiple sorts" do
     Post.create!(title: "z")
     Post.create!(title: "g", priority: 1)
@@ -190,6 +213,21 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     json = JSON.parse(@response.body)
     assert_equal expected_json, json
+  end
+
+  test "it errors when default_sort doesn't match a sort defined through sort_on" do
+    expected_json = { "errors" => { "sort" => ["is not included in the list"] } }
+
+    # This feels hacky, but allows us to simulate declaring an invalid default_sort.
+    PostsController.default_sorts << Brita::DefaultSort.new(parameter: :category)
+
+    get("/posts", params: {})
+
+    json = JSON.parse(@response.body)
+    assert_equal expected_json, json
+
+    # Remove the default sort so that future tests aren't broken.
+    PostsController.default_sorts.pop
   end
 
   test "it custom filters" do

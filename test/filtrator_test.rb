@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class FiltratorTest < ActiveSupport::TestCase
   test "it takes a collection, params and (optional) filters" do
