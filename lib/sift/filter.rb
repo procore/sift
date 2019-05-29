@@ -52,7 +52,7 @@ module Sift
     private
 
     def parameterize(value)
-      ValueParser.new(value: value, options: parameter.parse_options).parse
+      ValueParser.new(value: value, type: parameter.type, options: parameter.parse_options).parse
     end
 
     def not_processable?(value)

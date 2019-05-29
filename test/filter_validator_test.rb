@@ -179,6 +179,20 @@ class FilterValidatorTest < ActiveSupport::TestCase
     assert_equal expected_messages, validator.errors.messages
   end
 
+  test "datetimes are invalid if any of the boundaries is invalid date" do
+    filter = Sift::Filter.new(:hi, :datetime, :hi, nil)
+    expected_messages = { hi: ["is invalid"] }
+
+    validator = Sift::FilterValidator.build(
+      filters: [filter],
+      sort_fields: [],
+      filter_params: { hi: "2016-09-11T22:42:47Z...invalid" },
+      sort_params: [],
+    )
+    assert !validator.valid?
+    assert_equal expected_messages, validator.errors.messages
+  end
+
   test "it validates that sort exists" do
     filter = Sift::Sort.new(:hi, :datetime, :hi)
     expected_messages = { sort: ["is not included in the list"] }
