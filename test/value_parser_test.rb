@@ -71,34 +71,64 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal false, parser.parse
   end
 
-  test "parses range for time string range" do
+  test "parses range for range values" do
     options = {
       supports_ranges: true
     }
-    start_time = Time.new(2008, 6, 21, 13, 30, 0, "+09:00")
-    end_time = Time.new(2008, 6, 21, 13, 45, 0, "+09:00")
-    range_string = "#{start_time}...#{end_time}"
-    parser = Sift::ValueParser.new(value: range_string, options: options)
-
-    result = parser.parse
-    assert_instance_of Range, result
-    assert_equal result.max, end_time.to_s
-  end
-
-  [:date, :time, :datetime].each do |type|
-    test "parses range for Date string range and normalizes Date values for type #{type}" do
-      options = {
-        supports_ranges: true
+    test_sets = [
+      {
+        type: :date,
+        start_value: '2008-06-21',
+        end_value: '2008-06-22'
+      },
+      {
+        type: :time,
+        start_value: '13:30:00',
+        end_value: '13:45:00'
+      },
+      {
+        type: :boolean,
+        start_value: true,
+        end_value: false
+      },
+      {
+        type: :int,
+        start_value: 3,
+        end_value: 20
+      },
+      {
+        type: :decimal,
+        start_value: 123.456,
+        end_value: 44.55
+      },
+      {
+        start_value: 'any',
+        end_value: 'value'
       }
+    ]
 
-      start_date = "2018-01-01T10:00:00Z[Etc/UTC]"
-      end_date = "2018-01-01T12:00:00Z[Etc/UTC]"
-      range_string = "#{start_date}...#{end_date}"
-      parser = Sift::ValueParser.new(value: range_string, type: type, options: options)
+    test_sets.each do |set|
+      range_string = "#{set[:start_value]}...#{set[:end_value]}"
+      parser = Sift::ValueParser.new(value: range_string, type: set[:type], options: options)
 
       result = parser.parse
       assert_instance_of Range, result
-      assert_equal DateTime.parse(result.max), DateTime.parse(end_date)
+      assert_equal result.last, set[:end_value].to_s
     end
+  end
+
+  test "parses range for Date string range and normalizes DateTime values" do
+    options = {
+      supports_ranges: true
+    }
+
+    start_date = "2018-01-01T10:00:00Z[Etc/UTC]"
+    end_date = "2018-01-01T12:00:00Z[Etc/UTC]"
+    range_string = "#{start_date}...#{end_date}"
+    parser = Sift::ValueParser.new(value: range_string, type: :datetime, options: options)
+
+    result = parser.parse
+    assert_instance_of Range, result
+    assert_equal DateTime.parse(result.last), DateTime.parse(end_date)
   end
 end

@@ -60,9 +60,7 @@ module Sift
 
     def normalized_value(value, type)
       @value = value
-      if [:date, :time, :datetime].include?(type) && parse_as_range?
-        return normalized_date_range
-      end
+      return normalized_date_range if type == :datetime && parse_as_range?
       value
     end
 
