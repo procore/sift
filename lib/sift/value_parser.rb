@@ -2,11 +2,10 @@ module Sift
   class ValueParser
     attr_accessor :value, :type, :supports_boolean, :supports_json, :supports_ranges
     def initialize(value:, type: nil, options: {})
-      @value = value
-      @type = type
       @supports_boolean = options.fetch(:supports_boolean, false)
       @supports_ranges = options.fetch(:supports_ranges, false)
       @supports_json = options.fetch(:supports_json, false)
+      @value = normalized_value(value, type)
     end
 
     def parse
@@ -40,8 +39,6 @@ module Sift
     end
 
     def range_value
-      @value = normalized_date_range if [:date, :time, :datetime].include?(type)
-
       Range.new(*value.split("..."))
     end
 
@@ -59,6 +56,14 @@ module Sift
       else
         ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
       end
+    end
+
+    def normalized_value(value, type)
+      @value = value
+      if [:date, :time, :datetime].include?(type) && parse_as_range?
+        return normalized_date_range
+      end
+      value
     end
 
     def normalized_date_range
