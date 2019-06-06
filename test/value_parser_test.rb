@@ -85,18 +85,20 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal result.max, end_time.to_s
   end
 
-  test "parses range for Date string range and normalizes Date values" do
-    options = {
-      supports_ranges: true
-    }
+  [:date, :time, :datetime].each do |type|
+    test "parses range for Date string range and normalizes Date values for type #{type}" do
+      options = {
+        supports_ranges: true
+      }
 
-    start_date = "2018-01-01T10:00:00Z[Etc/UTC]"
-    end_date = "2018-01-01T12:00:00Z[Etc/UTC]"
-    range_string = "#{start_date}...#{end_date}"
-    parser = Sift::ValueParser.new(value: range_string, type: :datetime, options: options)
+      start_date = "2018-01-01T10:00:00Z[Etc/UTC]"
+      end_date = "2018-01-01T12:00:00Z[Etc/UTC]"
+      range_string = "#{start_date}...#{end_date}"
+      parser = Sift::ValueParser.new(value: range_string, type: type, options: options)
 
-    result = parser.parse
-    assert_instance_of Range, result
-    assert_equal DateTime.parse(result.max), DateTime.parse(end_date)
+      result = parser.parse
+      assert_instance_of Range, result
+      assert_equal DateTime.parse(result.max), DateTime.parse(end_date)
+    end
   end
 end
