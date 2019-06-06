@@ -40,7 +40,7 @@ module Sift
     end
 
     def range_value
-      normalize_date_range if [:date, :time, :datetime].include?(type)
+      @value = normalized_date_range if [:date, :time, :datetime].include?(type)
 
       Range.new(*value.split("..."))
     end
@@ -61,7 +61,7 @@ module Sift
       end
     end
 
-    def normalize_date_range
+    def normalized_date_range
       from_date_string, end_date_string = value.split("...")
       return unless end_date_string
 
@@ -73,7 +73,7 @@ module Sift
         end
       end
 
-      @value = parsed_dates.join("...")
+      parsed_dates.join("...")
     end
   end
 end
