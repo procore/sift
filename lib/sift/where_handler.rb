@@ -1,4 +1,4 @@
-module Brita
+module Sift
   class WhereHandler
     def initialize(param)
       @param = param

@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 0,11.0
+
+Rename gem to Sift
+
 ## 0.10.0
 
 * Support for integer filtering of JSON arrays

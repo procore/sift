@@ -1,16 +1,16 @@
-require "brita/filter"
-require "brita/filter_validator"
-require "brita/filtrator"
-require "brita/sort"
-require "brita/subset_comparator"
-require "brita/type_validator"
-require "brita/parameter"
-require "brita/value_parser"
-require "brita/scope_handler"
-require "brita/where_handler"
-require "brita/validators/valid_int_validator"
+require "sift/filter"
+require "sift/filter_validator"
+require "sift/filtrator"
+require "sift/sort"
+require "sift/subset_comparator"
+require "sift/type_validator"
+require "sift/parameter"
+require "sift/value_parser"
+require "sift/scope_handler"
+require "sift/where_handler"
+require "sift/validators/valid_int_validator"
 
-module Brita
+module Sift
   extend ActiveSupport::Concern
 
   def filtrate(collection)

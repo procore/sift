@@ -1,16 +1,16 @@
 $LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
-require "brita/version"
+require "sift/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "brita"
-  s.version     = Brita::VERSION
+  s.name        = "sift"
+  s.version     = Sift::VERSION
   s.authors     = ["Procore Technologies"]
   s.email       = ["dev@procore.com"]
-  s.homepage    = "https://github.com/procore/brita"
-  s.summary     = "Summary of Brita."
+  s.homepage    = "https://github.com/procore/sift"
+  s.summary     = "Summary of Sift."
   s.description = "Easily write arbitrary filters"
   s.license     = "MIT"
 

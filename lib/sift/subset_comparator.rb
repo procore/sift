@@ -1,4 +1,4 @@
-module Brita
+module Sift
   class SubsetComparator
     def initialize(array)
       @array = array
