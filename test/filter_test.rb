@@ -29,7 +29,7 @@ class FilterTest < ActiveSupport::TestCase
 
   test "it knows what validation it needs when a datetime" do
     filter = Sift::Filter.new("hi", :datetime, "hi", nil)
-    expected_validation = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: "must be a range" } }
+    expected_validation = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: "must be a range" }, valid_date_range: true }
 
     assert_equal expected_validation, filter.validation(nil)
   end
