@@ -1,8 +1,12 @@
 ## Unreleased
 
-## 0,11.0
+## 0.12.0
 
-Rename gem to Sift
+* Add normalization and validation for date range values
+
+## 0.11.0
+
+* Rename gem to Sift
 
 ## 0.10.0
 
