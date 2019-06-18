@@ -34,8 +34,8 @@ module Sift
 
     private
 
-    def parse_as_range?
-      supports_ranges && value.to_s.include?("...")
+    def parse_as_range?(raw_value=value)
+      supports_ranges && raw_value.to_s.include?("...")
     end
 
     def range_value
@@ -58,14 +58,16 @@ module Sift
       end
     end
 
-    def normalized_value(value, type)
-      @value = value
-      return normalized_date_range if type == :datetime && parse_as_range?
-      value
+    def normalized_value(raw_value, type)
+      if type == :datetime && parse_as_range?(raw_value)
+        normalized_date_range(raw_value)
+      else
+        raw_value
+      end
     end
 
-    def normalized_date_range
-      from_date_string, end_date_string = value.split("...")
+    def normalized_date_range(raw_value)
+      from_date_string, end_date_string = raw_value.split("...")
       return unless end_date_string
 
       parsed_dates = [from_date_string, end_date_string].map do |date_string|
