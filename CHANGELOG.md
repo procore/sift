@@ -1,8 +1,10 @@
 ## Unreleased
 
-## 0,11.0
+## 0.11.0
 
-Rename gem to Sift
+* Rename gem to Sift
+* Add normalization and validation for date range values
+* Tightened up ValueParser by privatizing unnecessarily public attr_accessors
 
 ## 0.10.0
 
