@@ -216,7 +216,7 @@ the `-` symbol means to sort in `desc` order. By default, keys are sorted in `as
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'sift'
+gem 'procore-sift'
 ```
 
 And then execute:
@@ -226,7 +226,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install sift
+$ gem install procore-sift
 ```
 
 ## Without Rails
