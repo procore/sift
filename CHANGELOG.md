@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 0.12.0
+
+* Change gem name to procore-sift
+
 ## 0.11.0
 
 * Rename gem to Sift
