@@ -39,18 +39,26 @@ module Sift
   def filter_validator
     @_filter_validator ||= FilterValidator.build(
       filters: filters,
-      sort_fields: self.class.sort_fields,
+      sort_fields: sort_fields,
       filter_params: filter_params,
       sort_params: sort_params,
     )
   end
 
   def filters
-    self.class.filters
+    return self.class.filters if self.class.filters.any?
+
+    self.class.parent_filters
   end
 
   def sorts_exist?
     filters.any? { |filter| filter.is_a?(Sort) }
+  end
+
+  def sort_fields
+    return self.class.sort_fields if self.class.sort_fields.any?
+
+    self.class.parent_sort_fields
   end
 
   class_methods do
@@ -62,6 +70,10 @@ module Sift
       @_filters ||= []
     end
 
+    def parent_filters
+      ancestors.detect { |klass| klass.respond_to?(:filters) && klass.filters.any? }&.filters || []
+    end
+
     # TODO: this is only used in tests, can I kill it?
     def reset_filters
       @_filters = []
@@ -69,6 +81,10 @@ module Sift
 
     def sort_fields
       @_sort_fields ||= []
+    end
+
+    def parent_sort_fields
+      ancestors.detect { |klass| klass.respond_to?(:sort_fields) && klass.sort_fields.any? }&.sort_fields || []
     end
 
     def sort_on(parameter, type:, internal_name: parameter, scope_params: [])
