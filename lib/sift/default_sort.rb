@@ -1,4 +1,4 @@
-module Brita
+module Sift
   class DefaultSort
     attr_reader :parameter, :direction
 

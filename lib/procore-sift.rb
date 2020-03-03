@@ -10,7 +10,7 @@ require "sift/scope_handler"
 require "sift/where_handler"
 require "sift/validators/valid_int_validator"
 require "sift/validators/valid_date_range_validator"
-require "brita/default_sort"
+require "sift/default_sort"
 
 module Sift
   extend ActiveSupport::Concern
