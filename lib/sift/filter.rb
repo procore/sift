@@ -1,4 +1,4 @@
-module Brita
+module Sift
   # Filter describes the way a parameter maps to a database column
   # and the type information helpful for validating input.
   class Filter
@@ -38,7 +38,7 @@ module Brita
     end
 
     def type_validator
-      @type_validator ||= Brita::TypeValidator.new(param, type)
+      @type_validator ||= Sift::TypeValidator.new(param, type)
     end
 
     def type
@@ -52,7 +52,7 @@ module Brita
     private
 
     def parameterize(value)
-      ValueParser.new(value: value, options: parameter.parse_options).parse
+      ValueParser.new(value: value, type: parameter.type, options: parameter.parse_options).parse
     end
 
     def not_processable?(value)

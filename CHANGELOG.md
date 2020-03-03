@@ -1,5 +1,15 @@
 ## Unreleased
 
+## 0.12.0
+
+* Change gem name to procore-sift
+
+## 0.11.0
+
+* Rename gem to Sift
+* Add normalization and validation for date range values
+* Tightened up ValueParser by privatizing unnecessarily public attr_accessors
+
 ## 0.10.0
 
 * Support for integer filtering of JSON arrays

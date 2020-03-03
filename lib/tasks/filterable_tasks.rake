@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :brita do
+# task :sift do
 #   # Task goes here
 # end

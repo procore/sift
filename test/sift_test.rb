@@ -1,9 +1,9 @@
 require_relative "test_helper"
 
-class BritaTest < ActiveSupport::TestCase
+class SiftTest < ActiveSupport::TestCase
   class MyClass
     attr_writer :params
-    include Brita
+    include Sift
 
     def params
       @params ||= ActionController::Parameters.new({})

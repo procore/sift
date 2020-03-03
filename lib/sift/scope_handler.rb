@@ -1,4 +1,4 @@
-module Brita
+module Sift
   class ScopeHandler
     def initialize(param)
       @param = param
