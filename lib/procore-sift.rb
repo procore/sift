@@ -46,9 +46,7 @@ module Sift
   end
 
   def filters
-    return self.class.filters if self.class.filters.any?
-
-    self.class.parent_filters
+    self.class.parent_filters + (self.class.try(:filters) || [])
   end
 
   def sorts_exist?
@@ -56,9 +54,7 @@ module Sift
   end
 
   def sort_fields
-    return self.class.sort_fields if self.class.sort_fields.any?
-
-    self.class.parent_sort_fields
+    self.class.parent_sort_fields + (self.class.try(:sort_fields) || [])
   end
 
   class_methods do
@@ -71,7 +67,7 @@ module Sift
     end
 
     def parent_filters
-      ancestors.detect { |klass| klass.respond_to?(:filters) && klass.filters.any? }&.filters || []
+      ancestors.flat_map { |klass| klass.try(:filters) }.compact
     end
 
     # TODO: this is only used in tests, can I kill it?
@@ -84,7 +80,7 @@ module Sift
     end
 
     def parent_sort_fields
-      ancestors.detect { |klass| klass.respond_to?(:sort_fields) && klass.sort_fields.any? }&.sort_fields || []
+      ancestors.flat_map { |klass| klass.try(:sort_fields) }.compact
     end
 
     def sort_on(parameter, type:, internal_name: parameter, scope_params: [])
