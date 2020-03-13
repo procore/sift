@@ -46,7 +46,11 @@ module Sift
   end
 
   def filters
-    self.class.parent_filters + (self.class.try(:filters) || [])
+    self.class.ancestors.flat_map do |klass|
+      klass.try(:filters)
+    end.compact.uniq do |f|
+      [f.param, f.class]
+    end
   end
 
   def sorts_exist?
@@ -54,7 +58,7 @@ module Sift
   end
 
   def sort_fields
-    self.class.parent_sort_fields + (self.class.try(:sort_fields) || [])
+    self.class.ancestors.flat_map { |klass| klass.try(:sort_fields) }.compact
   end
 
   class_methods do
@@ -66,10 +70,6 @@ module Sift
       @_filters ||= []
     end
 
-    def parent_filters
-      ancestors.flat_map { |klass| klass.try(:filters) }.compact
-    end
-
     # TODO: this is only used in tests, can I kill it?
     def reset_filters
       @_filters = []
@@ -77,10 +77,6 @@ module Sift
 
     def sort_fields
       @_sort_fields ||= []
-    end
-
-    def parent_sort_fields
-      ancestors.flat_map { |klass| klass.try(:sort_fields) }.compact
     end
 
     def sort_on(parameter, type:, internal_name: parameter, scope_params: [])
