@@ -46,14 +46,10 @@ module Sift
   end
 
   def filters
-    self.class.ancestors.flat_map do |klass|
-      klass.try(:filters)
-    end.compact.uniq do |f|
-      [f.param, f.class]
-    self.class.ancestors.
-      flat_map { |klass| klass.try(:filters) }.
-      compact.
-      uniq { |f| [f.param, f.class] }
+    self.class.ancestors
+      .flat_map { |klass| klass.try(:filters) }
+      .compact
+      .uniq { |f| [f.param, f.class] }
   end
 
   def sorts_exist?
