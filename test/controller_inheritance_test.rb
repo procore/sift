@@ -38,8 +38,8 @@ class PostsInheritanceTest < ActionDispatch::IntegrationTest
     Post.create!(priority: 2)
     get("/posts_alt", params: { filters: { body: [2, 3] } })
 
-    json = JSON.parse(@response.body)
-    assert_equal 2, json.size
+    json = JSON.parse(@response.body, object_class: OpenStruct)
+    assert_equal [3, 2], json.map(&:priority)
   end
 
   test "it overrides inherited body sort with priority sort" do
