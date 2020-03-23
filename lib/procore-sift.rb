@@ -47,6 +47,7 @@ module Sift
 
   def filters
     self.class.ancestors
+      .take_while { |klass| klass.name != "Sift" }
       .flat_map { |klass| klass.try(:filters) }
       .compact
       .uniq { |f| [f.param, f.class] }
