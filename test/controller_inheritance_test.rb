@@ -4,7 +4,7 @@ class PostsInheritanceTest < ActionDispatch::IntegrationTest
   test "it works" do
     post = Post.create!
 
-    get("/alt_posts")
+    get("/posts_alt")
 
     json = JSON.parse(@response.body)
     assert_equal 1, json.size
@@ -15,7 +15,7 @@ class PostsInheritanceTest < ActionDispatch::IntegrationTest
     post = Post.create!
     Post.create!
 
-    get("/alt_posts", params: { filters: { id: post.id } })
+    get("/posts_alt", params: { filters: { id: post.id } })
 
     json = JSON.parse(@response.body)
     assert_equal 1, json.size
@@ -26,7 +26,7 @@ class PostsInheritanceTest < ActionDispatch::IntegrationTest
     Post.create!(title: "z")
     Post.create!(title: "a")
 
-    get("/alt_posts", params: { sort: "title" })
+    get("/posts_alt", params: { sort: "title" })
 
     json = JSON.parse(@response.body, object_class: OpenStruct)
     assert_equal ["a", "z"], json.map(&:title)
@@ -36,7 +36,7 @@ class PostsInheritanceTest < ActionDispatch::IntegrationTest
     Post.create!(body: "hi")
     Post.create!(body: "hello")
     Post.create!(body: "hola")
-    get("/alt_posts", params: { filters: { french_bread: ["hi", "hello"] } })
+    get("/posts_alt", params: { filters: { french_bread: ["hi", "hello"] } })
 
     json = JSON.parse(@response.body)
     assert_equal 2, json.size
@@ -46,7 +46,7 @@ class PostsInheritanceTest < ActionDispatch::IntegrationTest
     Post.create!(priority: 3)
     Post.create!(priority: 1)
     Post.create!(priority: 2)
-    get("/alt_posts", params: { sort: "foobar" })
+    get("/posts_alt", params: { sort: "foobar" })
 
     json = JSON.parse(@response.body, object_class: OpenStruct)
     assert_equal [1, 2, 3], json.map(&:priority)
