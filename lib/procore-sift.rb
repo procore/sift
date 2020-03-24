@@ -39,18 +39,29 @@ module Sift
   def filter_validator
     @_filter_validator ||= FilterValidator.build(
       filters: filters,
-      sort_fields: self.class.sort_fields,
+      sort_fields: sort_fields,
       filter_params: filter_params,
       sort_params: sort_params,
     )
   end
 
   def filters
-    self.class.filters
+    self.class.ancestors
+      .take_while { |klass| klass.name != "Sift" }
+      .flat_map { |klass| klass.try(:filters) }
+      .compact
+      .uniq { |f| [f.param, f.class] }
   end
 
   def sorts_exist?
     filters.any? { |filter| filter.is_a?(Sort) }
+  end
+
+  def sort_fields
+    self.class.ancestors
+      .take_while { |klass| klass.name != "Sift" }
+      .flat_map { |klass| klass.try(:sort_fields) }
+      .compact
   end
 
   class_methods do
