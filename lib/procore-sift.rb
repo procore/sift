@@ -58,7 +58,10 @@ module Sift
   end
 
   def sort_fields
-    self.class.ancestors.flat_map { |klass| klass.try(:sort_fields) }.compact
+    self.class.ancestors
+      .take_while { |klass| klass.name != "Sift" }
+      .flat_map { |klass| klass.try(:sort_fields) }
+      .compact
   end
 
   class_methods do
