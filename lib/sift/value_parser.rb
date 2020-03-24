@@ -53,7 +53,7 @@ module Sift
     end
 
     def boolean_value
-      if Rails.version.starts_with?("5")
+      if Rails.version.starts_with?('5') || Rails.version.starts_with?('6')
         ActiveRecord::Type::Boolean.new.cast(value)
       else
         ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
