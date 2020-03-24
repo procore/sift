@@ -312,7 +312,7 @@ Style/PerlBackrefs:
 Naming/PredicateName:
   Description: 'Check the names of predicate methods.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#bool-methods-qmark'
-  ForbiddenPrefixes:
+  NamePrefixBlacklist:
     - is_
   Exclude:
     - spec/**/*
