@@ -27,6 +27,12 @@ class FilterTest < ActiveSupport::TestCase
     end
   end
 
+  test "it raises an exception if type scope has invalid scope types" do
+    assert_raise ArgumentError do
+      Sift::Filter.new("hi", :scope, "hi", nil, nil, [:foo], [:int, :foo])
+    end
+  end
+
   test "it knows what validation it needs when a datetime" do
     filter = Sift::Filter.new("hi", :datetime, "hi", nil)
     expected_validation = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: "must be a range" }, valid_date_range: true }

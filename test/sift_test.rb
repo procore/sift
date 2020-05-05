@@ -22,6 +22,13 @@ class SiftTest < ActiveSupport::TestCase
     assert_equal [:id], MyClass.filters.map(&:param)
   end
 
+  test "it defaults scope params to scope subtypes" do
+    MyClass.reset_filters
+    MyClass.filter_on(:foo, type: { scope: [:string, { bar: :int, biz: :string }] })
+
+    assert_equal [:bar, :biz], MyClass.filters.first.scope_params
+  end
+
   test "it registers sorts with sort_on" do
     MyClass.reset_filters
     MyClass.sort_on(:id, type: :int)

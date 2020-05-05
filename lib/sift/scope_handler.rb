@@ -1,24 +1,36 @@
 module Sift
   class ScopeHandler
-    def initialize(param)
-      @param = param
+    def initialize(raw_value, raw_scope_options, parameter, scope_types)
+      @value = ValueParser.new(value: raw_value, type: scope_types.first || parameter).parse
+      @param = parameter
+      @scope_options = parsed_scope_options(raw_scope_options, scope_types)
     end
 
-    def call(collection, value, params, scope_params)
-      collection.public_send(@param.internal_name, *scope_parameters(value, params, scope_params))
+    def call(collection)
+      collection.public_send(@param.internal_name, *scope_parameters)
     end
 
-    def scope_parameters(value, params, scope_params)
-      if scope_params.empty?
-        [value]
+    private
+
+    def scope_parameters
+      if @scope_options.present?
+        [@value, @scope_options]
       else
-        [value, mapped_scope_params(params, scope_params)]
+        [@value]
       end
     end
 
-    def mapped_scope_params(params, scope_params)
-      scope_params.each_with_object({}) do |scope_param, hash|
-        hash[scope_param] = params.fetch(scope_param)
+    def parsed_scope_options(raw_scope_options, scope_types)
+      return nil if raw_scope_options.empty?
+
+      scope_option_types = scope_types[1] || {}
+      raw_scope_options.each_with_object({}) do |(key, raw_param), hash|
+        hash[key] =
+          if scope_option_types[key].present?
+            ValueParser.new(value: raw_param, type: scope_option_types[key]).parse
+          else
+            raw_param
+          end
       end
     end
   end

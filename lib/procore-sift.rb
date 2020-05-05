@@ -66,7 +66,16 @@ module Sift
 
   class_methods do
     def filter_on(parameter, type:, internal_name: parameter, default: nil, validate: nil, scope_params: [])
-      filters << Filter.new(parameter, type, internal_name, default, validate, scope_params)
+      if type.respond_to?(:key?)
+        unless type.key?(:scope)
+          raise ArgumentError, "filter_on: Only type: :scope can have subtypes. Expecting the form `type: {scope: [type, {param: type}]}`"
+        end
+
+        scope_types = type[:scope]
+        filters << Filter.new(parameter, :scope, internal_name, default, validate, scope_params, scope_types)
+      else
+        filters << Filter.new(parameter, type, internal_name, default, validate, scope_params)
+      end
     end
 
     def filters

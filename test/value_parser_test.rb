@@ -14,67 +14,36 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   test "With options a json string array of integers results in an array of integers" do
-    options = {
-      supports_ranges: true,
-      supports_json: true
-    }
-    parser = Sift::ValueParser.new(value: "[1,2,3]", options: options)
+    parser = Sift::ValueParser.new(value: "[1,2,3]", type: :int)
 
     assert_equal [1, 2, 3], parser.parse
   end
 
   test "with invalid json returns original value" do
-    options = {
-      supports_ranges: true,
-      supports_json: true
-    }
-    parser = Sift::ValueParser.new(value: "[1,2,3", options: options)
+    parser = Sift::ValueParser.new(value: "[1,2,3", type: :int)
 
     assert_equal "[1,2,3", parser.parse
   end
 
-  test "JSON parsing only supports arrays" do
-    options = {
-      supports_json: true
-    }
-    json_string = "{\"a\":4}"
-    parser = Sift::ValueParser.new(value: json_string, options: options)
-
-    assert_equal json_string, parser.parse
-  end
-
   test "With options a range string of integers results in a range" do
-    options = {
-      supports_ranges: true,
-      supports_json: true
-    }
-    parser = Sift::ValueParser.new(value: "1...3", options: options)
+    parser = Sift::ValueParser.new(value: "1...3", type: :int)
 
     assert_instance_of Range, parser.parse
   end
 
   test "parses true from 1" do
-    options = {
-      supports_boolean: true
-    }
-    parser = Sift::ValueParser.new(value: 1, options: options)
+    parser = Sift::ValueParser.new(value: 1, type: :boolean)
 
     assert_equal true, parser.parse
   end
 
   test "parses false from 0" do
-    options = {
-      supports_boolean: true
-    }
-    parser = Sift::ValueParser.new(value: 0, options: options)
+    parser = Sift::ValueParser.new(value: 0, type: :boolean)
 
     assert_equal false, parser.parse
   end
 
   test "parses range for range values" do
-    options = {
-      supports_ranges: true
-    }
     test_sets = [
       {
         type: :date,
@@ -109,7 +78,7 @@ class FilterTest < ActiveSupport::TestCase
 
     test_sets.each do |set|
       range_string = "#{set[:start_value]}...#{set[:end_value]}"
-      parser = Sift::ValueParser.new(value: range_string, type: set[:type], options: options)
+      parser = Sift::ValueParser.new(value: range_string, type: set[:type])
 
       result = parser.parse
       assert_instance_of Range, result
@@ -118,14 +87,10 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   test "parses range for Date string range and normalizes DateTime values" do
-    options = {
-      supports_ranges: true
-    }
-
     start_date = "2018-01-01T10:00:00Z[Etc/UTC]"
     end_date = "2018-01-01T12:00:00Z[Etc/UTC]"
     range_string = "#{start_date}...#{end_date}"
-    parser = Sift::ValueParser.new(value: range_string, type: :datetime, options: options)
+    parser = Sift::ValueParser.new(value: range_string, type: :datetime)
 
     result = parser.parse
     assert_instance_of Range, result
