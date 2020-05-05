@@ -149,6 +149,10 @@ Passing `?filters[user_posts_on_date]=2010-12-20&user_id=3blog_id=[4,5]` will re
 `Post.all.user_posts_on_date(DateTime.parse('2010-12-20'), user_id: "3", blog_id: [4, 5])`.
 Unfortunately, validation with `filters_valid?` is not yet supported on params used by scope options.
 
+Note that if `scope_params` is omitted it will default to the keys provided the scope option types.
+For example, `filter_on :foo, type: {scope: [:int, { bar: :int, baz: :int }]}` implicitly defines `scope_params`
+of `[:bar, :baz]`
+
 ### Renaming Filter Params
 
 A filter param can have a different field name than the column or scope. Use `internal_name` with the correct name of the column or scope.
