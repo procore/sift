@@ -2,7 +2,7 @@ require "test_helper"
 
 class FilterValidatorTest < ActiveSupport::TestCase
   test "it validates that integers are string integers" do
-    filter = Sift::Filter.new(:hi, :int, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :int, :hi, nil)
     validator = Sift::FilterValidator.build(
       filters: [filter],
       sort_fields: [],
@@ -15,7 +15,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it validates that integers are numeric integers" do
-    filter = Sift::Filter.new(:hola, :int, :hola, nil)
+    filter = Sift::Filter::Where.new(:hola, :int, :hola, nil)
     validator = Sift::FilterValidator.build(
       filters: [filter],
       sort_fields: [],
@@ -28,7 +28,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it validates integers cannot be strings" do
-    filter = Sift::Filter.new(:hi, :int, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :int, :hi, nil)
     expected_messages = { hi: ["must be integer, array of integers, or range"] }
 
     validator = Sift::FilterValidator.build(
@@ -42,7 +42,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it validates decimals are numerical" do
-    filter = Sift::Filter.new(:hi, :decimal, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :decimal, :hi, nil)
 
     validator = Sift::FilterValidator.build(
       filters: [filter],
@@ -55,7 +55,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it validates decimals cannot be strings" do
-    filter = Sift::Filter.new(:hi, :decimal, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :decimal, :hi, nil)
     expected_messages = { hi: ["is not a number"] }
 
     validator = Sift::FilterValidator.build(
@@ -69,7 +69,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it validates booleans are 0 or 1" do
-    filter = Sift::Filter.new(:hi, :boolean, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :boolean, :hi, nil)
 
     validator = Sift::FilterValidator.build(
       filters: [filter],
@@ -82,8 +82,8 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it validates multiple fields" do
-    bool_filter = Sift::Filter.new(:hi, :boolean, :hi, nil)
-    dec_filter = Sift::Filter.new(:bye, :decimal, :bye, nil)
+    bool_filter = Sift::Filter::Where.new(:hi, :boolean, :hi, nil)
+    dec_filter = Sift::Filter::Where.new(:bye, :decimal, :bye, nil)
 
     validator = Sift::FilterValidator.build(
       filters: [bool_filter, dec_filter],
@@ -96,8 +96,8 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it invalidates when one of two filters is invalid" do
-    bool_filter = Sift::Filter.new(:hi, :boolean, :hi, nil)
-    dec_filter = Sift::Filter.new(:bye, :decimal, :bye, nil)
+    bool_filter = Sift::Filter::Where.new(:hi, :boolean, :hi, nil)
+    dec_filter = Sift::Filter::Where.new(:bye, :decimal, :bye, nil)
     expected_messages = { bye: ["is not a number"] }
 
     validator = Sift::FilterValidator.build(
@@ -111,8 +111,8 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it invalidates when both fields are invalid" do
-    bool_filter = Sift::Filter.new(:hi, :date, :hi, nil)
-    dec_filter = Sift::Filter.new(:bye, :decimal, :bye, nil)
+    bool_filter = Sift::Filter::Where.new(:hi, :date, :hi, nil)
+    dec_filter = Sift::Filter::Where.new(:bye, :decimal, :bye, nil)
     expected_messages = { hi: ["must be a range"], bye: ["is not a number"] }
 
     validator = Sift::FilterValidator.build(
@@ -126,8 +126,8 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it ignores validations for filters that are not being used" do
-    bool_filter = Sift::Filter.new(:hi, :boolean, :hi, nil)
-    dec_filter = Sift::Filter.new(:bye, :decimal, :bye, nil)
+    bool_filter = Sift::Filter::Where.new(:hi, :boolean, :hi, nil)
+    dec_filter = Sift::Filter::Where.new(:bye, :decimal, :bye, nil)
 
     validator = Sift::FilterValidator.build(
       filters: [bool_filter, dec_filter],
@@ -140,7 +140,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "it allows ranges" do
-    filter = Sift::Filter.new(:hi, :int, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :int, :hi, nil)
 
     validator = Sift::FilterValidator.build(
       filters: [filter],
@@ -153,7 +153,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "datetimes are invalid unless they are a range" do
-    filter = Sift::Filter.new(:hi, :datetime, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :datetime, :hi, nil)
 
     validator = Sift::FilterValidator.build(
       filters: [filter],
@@ -166,7 +166,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "datetimes are invalid when not a range" do
-    filter = Sift::Filter.new(:hi, :datetime, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :datetime, :hi, nil)
     expected_messages = { hi: ["must be a range"] }
 
     validator = Sift::FilterValidator.build(
@@ -180,7 +180,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "datetimes are invalid if any of the boundaries is invalid date" do
-    filter = Sift::Filter.new(:hi, :datetime, :hi, nil)
+    filter = Sift::Filter::Where.new(:hi, :datetime, :hi, nil)
     expected_messages = { hi: ["is invalid"] }
 
     validator = Sift::FilterValidator.build(
@@ -209,7 +209,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
 
   test "it respects a custom validation" do
     error_message = "super duper error message"
-    filter = Sift::Filter.new(:hi, :int, :hi, nil, ->(validator) {
+    filter = Sift::Filter::Where.new(:hi, :int, :hi, nil, ->(validator) {
       validator.errors.add(:base, error_message)
     })
     expected_messages = { base: [error_message] }
@@ -225,7 +225,7 @@ class FilterValidatorTest < ActiveSupport::TestCase
   end
 
   test "custom validation supercedes type validation" do
-    filter = Sift::Filter.new(:hi, :int, :hi, nil, ->(validator) {})
+    filter = Sift::Filter::Where.new(:hi, :int, :hi, nil, ->(validator) {})
 
     validator = Sift::FilterValidator.build(
       filters: [filter],
