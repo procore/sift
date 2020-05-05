@@ -1,7 +1,7 @@
 module Sift
   class ScopeHandler
     def initialize(raw_value, raw_scope_options, parameter, scope_types)
-      @value = ValueParser.new(value: raw_value, type: scope_types.first || parameter).parse
+      @value = ValueParser.new(value: raw_value, type: scope_types.first || parameter.type).parse
       @param = parameter
       @scope_options = parsed_scope_options(raw_scope_options, scope_types)
     end
