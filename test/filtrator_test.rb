@@ -7,7 +7,7 @@ class FiltratorTest < ActiveSupport::TestCase
 
   test "it filters by all the filters you pass it" do
     post = Post.create!
-    filter = Sift::Filter.new(:id, :int, :id, nil)
+    filter = Sift::Filter::Where.new(:id, :int, :id, nil)
 
     collection = Sift::Filtrator.filter(
       Post.all,
@@ -20,7 +20,7 @@ class FiltratorTest < ActiveSupport::TestCase
 
   test "it will not try to make a range out of a string field that includes ..." do
     post = Post.create!(title: "wow...man")
-    filter = Sift::Filter.new(:title, :string, :title, nil)
+    filter = Sift::Filter::Where.new(:title, :string, :title, nil)
 
     collection = Sift::Filtrator.filter(
       Post.all,
@@ -34,7 +34,7 @@ class FiltratorTest < ActiveSupport::TestCase
   test "it returns default when filter param not passed" do
     Post.create!(body: "foo")
     Post.create!(body: "bar")
-    filter = Sift::Filter.new(:body2, :scope, :body2, ->(c) { c.order(:body) })
+    filter = Sift::Filter::Scope.new(:body2, :scope, :body2, ->(c) { c.order(:body) })
     collection = Sift::Filtrator.filter(Post.all, {}, [filter])
 
     assert_equal [Post.second, Post.first], collection.to_a
@@ -43,7 +43,7 @@ class FiltratorTest < ActiveSupport::TestCase
   test "it will not return default if param passed" do
     Post.create!(body: "foo")
     filtered_post = Post.create!(body: "bar")
-    filter = Sift::Filter.new(:body2, :scope, :body2, nil)
+    filter = Sift::Filter::Scope.new(:body2, :scope, :body2, nil)
     collection = Sift::Filtrator.filter(
       Post.all,
       { filters: { body2: "bar" } },
@@ -57,7 +57,7 @@ class FiltratorTest < ActiveSupport::TestCase
     Post.create!(priority: 5, expiration: "2017-01-01")
     Post.create!(priority: 5, expiration: "2017-01-02")
     Post.create!(priority: 7, expiration: "2020-10-20")
-    filter = Sift::Filter.new(
+    filter = Sift::Filter::Scope.new(
       :expired_before_and_priority,
       :scope,
       :expired_before_and_priority,
@@ -86,7 +86,7 @@ class FiltratorTest < ActiveSupport::TestCase
     Post.create!(priority: 5, expiration: "2017-01-02")
     Post.create!(priority: 7, expiration: "2020-10-20")
 
-    filter = Sift::Filter.new(
+    filter = Sift::Filter::Scope.new(
       :ordered_expired_before_and_priority,
       :scope,
       :ordered_expired_before_and_priority,

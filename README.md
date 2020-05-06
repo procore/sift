@@ -96,6 +96,63 @@ end
 Passing `?filters[user_posts_on_date]=10/12/20` will call the `user_posts_on_date` scope with
 `10/12/20` as the the first argument, and will grab the `user_id` and `blog_id` out of the params and pass them as a hash, as the second argument.
 
+### Scope Arguments with Types
+
+Sometimes you need the argument to a scope to be parsed using Sift types. Scope argument types can be specified by passing a hash to the  `type:` keyword,
+as follows:
+
+```ruby
+class Post < ActiveRecord::Base
+  scope :with_priority, ->(int_array) { where(priority: int_array) }
+end
+
+class PostsController < ApplicationController
+  include Sift
+
+  filter_on :with_priority, type: { scope: :int }
+
+  def index
+    render json: filtrate(Post.all)
+  end
+end
+```
+Passing `?filters[with_priority]=[1,2]` will call the `with_priority` scope with the array, `[1, 2]`, instead of `"[1,2]"`
+`filters[with_priority]` can also be validated with the `:int` type using `filters_valid?` (see below).
+
+Types can also be specified for `scope_params` like this:
+
+```ruby
+class Post < ActiveRecord::Base
+  scope :user_posts_on_date, ->(date, options) {
+    where(user_id: options[:user_id], blog_id: options[:blog_id], date: date)
+  }
+end
+
+class UsersController < ApplicationController
+  include Sift
+
+  filter_on :user_posts_on_date,
+    type: {
+      scope: [
+        :datetime,
+        { blog_id: :int }
+      ]
+    },
+    scope_params: [:user_id, :blog_id]
+
+  def show
+    render json: filtrate(Post.all)
+  end
+end
+```
+Passing `?filters[user_posts_on_date]=2010-12-20&user_id=3blog_id=[4,5]` will result in the filter
+`Post.all.user_posts_on_date(DateTime.parse('2010-12-20'), user_id: "3", blog_id: [4, 5])`.
+Unfortunately, validation with `filters_valid?` is not yet supported on params used by scope options.
+
+Note that if `scope_params` is omitted it will default to the keys provided the scope option types.
+For example, `filter_on :foo, type: {scope: [:int, { bar: :int, baz: :int }]}` implicitly defines `scope_params`
+of `[:bar, :baz]`
+
 ### Renaming Filter Params
 
 A filter param can have a different field name than the column or scope. Use `internal_name` with the correct name of the column or scope.

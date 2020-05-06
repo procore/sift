@@ -1,4 +1,6 @@
 require "sift/filter"
+require "sift/filter/scope"
+require "sift/filter/where"
 require "sift/filter_validator"
 require "sift/filtrator"
 require "sift/sort"
@@ -66,7 +68,12 @@ module Sift
 
   class_methods do
     def filter_on(parameter, type:, internal_name: parameter, default: nil, validate: nil, scope_params: [])
-      filters << Filter.new(parameter, type, internal_name, default, validate, scope_params)
+      filters <<
+        if Sift::Filter.scope_type?(type)
+          Sift::Filter::Scope.new(parameter, type, internal_name, default, validate, scope_params)
+        else
+          Sift::Filter::Where.new(parameter, type, internal_name, default, validate)
+        end
     end
 
     def filters

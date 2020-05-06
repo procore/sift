@@ -1,11 +1,8 @@
 module Sift
   class ValueParser
-    def initialize(value:, type: nil, options: {})
-      @value = value
-      @supports_boolean = options.fetch(:supports_boolean, false)
-      @supports_ranges = options.fetch(:supports_ranges, false)
-      @supports_json = options.fetch(:supports_json, false)
+    def initialize(value:, type: nil)
       @value = normalized_value(value, type)
+      @type = type
     end
 
     def parse
@@ -34,10 +31,22 @@ module Sift
 
     private
 
-    attr_reader :value, :type, :supports_boolean, :supports_json, :supports_ranges
+    def supports_ranges?
+      ![:string, :text, :scope].include?(type)
+    end
 
-    def parse_as_range?(raw_value=value)
-      supports_ranges && raw_value.to_s.include?("...")
+    def supports_json?
+      type == :int
+    end
+
+    def supports_boolean?
+      type == :boolean
+    end
+
+    attr_reader :value, :type
+
+    def parse_as_range?(raw_value = value)
+      supports_ranges? && raw_value.to_s.include?("...")
     end
 
     def range_value
@@ -45,11 +54,11 @@ module Sift
     end
 
     def parse_as_json?
-      supports_json && value.is_a?(String)
+      supports_json? && value.is_a?(String)
     end
 
     def parse_as_boolean?
-      supports_boolean
+      supports_boolean?
     end
 
     def boolean_value
