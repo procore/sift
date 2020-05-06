@@ -137,7 +137,7 @@ class UsersController < ApplicationController
         :datetime,
         { blog_id: :int }
       ]
-    }
+    },
     scope_params: [:user_id, :blog_id]
 
   def show
