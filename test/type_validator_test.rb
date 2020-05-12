@@ -40,4 +40,18 @@ class TypeValidatorTest < ActiveSupport::TestCase
 
     assert_equal expected_validation, validator.validate
   end
+
+  test "it accepts a json array for type jsonb" do
+    validator = Sift::TypeValidator.new("[1,10]", :jsonb)
+    expected_validation = { valid_json: true }
+
+    assert_equal expected_validation, validator.validate
+  end
+
+  test "it accepts a json object for type jsonb" do
+    validator = Sift::TypeValidator.new("{\"a\":4}", :jsonb)
+    expected_validation = { valid_json: true }
+
+    assert_equal expected_validation, validator.validate
+  end
 end

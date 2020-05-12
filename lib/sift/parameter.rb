@@ -13,7 +13,8 @@ module Sift
       {
         supports_boolean: supports_boolean?,
         supports_ranges: supports_ranges?,
-        supports_json: supports_json?
+        supports_json: supports_json?,
+        supports_json_object: supports_json_object?
       }
     end
 
@@ -32,7 +33,11 @@ module Sift
     end
 
     def supports_json?
-      type == :int
+      [:int, :jsonb].include?(type)
+    end
+
+    def supports_json_object?
+      type == :jsonb
     end
 
     def supports_boolean?

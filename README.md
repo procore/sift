@@ -46,6 +46,7 @@ Every filter must have a type, so that Sift knows what to do with it. The curren
 * time - Filter on a time column
 * datetime - Filter on a datetime column
 * scope - Filter on an ActiveRecord scope
+* jsonb - Filter on a jsonb column (supported only in PostgreSQL)
 
 ### Filter on Scopes
 Just as your filter values are used to scope queries on a column, values you

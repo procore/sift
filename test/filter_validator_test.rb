@@ -236,4 +236,31 @@ class FilterValidatorTest < ActiveSupport::TestCase
     assert validator.valid?
     assert_equal Hash.new, validator.errors.messages
   end
+
+  test "it allows jsonb" do
+    filter = Sift::Filter.new(:metadata, :jsonb, :metadata, nil)
+
+    validator = Sift::FilterValidator.build(
+      filters: [filter],
+      sort_fields: [],
+      filter_params: { metadata: "{\"a\":4}" },
+      sort_params: [],
+    )
+    assert validator.valid?
+    assert_equal Hash.new, validator.errors.messages
+  end
+
+  test "invalid jsonb when the value is not correct" do
+    filter = Sift::Filter.new(:metadata, :jsonb, :metadata, nil)
+    expected_messages = { metadata: ["must be a valid JSON"] }
+
+    validator = Sift::FilterValidator.build(
+      filters: [filter],
+      sort_fields: [],
+      filter_params: { metadata: "\"a\":4" },
+      sort_params: [],
+    )
+    assert !validator.valid?
+    assert_equal expected_messages, validator.errors.messages
+  end
 end

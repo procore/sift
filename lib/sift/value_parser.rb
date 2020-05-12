@@ -5,6 +5,7 @@ module Sift
       @supports_boolean = options.fetch(:supports_boolean, false)
       @supports_ranges = options.fetch(:supports_ranges, false)
       @supports_json = options.fetch(:supports_json, false)
+      @supports_json_object = options.fetch(:supports_json_object, false)
       @value = normalized_value(value, type)
     end
 
@@ -15,26 +16,30 @@ module Sift
         elsif parse_as_boolean?
           boolean_value
         elsif parse_as_json?
-          array_from_json
+          supports_json_object ? parse_json : array_from_json
         else
           value
         end
     end
 
+    def parse_json
+      JSON.parse(value)
+    rescue JSON::ParserError
+      value
+    end
+
     def array_from_json
-      result = JSON.parse(value)
+      result = parse_json
       if result.is_a?(Array)
         result
       else
         value
       end
-    rescue JSON::ParserError
-      value
     end
 
     private
 
-    attr_reader :value, :type, :supports_boolean, :supports_json, :supports_ranges
+    attr_reader :value, :type, :supports_boolean, :supports_json, :supports_json_object, :supports_ranges
 
     def parse_as_range?(raw_value=value)
       supports_ranges && raw_value.to_s.include?("...")
