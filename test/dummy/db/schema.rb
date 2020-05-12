@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160909014304) do
+ActiveRecord::Schema.define(version: 20200512151604) do
   create_table "posts", force: :cascade do |t|
     t.integer  "priority"
     t.decimal  "rating"
@@ -22,5 +22,6 @@ ActiveRecord::Schema.define(version: 20160909014304) do
     t.datetime "published_at"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.json "metadata"
   end
 end
