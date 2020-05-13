@@ -1,5 +1,11 @@
 ## Unreleased
 
+## 0.13.1
+
+* Add support for `jsonb` type (only for PostgreSQL)
+
+## 0.13.0
+
 ## 0.12.0
 
 * Change gem name to procore-sift
