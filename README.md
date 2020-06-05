@@ -136,14 +136,18 @@ It should be sent an array in the URL Query parameters
 
 It can be passed one or more Key values:
  * `?filters[metadata]={"data_1":"test"}`
- * `?filters[metadata]={"data_1":"test","data_2":[1,2]}`
+ * `?filters[metadata]={"data_1":"test","data_2":"[1,2]"}`
 
 When the value is an array, it will filter records with those values or more, for example:
 
-* `?filters[metadata]={"data_2":[1,2]}`
+* `?filters[metadata]={"data_2":"[1,2]"}`
 
 Will return records with next values stored in the JSONB column `metadata`:
 ```ruby
+{ data_2: 1 }
+{ data_2: 2 }
+{ data_2: [1] }
+{ data_2: [2] }
 { data_2: [1,2] }
 { data_2: [1,2,3] }
 ```
