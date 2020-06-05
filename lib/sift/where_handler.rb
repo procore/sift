@@ -19,7 +19,7 @@ module Sift
 
       value.each do |key, val|
         condition = if val.is_a?(Array)
-          "#{@param.internal_name} @> '{\"#{key}\": [?]}'"
+          "('{' || TRANSLATE(#{@param.internal_name}->>'#{key}', '[]','') || '}')::int[] && ARRAY[?]"
         else # Single Value
           val = val.to_s
           "#{@param.internal_name}->>'#{key}' = ?"
