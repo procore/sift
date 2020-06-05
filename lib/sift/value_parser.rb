@@ -16,20 +16,29 @@ module Sift
         elsif parse_as_boolean?
           boolean_value
         elsif parse_as_json?
-          supports_json_object ? parse_json : array_from_json
+          supports_json_object ? parse_json_and_values : array_from_json
         else
           value
         end
     end
 
-    def parse_json
-      JSON.parse(value)
+    def parse_json(string)
+      JSON.parse(string)
     rescue JSON::ParserError
-      value
+      string
+    end
+
+    def parse_json_and_values
+      parsed_jsonb = parse_json(value)
+      return parsed_jsonb if parsed_jsonb.is_a?(Array) || parsed_jsonb.is_a?(String)
+
+      parsed_jsonb.each_with_object({}) do |key_value, hash|
+        hash[key_value.first] = parse_json(key_value.last.to_s)
+      end
     end
 
     def array_from_json
-      result = parse_json
+      result = parse_json(value)
       if result.is_a?(Array)
         result
       else
