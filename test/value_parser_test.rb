@@ -48,10 +48,11 @@ class FilterTest < ActiveSupport::TestCase
       supports_json: true,
       supports_json_object: true
     }
-    json_string = "{\"a\":4}"
+    json_string = "{\"a\":\"abcd\"}"
     parser = Sift::ValueParser.new(value: json_string, options: options)
+    parsed_expected = JSON.parse(json_string)
 
-    assert_equal JSON.parse(json_string), parser.parse
+    assert_equal parsed_expected, parser.parse
   end
 
   test "JSON parsing objects when supports_json_object is true and the one json value is an array" do
