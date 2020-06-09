@@ -4,6 +4,7 @@ module Sift
     DATETIME_RANGE_PATTERN = { format: { with: /\A.+(?:[^.]\.\.\.[^.]).+\z/, message: "must be a range" }, valid_date_range: true }.freeze
     DECIMAL_PATTERN = { numericality: true, allow_nil: true }.freeze
     BOOLEAN_PATTERN = { inclusion: { in: [true, false] }, allow_nil: true }.freeze
+    JSON_PATTERN = { valid_json: true }.freeze
 
     WHITELIST_TYPES = [:int,
                        :decimal,
@@ -13,7 +14,8 @@ module Sift
                        :date,
                        :time,
                        :datetime,
-                       :scope].freeze
+                       :scope,
+                       :jsonb].freeze
 
     def initialize(param, type)
       @param = param
@@ -32,6 +34,8 @@ module Sift
         DECIMAL_PATTERN
       when :boolean
         BOOLEAN_PATTERN
+      when :jsonb
+        JSON_PATTERN
       end
     end
 

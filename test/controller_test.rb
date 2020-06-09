@@ -282,4 +282,50 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(@response.body)
     assert_equal [post1.id], (json.map { |post| post.fetch("id") })
   end
+
+  test "it filters on metadata by jsonb key-value" do
+    post = Post.create!(metadata: { 'a' => 4 }.to_json)
+    Post.create!(metadata: { 'b' => 5 }.to_json)
+
+    # Stubs are needed because the dummy app DB is not PostgreSQL
+    instance_mock = Minitest::Mock.new
+    instance_mock.expect :call, Post.where(id: post.id), [Post.all, Hash, ActionController::Parameters, Array]
+
+    class_mock = Minitest::Mock.new
+    class_mock.expect :call, instance_mock, [Sift::Parameter]
+
+    Sift::WhereHandler.stub :new, class_mock, [Sift::Parameter] do
+      get("/posts", params: { filters: { metadata: { 'a' => 4 }.to_json } })
+
+      json = JSON.parse(@response.body)
+      assert_equal 1, json.size
+      assert_equal post.id, json.first["id"]
+    end
+
+    assert_mock class_mock
+    assert_mock instance_mock
+  end
+
+  test "it filters on metadata by jsonb array" do
+    post = Post.create!(metadata: [1,2,3].to_json)
+    Post.create!(metadata: [4,5,6].to_json)
+
+    # Stubs are needed because the dummy app DB is not PostgreSQL
+    instance_mock = Minitest::Mock.new
+    instance_mock.expect :call, Post.where(id: post.id), [Post.all, Array, ActionController::Parameters, Array]
+
+    class_mock = Minitest::Mock.new
+    class_mock.expect :call, instance_mock, [Sift::Parameter]
+
+    Sift::WhereHandler.stub :new, class_mock, [Sift::Parameter] do
+      get("/posts", params: { filters: { metadata: [1,2].to_json } })
+
+      json = JSON.parse(@response.body)
+      assert_equal 1, json.size
+      assert_equal post.id, json.first["id"]
+    end
+
+    assert_mock class_mock
+    assert_mock instance_mock
+  end
 end

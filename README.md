@@ -46,6 +46,7 @@ Every filter must have a type, so that Sift knows what to do with it. The curren
 * time - Filter on a time column
 * datetime - Filter on a datetime column
 * scope - Filter on an ActiveRecord scope
+* jsonb - Filter on a jsonb column (supported only in PostgreSQL)
 
 ### Filter on Scopes
 Just as your filter values are used to scope queries on a column, values you
@@ -121,6 +122,36 @@ The following types support ranges
 * date
 * time
 * datetime
+
+### Filter on jsonb column
+
+Usually JSONB columns stores values as an Array or an Object (key-value), in both cases the parameter needs to be sent in a JSON format
+
+**Array**
+
+It should be sent an array in the URL Query parameters
+ * `?filters[metadata]=[1,2]`
+
+**key-value**
+
+It can be passed one or more Key values:
+ * `?filters[metadata]={"data_1":"test"}`
+ * `?filters[metadata]={"data_1":"test","data_2":"[1,2]"}`
+
+When the value is an array, it will filter records with those values or more, for example:
+
+* `?filters[metadata]={"data_2":"[1,2]"}`
+
+Will return records with next values stored in the JSONB column `metadata`:
+```ruby
+{ data_2: 1 }
+{ data_2: 2 }
+{ data_2: [1] }
+{ data_2: [2] }
+{ data_2: [1,2] }
+{ data_2: [1,2,3] }
+```
+
 
 ### Filter on JSON Array
 `int` type filters support sending the values as an array in the URL Query parameters. For example `?filters[id]=[1,2]`. This is a way to keep payloads smaller for GET requests. When URI encoded this will become `filters%5Bid%5D=%5B1,2%5D` which is much smaller the standard format of `filters%5Bid%5D%5B%5D=1&&filters%5Bid%5D%5B%5D=2`.

@@ -43,6 +43,30 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal json_string, parser.parse
   end
 
+  test "JSON parsing objects when supports_json_object is true" do
+    options = {
+      supports_json: true,
+      supports_json_object: true
+    }
+    json_string = "{\"a\":\"abcd\"}"
+    parser = Sift::ValueParser.new(value: json_string, options: options)
+    parsed_expected = JSON.parse(json_string)
+
+    assert_equal parsed_expected, parser.parse
+  end
+
+  test "JSON parsing objects when supports_json_object is true and the one json value is an array" do
+    options = {
+      supports_json: true,
+      supports_json_object: true
+    }
+    json_string = "{\"a\":\"[1,2]\"}"
+    parser = Sift::ValueParser.new(value: json_string, options: options)
+
+    parsed_expected = { "a" => [1,2] }
+    assert_equal parsed_expected, parser.parse
+  end
+
   test "With options a range string of integers results in a range" do
     options = {
       supports_ranges: true,

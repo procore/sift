@@ -10,6 +10,7 @@ require "sift/scope_handler"
 require "sift/where_handler"
 require "sift/validators/valid_int_validator"
 require "sift/validators/valid_date_range_validator"
+require "sift/validators/valid_json_validator"
 
 module Sift
   extend ActiveSupport::Concern
