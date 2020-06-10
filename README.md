@@ -271,6 +271,28 @@ Running tests:
 $ bundle exec rake test
 ```
 
+## Publishing
+
+Publishing is done use the `gem` commandline tool. You must have permissions to publish a new version. Users with permissions can be seen here https://rubygems.org/gems/procore-sift.
+
+When a bump is desired, the gemspec should have the version number bumped and merged into master.
+
+Step 1: build the new version
+`gem build sift.gemspec`
+```
+  Successfully built RubyGem
+  Name: procore-sift
+  Version: 0.14.0
+  File: procore-sift-0.14.0.gem
+```
+
+Step2: Push the updated build
+`gem push procore-sift-0.14.0.gem`
+```
+Pushing gem to https://rubygems.org...
+Successfully registered gem: procore-sift (0.14.0)
+```
+
 ## License
 
 The gem is available as open source under the terms of the [MIT
