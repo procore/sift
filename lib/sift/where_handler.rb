@@ -19,16 +19,13 @@ module Sift
 
       value.each do |key, val|
         collection = if val.is_a?(Array)
-          if val.include?(nil)
-            condition = val.each_with_index.map do |element, i|
-              "#{@param.internal_name}->>'#{key}' #{element === nil ? 'IS NULL' : "= :value_#{i}"}"
-            end.join(' OR ')
-            elements = Hash[val.each_with_index.map { |item, i| ["value_#{i}".to_sym, item.to_s] } ]
-          else
-            condition =  "('{' || TRANSLATE(#{@param.internal_name}->>'#{key}', '[]','') || '}')::text[] && ARRAY[?]"
-            elements = val.map(&:to_s)
-          end
-          collection.where(condition, elements)
+          elements = Hash[val.each_with_index.map { |item, i| ["value_#{i}".to_sym, item.to_s] } ]
+          elements[:all_values] = val.compact.map(&:to_s)
+          main_condition =  "('{' || TRANSLATE(#{@param.internal_name}->>'#{key}', '[]','') || '}')::text[] && ARRAY[:all_values]"
+          sub_conditions = val.each_with_index.map do |element, i|
+            "#{@param.internal_name}->>'#{key}' #{element === nil ? 'IS NULL' : "= :value_#{i}"}"
+          end.join(' OR ')
+          collection.where("(#{main_condition}) OR (#{sub_conditions})", elements)
         else
           collection.where("#{@param.internal_name}->>'#{key}' = ?", val.to_s)
         end
