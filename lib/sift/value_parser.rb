@@ -33,7 +33,9 @@ module Sift
       return parsed_jsonb if parsed_jsonb.is_a?(Array) || parsed_jsonb.is_a?(String)
 
       parsed_jsonb.each_with_object({}) do |key_value, hash|
-        hash[key_value.first] = parse_json(key_value.last.to_s)
+        key   = key_value.first
+        value = key_value.last
+        hash[key] = value.is_a?(String) ? parse_json(value) : value
       end
     end
 
