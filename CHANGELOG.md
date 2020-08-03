@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 0.15.0
+
+* Support for `null` filtering by `jsonb` type
+
 ## 0.14.0
 
 * Add support for `jsonb` type (only for PostgreSQL)
