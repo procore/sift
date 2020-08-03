@@ -152,6 +152,17 @@ Will return records with next values stored in the JSONB column `metadata`:
 { data_2: [1,2,3] }
 ```
 
+When the `null` value is included in the array, it will return also all the records without any value in that property, for example:
+
+* `?filters[metadata]={"data_2":"[false,null]"}`
+
+Will return records with next values stored in the JSONB column `metadata`:
+```ruby
+{ data_2: null }
+{ data_2: false }
+{ data_2: [false] }
+{ data_1: {another: 'information'} } # When the JSONB key "data_2" is not set.
+```
 
 ### Filter on JSON Array
 `int` type filters support sending the values as an array in the URL Query parameters. For example `?filters[id]=[1,2]`. This is a way to keep payloads smaller for GET requests. When URI encoded this will become `filters%5Bid%5D=%5B1,2%5D` which is much smaller the standard format of `filters%5Bid%5D%5B%5D=1&&filters%5Bid%5D%5B%5D=2`.
