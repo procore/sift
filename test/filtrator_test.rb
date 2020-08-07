@@ -197,4 +197,39 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.expired_before_ordered_by_body("2017-12-31", :asc).to_a, collection.to_a
   end
+
+  test "it can utilize the tap parameter to mutate a param" do
+    Post.create!(priority: 5, expiration: "2017-01-01T00:00:00+00:00")
+    Post.create!(priority: 5, expiration: "2017-01-02T00:00:00+00:00")
+    Post.create!(priority: 7, expiration: "2020-10-20T00:00:00+00:00")
+
+    filter = Sift::Filter.new(
+      :expiration,
+      :datetime,
+      :expiration,
+      nil,
+      nil,
+      [],
+      ->(value, params) {
+        if params[:mutate].present?
+          "2017-01-02T00:00:00+00:00...2017-01-02T00:00:00+00:00"
+        else
+          value
+        end
+      },
+    )
+    collection = Sift::Filtrator.filter(
+      Post.all,
+      {
+        filters: { expiration: "2017-01-01...2017-01-01" },
+        mutate: true
+      },
+      [filter],
+    )
+
+    assert_equal 3, Post.count
+    assert_equal 1, collection.count
+
+    assert_equal Post.where(expiration: "2017-01-02").to_a, collection.to_a
+  end
 end

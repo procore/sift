@@ -66,8 +66,8 @@ module Sift
   end
 
   class_methods do
-    def filter_on(parameter, type:, internal_name: parameter, default: nil, validate: nil, scope_params: [])
-      filters << Filter.new(parameter, type, internal_name, default, validate, scope_params)
+    def filter_on(parameter, type:, internal_name: parameter, default: nil, validate: nil, scope_params: [], tap: nil)
+      filters << Filter.new(parameter, type, internal_name, default, validate, scope_params, tap)
     end
 
     def filters
