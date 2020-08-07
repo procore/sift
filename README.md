@@ -124,7 +124,7 @@ The following types support ranges
 * datetime
 
 ### Mutating Filters
-Filters can be mutated before the filter is applied.  This is useful, for example, if you need to adjust the time zone of a `datetime` range filter.
+Filters can be mutated before the filter is applied using the `tap` argument. This is useful, for example, if you need to adjust the time zone of a `datetime` range filter.
 
 ```ruby
 
