@@ -4,11 +4,12 @@ module Sift
   class Filter
     attr_reader :parameter, :default, :custom_validate, :scope_params
 
-    def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [])
+    def initialize(param, type, internal_name, default, custom_validate = nil, scope_params = [], tap = ->(value, _params) { value })
       @parameter = Parameter.new(param, type, internal_name)
       @default = default
       @custom_validate = custom_validate
       @scope_params = scope_params
+      @tap = tap
       raise ArgumentError, "scope_params must be an array of symbols" unless valid_scope_params?(scope_params)
       raise "unknown filter type: #{type}" unless type_validator.valid_type?
     end
@@ -24,7 +25,9 @@ module Sift
       elsif should_apply_default?(value)
         default.call(collection)
       else
-        handler.call(collection, parameterize(value), params, scope_params)
+        parameterized_values = parameterize(value)
+        processed_values = @tap.present? ? @tap.call(parameterized_values, params) : parameterized_values
+        handler.call(collection, processed_values, params, scope_params)
       end
     end
     # rubocop:enable Lint/UnusedMethodArgument

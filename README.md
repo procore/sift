@@ -130,6 +130,24 @@ The following types support ranges
 - time
 - datetime
 
+### Mutating Filters
+Filters can be mutated before the filter is applied using the `tap` argument. This is useful, for example, if you need to adjust the time zone of a `datetime` range filter.
+
+```ruby
+
+class PostsController < ApplicationController
+  include Sift
+
+  filter_on :expiration, type: :datetime, tap: ->(value, params) {
+    value.split("...").
+      map do |str|
+        str.to_date.in_time_zone(LOCAL_TIME_ZONE)
+      end.
+      join("...")
+  }
+end
+```
+
 ### Filter on jsonb column
 
 Usually JSONB columns stores values as an Array or an Object (key-value), in both cases the parameter needs to be sent in a JSON format
