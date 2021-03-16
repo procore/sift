@@ -75,4 +75,12 @@ class FilterTest < ActiveSupport::TestCase
 
     assert_equal expected_validation, filter.validation(nil)
   end
+
+  test "it accepts a tap parameter" do
+    filter = Sift::Filter.new("hi", :boolean, "hi", nil, nil, [], ->(_value, _params) {
+      false
+    })
+
+    assert_equal false, filter.instance_variable_get("@tap").call(true, {})
+  end
 end

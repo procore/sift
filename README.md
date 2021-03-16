@@ -79,7 +79,7 @@ Scopes that accept no arguments are currently not supported.
 
 #### Accessing Params with Filter Scopes
 
-Filters with `type: :scope` have access to the params hash by passing in the desired keys to the `scope_params`. The keys passed in will be returned as a hash with their associated values, and should always appear as the last argument in your scope.
+Filters with `type: :scope` have access to the params hash by passing in the desired keys to the `scope_params`. The keys passed in will be returned as a hash with their associated values.
 
 ```ruby
 class Post < ActiveRecord::Base
@@ -129,6 +129,25 @@ The following types support ranges
 - date
 - time
 - datetime
+
+### Mutating Filters
+
+Filters can be mutated before the filter is applied using the `tap` argument. This is useful, for example, if you need to adjust the time zone of a `datetime` range filter.
+
+```ruby
+
+class PostsController < ApplicationController
+  include Sift
+
+  filter_on :expiration, type: :datetime, tap: ->(value, params) {
+    value.split("...").
+      map do |str|
+        str.to_date.in_time_zone(LOCAL_TIME_ZONE)
+      end.
+      join("...")
+  }
+end
+```
 
 ### Filter on jsonb column
 
