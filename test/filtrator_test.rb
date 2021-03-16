@@ -232,4 +232,37 @@ class FiltratorTest < ActiveSupport::TestCase
 
     assert_equal Post.where(expiration: "2017-01-02").to_a, collection.to_a
   end
+
+  test "it can filter on scopes that need multiple values from params with a tap" do
+    Post.create!(priority: 5, expiration: "2017-01-01")
+    Post.create!(priority: 5, expiration: "2017-01-02")
+    Post.create!(priority: 7, expiration: "2020-10-20")
+
+    filter = Sift::Filter.new(
+      :ordered_expired_before_and_priority,
+      :scope,
+      :ordered_expired_before_and_priority,
+      nil,
+      nil,
+      [:date, :priority],
+      ->(_value, _params) {
+        "ASC"
+      },
+    )
+    collection = Sift::Filtrator.filter(
+      Post.all,
+      {
+        filters: { ordered_expired_before_and_priority: "DESC" },
+        priority: 5,
+        date: "2017-12-31"
+      },
+      [filter],
+    )
+
+    assert_equal 3, Post.count
+    assert_equal 2, Post.ordered_expired_before_and_priority("ASC", date: "2017-12-31", priority: 5).count
+    assert_equal 2, collection.count
+
+    assert_equal Post.ordered_expired_before_and_priority("ASC", date: "2017-12-31", priority: 5).to_a, collection.to_a
+  end
 end
