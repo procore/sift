@@ -17,6 +17,7 @@ module Sift
     def initialize(param, type, internal_name = param, scope_params = [])
       raise "unknown filter type: #{type}" unless WHITELIST_TYPES.include?(type)
       raise "scope params must be an array" unless scope_params.is_a?(Array)
+
       @parameter = Parameter.new(param, type, internal_name)
       @scope_params = scope_params
     end
