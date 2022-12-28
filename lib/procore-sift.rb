@@ -32,7 +32,7 @@ module Sift
   end
 
   def filter_errors
-    filter_validator.errors.messages
+    filter_validator.errors
   end
 
   private
