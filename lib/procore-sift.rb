@@ -32,6 +32,10 @@ module Sift
   end
 
   def filter_errors
+    filter_validator.errors.messages
+  end
+
+  def active_model_filter_errors
     filter_validator.errors
   end
 
