@@ -279,6 +279,11 @@ Scopes that accept no arguments are currently supported, but you should note tha
 
 `scope_params` can also accept symbols that are keys in the `params` hash. The value will be fetched and passed on as an argument to the scope.
 
+### Accessing raw errors
+
+Though we have some plans to remove Rails as a dependency, currently you can access raw `ActiveModel::Errors` object by using `Sift#active_model_filter_errors`.
+We plan to remove this for Sift 2.0 release.
+
 ## Consumer Usage
 
 Filter:
