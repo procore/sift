@@ -38,7 +38,7 @@ class SiftTest < ActiveSupport::TestCase
     assert_equal [], my_class.filtrate(Post.all)
   end
 
-  test "Sift#active_model_filter_errors returns an ActiveModel::Error object" do
+  test "Sift#active_model_filter_errors returns an ActiveModel::Errors object" do
     MyClass.reset_filters
     my_class = MyClass.new
 
