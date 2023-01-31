@@ -3,7 +3,7 @@
 ## 1.0.0
 
 - Breaking change: Bump `rails` dependency to `>=6.1`
-- Breaking change: Make `Sift#filter_errors` return `ActiveModel::Errors` object instead of `Hash`
+- Add `Sift#active_model_filter_errors` which returns `ActiveModel::Errors`, this method is analogous to `Sift#filter_errors`, which instead returns a `Hash`
 - Add `net-http` as explicit dependency. `net-http` is a default gem for Ruby 3.0
 
 ## 0.16.0
