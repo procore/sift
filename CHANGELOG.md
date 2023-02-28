@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 0.17.0
+
+- Add support for Rails 7.0
+
 ## 0.16.0
 
 - Adds a `tap` method to `filter_on` to support mutating filter values
