@@ -19,12 +19,13 @@ Gem::Specification.new do |s|
                 "Rakefile",
                 "README.md"]
 
-  s.required_ruby_version = ">= 2.3.0"
+  s.required_ruby_version = ">= 2.7.0"
 
-  s.add_dependency "rails", "> 4.2.0"
+  s.add_dependency "activerecord", ">= 6.1"
+  s.add_dependency "net-http"
 
   s.add_development_dependency "pry"
-  s.add_development_dependency "rails", ">= 5.1"
+  s.add_development_dependency "rails", ">= 7.0"
   s.add_development_dependency "rake"
   s.add_development_dependency "rubocop", "0.71.0"
   s.add_development_dependency "sqlite3"
