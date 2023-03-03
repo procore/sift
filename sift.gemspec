@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "net-http"
 
   s.add_development_dependency "pry"
-  s.add_development_dependency "rails", ">= 7.0"
+  s.add_development_dependency "rails", ">= 6.1"
   s.add_development_dependency "rake"
   s.add_development_dependency "rubocop", "0.71.0"
   s.add_development_dependency "sqlite3"
