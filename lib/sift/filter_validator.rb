@@ -52,7 +52,7 @@ module Sift
 
     def to_type(filter)
       if filter.type == :boolean
-        if Rails.version.starts_with?('5') || Rails.version.starts_with?('6')
+        if ActiveRecord::VERSION::MAJOR >= 5
           ActiveRecord::Type::Boolean.new.cast(filter_params[filter.param])
         else
           ActiveRecord::Type::Boolean.new.type_cast_from_user(filter_params[filter.param])

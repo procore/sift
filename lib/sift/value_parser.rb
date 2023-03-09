@@ -69,7 +69,7 @@ module Sift
     end
 
     def boolean_value
-      if Rails.version.to_i >= 5
+      if ActiveRecord::VERSION::MAJOR >= 5
         ActiveRecord::Type::Boolean.new.cast(value)
       else
         ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
