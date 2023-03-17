@@ -52,11 +52,7 @@ module Sift
 
     def to_type(filter)
       if filter.type == :boolean
-        if ActiveRecord::VERSION::MAJOR >= 5
-          ActiveRecord::Type::Boolean.new.cast(filter_params[filter.param])
-        else
-          ActiveRecord::Type::Boolean.new.type_cast_from_user(filter_params[filter.param])
-        end
+        ActiveRecord::Type::Boolean.new.cast(filter_params[filter.param])
       elsif filter.validation_field == :sort
         sort_params
       else

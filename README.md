@@ -318,10 +318,16 @@ We have some future plans to remove the rails dependency so that other framework
 
 ## Contributing
 
+Installing gems before running tests:
+
+```bash
+$ bundle exec appraisal install
+```
+
 Running tests:
 
 ```bash
-$ bundle exec rake test
+$ bundle exec appraisal rake test
 ```
 
 ## Publishing

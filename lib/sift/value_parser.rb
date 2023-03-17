@@ -69,11 +69,7 @@ module Sift
     end
 
     def boolean_value
-      if ActiveRecord::VERSION::MAJOR >= 5
-        ActiveRecord::Type::Boolean.new.cast(value)
-      else
-        ActiveRecord::Type::Boolean.new.type_cast_from_user(value)
-      end
+      ActiveRecord::Type::Boolean.new.cast(value)
     end
 
     def normalized_value(raw_value, type)
