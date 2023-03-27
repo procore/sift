@@ -3,7 +3,6 @@ PATH
   specs:
     procore-sift (1.0.0)
       activerecord (>= 6.1)
-      net-http
 
 GEM
   remote: https://rubygems.org/
@@ -101,8 +100,6 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.17.0)
-    net-http (0.3.2)
-      uri
     net-imap (0.3.4)
       date
       net-protocol
@@ -167,7 +164,6 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.6.1)
-    uri (0.12.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
