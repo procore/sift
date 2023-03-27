@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.7.0"
 
   s.add_dependency "activerecord", ">= 6.1"
-  s.add_dependency "net-http"
 
   s.add_development_dependency "pry"
   s.add_development_dependency "rails", ">= 6.1"
