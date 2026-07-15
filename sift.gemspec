@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "Build dynamic filters and sorts for Rails and Active Record"
   s.description = "A declarative DSL for building filters and sorts with Rails and Active Record"
   s.license     = "MIT"
+  s.metadata["allowed_push_host"] = "https://rubygems.org"
 
   s.files = Dir["{app,config,db,lib}/**/*",
                 "MIT-LICENSE",
