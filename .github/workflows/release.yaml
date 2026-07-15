@@ -1,11 +1,14 @@
 name: Release
 on:
-  push:
+  workflow_run:
+    workflows: [Tests]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 jobs:
   version-check:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     outputs:
       changed: ${{ steps.check.outputs.any_changed }}
     steps:

@@ -13,21 +13,22 @@ Gem::Specification.new do |s|
   s.summary     = "Build dynamic filters and sorts for Rails and Active Record"
   s.description = "A declarative DSL for building filters and sorts with Rails and Active Record"
   s.license     = "MIT"
+  s.metadata["allowed_push_host"] = "https://rubygems.org"
 
   s.files = Dir["{app,config,db,lib}/**/*",
                 "MIT-LICENSE",
                 "Rakefile",
                 "README.md"]
 
-  s.required_ruby_version = ">= 2.7.0"
+  s.required_ruby_version = ">= 3.3.0"
 
-  s.add_dependency "activerecord", ">= 7.0"
+  s.add_dependency "activerecord", ">= 7.2"
 
+  s.add_development_dependency "appraisal"
+  s.add_development_dependency "minitest", "< 6"
   s.add_development_dependency "pry"
   s.add_development_dependency "rails", ">= 7.0"
   s.add_development_dependency "rake"
-  s.add_development_dependency "minitest", "< 6"
   s.add_development_dependency "rubocop", "~> 1.68"
   s.add_development_dependency "sqlite3"
-  s.add_development_dependency "appraisal"
 end
