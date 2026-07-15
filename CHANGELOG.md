@@ -1,5 +1,12 @@
 ## Unreleased
 
+## 1.2.0
+
+### Breaking changes:
+- Drop support for Ruby 2.7, 3.0, 3.1, and 3.2 (all end-of-life); require Ruby `>= 3.3`
+- Drop support for Rails 7.0 and 7.1 (end-of-life); require `activerecord >= 7.2`
+- CI test matrix now covers Ruby 3.3–3.4 against Rails 7.2 and 8.0
+
 ## 1.1.0
 
 - Add support for Rails 7.1, 7.2, and 8.0 (#67)

@@ -20,15 +20,15 @@ Gem::Specification.new do |s|
                 "Rakefile",
                 "README.md"]
 
-  s.required_ruby_version = ">= 2.7.0"
+  s.required_ruby_version = ">= 3.3.0"
 
-  s.add_dependency "activerecord", ">= 7.0"
+  s.add_dependency "activerecord", ">= 7.2"
 
+  s.add_development_dependency "appraisal"
+  s.add_development_dependency "minitest", "< 6"
   s.add_development_dependency "pry"
   s.add_development_dependency "rails", ">= 7.0"
   s.add_development_dependency "rake"
-  s.add_development_dependency "minitest", "< 6"
   s.add_development_dependency "rubocop", "~> 1.68"
   s.add_development_dependency "sqlite3"
-  s.add_development_dependency "appraisal"
 end
