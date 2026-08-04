@@ -46,8 +46,20 @@ module Sift
 
     def active_filters
       filters.select do |filter|
-        filter_params.include?(filter.param) || filter.default || filter.always_active?
+        active_filter_param?(filter) || filter.default || filter.always_active?
       end
+    end
+
+    # A filter is active when its param is present AND carries a meaningful value.
+    # A literal `false` is meaningful (a boolean filter value — see #58), but a
+    # blank value (nil / "" / []) leaves the filter inactive, matching pre-1.2
+    # behavior. Prior to this, any present key activated the filter, so an empty
+    # value produced conditions like `WHERE col = ''` (a 500 on non-string columns).
+    def active_filter_param?(filter)
+      return false unless filter_params.include?(filter.param)
+
+      value = filter_params[filter.param]
+      value == false || value.present?
     end
   end
 end

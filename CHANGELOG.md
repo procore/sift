@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 1.2.1
+
+- Fix: a blank filter value (`nil` / `""` / `[]`) no longer activates its filter. 1.2.0 activated a filter whenever its param key was present, so an empty value produced conditions like `WHERE col = ''` — harmless on some string columns, but a 500 (`PG::InvalidTextRepresentation`) on integer/uuid columns and unintended narrowing (`WHERE col IN ()`) elsewhere. Blank values are now skipped again (pre-1.2 behavior). A literal boolean `false` is still treated as an active value, preserving the #58 fix.
+
 ## 1.2.0
 
 ### Breaking changes:

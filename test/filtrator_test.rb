@@ -31,6 +31,20 @@ class FiltratorTest < ActiveSupport::TestCase
     assert_equal Post.where(visible: false), collection
   end
 
+  test "it does not activate a filter when the value is blank" do
+    post = Post.create!(title: "hello")
+    filter = Sift::Filter.new(:title, :string, :title, nil)
+
+    # A blank value (nil / "" / []) must leave the filter inactive so the full
+    # collection is returned, rather than applying e.g. `WHERE title = ''`
+    # (which 500s on non-string columns).
+    ["", nil, []].each do |blank|
+      collection = Sift::Filtrator.filter(Post.all, { filters: { title: blank } }, [filter])
+
+      assert_equal [post], collection.to_a, "blank value #{blank.inspect} should leave the filter inactive"
+    end
+  end
+
   test "it will not try to make a range out of a string field that includes ..." do
     post = Post.create!(title: "wow...man")
     filter = Sift::Filter.new(:title, :string, :title, nil)
