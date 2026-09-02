@@ -7,3 +7,8 @@ appraise 'rails-80' do
   gem 'rails', '~> 8.0.0'
   gem 'minitest', '~> 5.0'
 end
+
+appraise 'rails-81' do
+  gem 'rails', '~> 8.1.0'
+  gem 'minitest', '~> 5.0'
+end
